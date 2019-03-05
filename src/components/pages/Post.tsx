@@ -4,7 +4,14 @@ class PostPage extends React.Component {
    render(){
        return (
            <div>
-               文章详细情况
+               <h1>文章详细情况11111111111</h1> 
+               <br/>
+               <br/>
+               <br/>
+               <br/>
+               <br/>
+               <br/>
+               <br/>
            </div>
        )
    }
