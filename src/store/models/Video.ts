@@ -1,21 +1,34 @@
-import { observable, action } from "mobx";
+import { observable, action, computed } from "mobx";
 
 export  class Video {
-    @observable seeding = false;
     @observable title = "";
-    @observable cover = "";
+    @observable coverPublicId = "";
+    @observable coverUrl = "http://res.cloudinary.com/ddycd5xyn/image/upload/a_0,c_fill,w_300/default.jpg";
+    @observable cloudName = ""
     @observable fileMagnetURI = "";
     @observable fileCaptionURI = "";
+    @observable torrentDownloadURI = ""
     @observable saving = false;
+    @observable uploading = false;
+    @observable description = "";
 
-    @action beginSeed(){
-        this.seeding = true;
+    @computed get locked(){
+        //这个状态是用以解决在一个上传任务没有完成的时候，锁住另外一个上传任务,不然浏览器就会奔溃
+
+        return  this.uploading;
     }
 
-    @action finishSeed(){
-        this.seeding = false;
+    @action setDescription(html:string){
+        this.description = html;
+    }
+    
+
+    
+    @action setUploading =(val: boolean)=>{
+        this.uploading = val;
     }
 
+    
     @action beginSave(){
         this.saving = true;
     }
@@ -24,23 +37,39 @@ export  class Video {
         this.saving = false;
     }
 
-    @action setCover(){
+    @action setCover(url:string, publicId:string, cloudName:string){
+        this.coverUrl = url;
+        this.coverPublicId = publicId;
+        this.cloudName = cloudName;
 
     }
-    @action setTitle(){
-
+    @action setTitle(title: string){
+        this.title = title;
     }
-    @action setFileMagnetURI(){
+
+    @action setFileMagnetURI = (uri:string)=>{
+        this.fileMagnetURI = uri;
 
     }
     @action setFileCaptionURI(){
 
+    }
+    @action setTorrentDownloadURI=(uri:string)=>{
+        this.torrentDownloadURI = uri;
     }
     @action uploadFile(files:any){
         
     }
     @action seedFiles(){
 
+    }
+
+    @action save(){
+
+    }
+
+    @action update(){
+        
     }
 
 }
