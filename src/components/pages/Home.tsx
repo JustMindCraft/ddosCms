@@ -10,6 +10,9 @@ import Grid from '@material-ui/core/Grid';
 import StarIcon from '@material-ui/icons/StarBorder';
 import Typography from '@material-ui/core/Typography';
 import { withStyles, createStyles } from '@material-ui/core/styles';
+import NewPage from './New';
+import Recreation from '../containers/Recreation';
+import Popular from '../containers/Popular';
 
 const styles = (theme:any) => createStyles({
     
@@ -32,6 +35,10 @@ const styles = (theme:any) => createStyles({
       borderTop: `1px solid ${theme.palette.divider}`,
       padding: `${theme.spacing.unit * 6}px 0`,
     },
+    container: {
+      width: '96%',
+      margin: '0 auto',
+    }
   });
   
   const tiers = [
@@ -86,6 +93,8 @@ const styles = (theme:any) => createStyles({
       description: ['Privacy policy', 'Terms of use'],
     },
   ];
+
+
   
 
 interface IHomePageProps {
@@ -100,7 +109,7 @@ class HomePage extends React.Component<IHomePageProps> {
             <React.Fragment>
                 <CssBaseline />
                
-                <main>
+                <main className={classes.container}>
                     <div>
                     <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
                         Pricing
@@ -113,7 +122,6 @@ class HomePage extends React.Component<IHomePageProps> {
                     {/* End hero unit */}
                     <Grid container spacing={40} alignItems="flex-end">
                     {tiers.map((tier:any) => (
-                        // Enterprise card is full width at sm breakpoint
                         <Grid item key={tier.title} xs={12} sm={tier.title === 'Enterprise' ? 12 : 6} md={4}>
                         <Card>
                             <CardHeader
@@ -148,6 +156,9 @@ class HomePage extends React.Component<IHomePageProps> {
                         </Grid>
                     ))}
                     </Grid>
+                    <NewPage />
+                    <Recreation />
+                    <Popular />
                 </main>
                 {/* Footer */}
                 <footer className={classNames(classes.footer, classes.layout)}>
