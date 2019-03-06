@@ -4,7 +4,7 @@ interface IConfig{
 }
 const config: IConfig ={
     hosts: [
-        'http://localhost:3002/gun'
+        'https://gun.10000cars.com/gun'
     ],
     rootId: 'site1'
 }
