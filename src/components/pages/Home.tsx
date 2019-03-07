@@ -13,6 +13,7 @@ import { withStyles, createStyles } from '@material-ui/core/styles';
 import NewPage from './New';
 import Recreation from '../containers/Recreation';
 import Popular from '../containers/Popular';
+import Carousel from '../containers/Carousel';
 
 const styles = (theme:any) => createStyles({
     
@@ -120,6 +121,7 @@ class HomePage extends React.Component<IHomePageProps> {
                     </Typography>
                     </div>
                     {/* End hero unit */}
+                    <Carousel />
                     <Grid container spacing={40} alignItems="flex-end">
                     {tiers.map((tier:any) => (
                         <Grid item key={tier.title} xs={12} sm={tier.title === 'Enterprise' ? 12 : 6} md={4}>
