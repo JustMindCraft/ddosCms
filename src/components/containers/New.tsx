@@ -26,10 +26,8 @@ interface INewPageProps {
     classes: any
 }
 
-class NewPage extends React.Component<INewPageProps> {
-
-    render() {
-        const { classes } = this.props;
+const  New = (props: INewPageProps) => {
+        const { classes } = props;
         return (
             <div className={classes.root}>
                 <Chips text={"新闻栏目"} />
@@ -49,8 +47,6 @@ class NewPage extends React.Component<INewPageProps> {
                 </Grid>
             </div>
         )
-    }
-
 }
 
-export default withStyles(styles)(NewPage);
+export default withStyles(styles)(New);
