@@ -13,6 +13,8 @@ import StarIcon from '@material-ui/icons/StarBorder';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { withStyles, createStyles } from '@material-ui/core/styles';
+import { Snackbar } from '@material-ui/core';
+import Message from '../withData/Message';
 const styles = (theme:any) => createStyles({
     '@global': {
       body: {
@@ -117,6 +119,7 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
                     
                 </Grid>
                 {this.props.children}
+                <Message />
             </React.Fragment>
         )
     }

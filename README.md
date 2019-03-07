@@ -1,44 +1,26 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+项目基于[Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## 项目规划
 
-In the project directory, you can run:
+1. 使用jwt认证固定用户
+2. 布局改皮
+3. 要在服务端部署webtorrent, 使得浏览器获得直接下载文件的能力
+4. 富文本编辑器效率不行，改用slat
+5. 分享体验优化
+6. 启用使用bat打赏系统
+7. 全面的社交网络账户注册，存在protonmail和google driver之中
+8. 盈利模式账号注册：矿机，广告联盟，打赏系统, 存在protonmail中
+9. 高级基础建设: 使用和部署开源矿池，占据上游产业链利润
+10. 大客户合作，摆脱广告联盟上游利润
 
-### `npm start`
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+==============挣大钱分割线=======================================
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+11. 高级基础建设: 使用和部署自己种子追踪服务器，进一步提高用户的网络体验
+12. 产品升级: 逐步出桌面端和andriod端，根据情况考虑ios端
+13. 产品升级2.0: 推出完全去中心化的用户认证系统，将内容创造任务交与用户
+14. 产品升级3.0 推出完全去中心化的用户非对称内容加密系统，将系统推广的任务交与用户
+15. 产品升级4.0　推出完全去中心化的用户基于区块链的经济系统，将系统盈利的任务交与用户
+16. 性能优化：使用rust底层编译不够快的js代码
+17. 安全性优化：使用rust和gunjs sea系统，对非对称加密使用pow方式进行数据验证
