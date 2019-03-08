@@ -4,9 +4,10 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'mobx-react'
 import message from './store/Message';
+import dataProvider from './store/DataProvider';
 
 ReactDOM.render(
-    <Provider message={message}>
+    <Provider message={message} dataProvider={dataProvider}>
         <App />
     </Provider>
     , 

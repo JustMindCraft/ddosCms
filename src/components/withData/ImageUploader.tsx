@@ -1,5 +1,5 @@
 import  React from 'react';
-import { Button, CircularProgress } from '@material-ui/core';
+import { Button, CircularProgress, Typography, Divider } from '@material-ui/core';
 import {Image, CloudinaryContext, Transformation} from 'cloudinary-react';
 import { observer, inject } from 'mobx-react';
 const cloudName = 'ddycd5xyn';
@@ -106,20 +106,11 @@ class ImageUploader extends React.Component<any, IImageUploader> {
             <div style={{
                 display: 'flex',
                 flexDirection: 'column',
-                alignItems: 'center'
             }}>
-                <Button disabled={locked} variant="contained" color="primary" fullWidth={true} style={{
-                    width: "320px",
-                }}>
-                    <span>{uploading? '正在上传封面' : "上传封面"}</span>
-                    <input type="file" style={{
-                            opacity: 0,
-                            width: "100%",
-                            zIndex: 200,
-                            position: "fixed",
-                            left: 0,
-                        }} onChange={this.handleFileChange}  accept="image/*"  capture='camera'  multiple={false} />
-                </Button>
+               
+                    <Typography variant="headline" >{uploading? '正在上传封面' : "上传封面"}</Typography> <br/>
+                    <input disabled={locked} type="file" onChange={this.handleFileChange}  accept="image/*"  capture='camera'  multiple={false} />
+                    <Divider />
                 <br/>
                 <div style={{
                     width: "100%",

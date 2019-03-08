@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Typography, CircularProgress } from '@material-ui/core';
+import { Button, Typography, CircularProgress, Divider } from '@material-ui/core';
 
 import { DefaultPlayer as Video } from 'react-html5video';
 import 'react-html5video/dist/styles.css';
@@ -106,20 +106,11 @@ class VideoUploader extends React.Component<any, any>{
             <div style={{
                 display: 'flex',
                 flexDirection: 'column',
-                alignItems: 'center'
             }}>
-                <Button disabled={locked} variant="contained" color="primary" style={{
-                    width: "320px",
-                }} >
-                    <span>{seeding? '正在上传视频，开始做种' : "上传视频"}</span>
-                    <input onClick={this.hanleFileInputClick} type="file" style={{
-                            opacity: 0,
-                            width: "100%",
-                            zIndex: 200,
-                            position: "fixed",
-                            left: 0,
-                        }}  onChange={this.handleFileChange} multiple={false} accept="video/*"  capture='camcorder' />
-                </Button>
+               
+                    <Typography variant="headline" >{seeding? '正在上传视频，开始做种' : "上传视频"}</Typography> <br/>
+                    <input disabled={locked} onClick={this.hanleFileInputClick} type="file"  onChange={this.handleFileChange} multiple={false} accept="video/*"  capture='camcorder' />
+                    <Divider />
                 <br/>
                 {
                     marginURI!=="" &&

@@ -18,16 +18,9 @@ class NewVideo extends React.Component{
                 }} variant="display1" component="h1">
                     新建视频
                 </Typography>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
+                
                 <Provider video={video}>
-
-                <VideoForm />
+                    <VideoForm />
                 </Provider>
             </React.Fragment>
         )

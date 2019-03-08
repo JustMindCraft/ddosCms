@@ -3,12 +3,14 @@ import { TextField, Paper, Button } from '@material-ui/core';
 import ImageUploader from './ImageUploader';
 import VideoUploader from './VideoUploader';
 import { observer, inject } from 'mobx-react';
-import BraftEditor from 'braft-editor'
-import 'braft-editor/dist/index.css'
+import TextEditor from './TextEditor';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { VideoNode } from '../../gunDB';
 
 
 
 @inject('video')
+@inject('message')
 @observer
 class VideoForm extends React.Component<any, any> {
 
@@ -16,8 +18,32 @@ class VideoForm extends React.Component<any, any> {
     constructor(props: any){
         super(props);
         this.state = {
-            editorState: BraftEditor.createEditorState(null)
+            editorState: ""
         }
+
+    }
+
+    componentWillReact(){
+        const { video, message } = this.props;
+        const { id, saving, validing, validText, setValiding } = video;
+        if(saving){
+            message.show("正在保存......");
+        }
+        if(validing){
+            message.show(validText);
+            setValiding(false);
+        }
+        VideoNode.map((item:any)=> item? (item.id===id? item: undefined): undefined).once((data:any, key:string)=>{
+            
+            if(data.id===id ){
+                if(data.status === 'draft'){
+                    message.show("保存草稿成功!");
+                }
+                if(data.status === "published"){
+                    message.show("视频发布成功!");
+                }
+            }
+        })
     }
 
     handleTitleInput = (e:any) => {
@@ -27,7 +53,7 @@ class VideoForm extends React.Component<any, any> {
 
     saveDraft = () => {
         const {video} = this.props;
-        console.log(video);
+        video.saveDraft();
         
     }
     publish = () => {
@@ -36,33 +62,25 @@ class VideoForm extends React.Component<any, any> {
         
     }
 
-    handleEditorChange = (editorState:any) => {
+    getRawHtml = (html:string) => {
         const { video } = this.props;
-        const htmlContent = this.state.editorState.toHTML();
-        this.setState({ editorState })
-        video.setDescription(htmlContent);
-        
-    }
-
-    submitContent = async () => {
-        const htmlContent = this.state.editorState.toHTML();
-        console.log(htmlContent);
-        
+        video.setDescription(html);
     }
    
     render(){
-
-        const { editorState } = this.state;
+        const { video } = this.props;
+        const { title, saving } = video;
+        
         
         return (
             <Paper style={{
-                paddingTop: 5,
+                paddingTop: 20,
                 paddingLeft: 15,
                 paddingRight: 15,
-                paddingBottom: 15,
+                paddingBottom: 100,
                 display: 'flex',
                 flexDirection: 'column',
-                minHeight: 500,
+                minHeight: 800,
                 alignItems: 'center',
                 alignCentent: 'center',
                 justifyContent: 'space-around',
@@ -83,7 +101,7 @@ class VideoForm extends React.Component<any, any> {
                         <TextField style={{
                             width: "100%",
                             minWidth: 310
-                        }} label="视频标题" placeholder="标题" onChange={this.handleTitleInput} />
+                        }} label="视频标题" value={title} placeholder="标题" onChange={this.handleTitleInput} />
 
                     </div>
                     
@@ -92,27 +110,25 @@ class VideoForm extends React.Component<any, any> {
                    
                     <br/>
                     
-                    <VideoUploader />
+                    <VideoUploader  />
                     <div>
                         <h2 style={{
                             textAlign: 'center',
                         }}>视频介绍或描述</h2>
-                        <BraftEditor
-                            value={editorState}
-                            onChange={this.handleEditorChange}
-                            onSave={this.submitContent}
-                        />
-
+                        <TextEditor getRawHtml={this.getRawHtml} />
+                       
                     </div>
                     <br/>
                     <div style={{
                         display: 'flex',
                         flexDirection: 'row',
                         justifyContent: 'space-between',
-                        width: "80%"
+                        width: "80%",
+                        marginBottom: 100,
+                        marginTop: 100
                     }}>
-                        <Button onClick={this.saveDraft} variant="contained" color="secondary">保存草稿</Button>
-                        <Button onClick={this.publish} variant="contained"  color="secondary">直接发布</Button>
+                        <Button disabled={saving} onClick={this.saveDraft} variant="contained" color="secondary">保存草稿</Button>
+                        <Button disabled={saving} onClick={this.publish} variant="contained"  color="secondary">直接发布</Button>
                     </div>
                 </form>
 

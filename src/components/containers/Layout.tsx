@@ -1,31 +1,30 @@
 import React from 'react';
-import './Layout.css';
-import { Link } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
-import StarIcon from '@material-ui/icons/StarBorder';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import { withStyles, createStyles } from '@material-ui/core/styles';
-import { Snackbar } from '@material-ui/core';
 import Message from '../withData/Message';
+import chashao from '../../images/f25af2fe5058dac470d3d628c54b8373.png';
+import { Link } from 'react-router-dom';
+
 const styles = (theme:any) => createStyles({
     '@global': {
       body: {
         backgroundColor: theme.palette.common.white,
       },
     },
+    logo: {
+      marginTop: -20,
+      width: 200,
+    },
     appBar: {
       position: 'fixed',
       width: "100%",
       height: 40,
-      justifyContent: 'center'
+      justifyContent: 'flex-start',
+      overflowX: 'auto',
+      overflowY: 'hidden',
     },
     toolbarTitle: {
       flex: 1,
@@ -34,9 +33,9 @@ const styles = (theme:any) => createStyles({
     toolBar: {
         display: 'flex',
         flexDirection: 'row',
-        alignItems: 'center',
-        justifyItems: 'stretch',
-        justifyContent: 'space-evenly',
+        alignItems: 'baseline',
+        justifyItems: 'center',
+        justifyContent: 'space-between',
         fontSize: "1.2rem",
     },
     toolBarButton: {
@@ -99,6 +98,9 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
         
         return (
             <React.Fragment>
+              <Link to="/">
+                <img src={chashao} className={classes.logo} />
+              </Link>
                  <AppBar style={
                      {
                          top: top<=50? 100: 0,
@@ -107,6 +109,9 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
                     <Toolbar className={classes.toolBar}>
                         <Button className={classes.toolBarButton}>视频</Button>
                         <Button className={classes.toolBarButton}>文章</Button>
+                        <Button className={classes.toolBarButton}>设计</Button>
+                        <Button className={classes.toolBarButton}>区块链</Button>
+                        <Button className={classes.toolBarButton}>经济</Button>
                         <Button className={classes.toolBarButton}>图片</Button>
                         <Button className={classes.toolBarButton}>资源</Button>
                         <Button className={classes.toolBarButton}>科技</Button>

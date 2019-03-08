@@ -1,6 +1,5 @@
 import React from 'react';
 import  WebTorrent from 'webtorrent';
-import Plyr from 'react-plyr';
 import { RootNode, now } from '../../gunDB';
 const  client = new WebTorrent();
 interface ITestPageState{
