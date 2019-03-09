@@ -6,6 +6,8 @@ import PostPage from './components/pages/Post';
 import TestPage from './components/pages/TestPage';
 import NewVideo from './components/pages/NewVideo';
 import Videos from './components/pages/Videos';
+import LoginPage from './components/pages/LoginPage';
+import SignupPage from './components/pages/SignupPage';
 
 class App extends Component {
   render() {
@@ -18,6 +20,8 @@ class App extends Component {
               <Route exact path="/posts/:id" component={PostPage}/>
               <Route exact path="/test" component={TestPage} />
               <Route exact path="/videos" component={Videos} />
+              <Route exact path="/login" component={LoginPage} />
+              <Route exact path="/signup" component={SignupPage} />
               <Route exact path="/videos/new" component={NewVideo} />
               <Route exact path="/videos/:id" component={TestPage} />
               <Route component={HomePage}/>
