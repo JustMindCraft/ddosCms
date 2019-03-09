@@ -156,7 +156,7 @@ export class DataProvider {
                 }
 
             })
-            const searchCondition = item[searchKey].toString().indexOf(this.searchString)>=0 || 
+            const searchCondition = item[searchKey] && item[searchKey].toString().indexOf(this.searchString)>=0 || 
             this.searchString==="";
             
             if(item[searchKey] && searchCondition  && timeCondition && conditionMatch){
@@ -225,6 +225,7 @@ export class DataProvider {
         
         switch (this.action) {
             case "list":
+            console.log(11)
                 return this.getList();
             
             case 'delete':

@@ -7,6 +7,7 @@ import Recreation from '../containers/Recreation';
 import Popular from '../containers/Popular';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import chashao from '../../images/f25af2fe5058dac470d3d628c54b8373.png';
+import HomeWithMobx from '../withData/HomeWithMobx';
 
 const styles = (theme: any) => createStyles({
   
@@ -41,7 +42,7 @@ const styles = (theme: any) => createStyles({
 
 
 interface IHomePageProps {
-  classes: any
+  classes: any,
 }
 
 class HomePage extends React.Component<IHomePageProps> {
@@ -52,10 +53,9 @@ class HomePage extends React.Component<IHomePageProps> {
       <React.Fragment>
         <CssBaseline />
         <main className={classes.container}>
-          
+         <HomeWithMobx /> 
           <Popular />
           <NewPage />
-          <Recreation />
         </main>
         {/* Footer */}
         <footer className={classNames(classes.footer, classes.layout)}>

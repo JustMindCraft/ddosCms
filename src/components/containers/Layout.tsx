@@ -22,6 +22,7 @@ const styles = (theme: any) => createStyles({
     headerButton: {
         display: 'flex',
         flexDirection: 'column',
+        marginRight: 2,
     },
     button: {
         margin: theme.spacing.unit,
@@ -119,14 +120,14 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
                     <Link to="/">
                         <img src={chashao} className={classes.logo} />
                     </Link>
-                    <div className={classes.headerButton}>
+                    {/* <div className={classes.headerButton}>
                         <Button variant="contained" className={classNames(classes.button,classes.headerRight)}>
                             Sign In
                         </Button>
                         <Button variant="contained" className={classNames(classes.button,classes.headerRight)}>
                             Sign In
                         </Button>
-                    </div>
+                    </div> */}
                 </div>
                 <AppBar style={
                     {
