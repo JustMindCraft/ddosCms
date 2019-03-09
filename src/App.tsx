@@ -8,6 +8,7 @@ import NewVideo from './components/pages/NewVideo';
 import Videos from './components/pages/Videos';
 import LoginPage from './components/pages/LoginPage';
 import SignupPage from './components/pages/SignupPage';
+import DetailPage from './components/pages/DetailPage';
 
 class App extends Component {
   render() {
@@ -22,6 +23,7 @@ class App extends Component {
               <Route exact path="/videos" component={Videos} />
               <Route exact path="/login" component={LoginPage} />
               <Route exact path="/signup" component={SignupPage} />
+              <Route exact path="/detail" component={DetailPage} />
               <Route exact path="/videos/new" component={NewVideo} />
               <Route exact path="/videos/:id" component={TestPage} />
               <Route component={HomePage}/>
