@@ -6,6 +6,7 @@ import { observer, inject } from 'mobx-react';
 import TextEditor from './TextEditor';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { VideoNode } from '../../gunDB';
+import { withRouter } from 'react-router';
 
 
 
@@ -22,9 +23,13 @@ class VideoForm extends React.Component<any, any> {
         }
 
     }
+    componentWillMount(){
+        const { video } = this.props;
+        video.reset();
+    }
 
     componentWillReact(){
-        const { video, message } = this.props;
+        const { video, message, history } = this.props;
         const { id, saving, validing, validText, setValiding } = video;
         if(saving){
             message.show("正在保存......");
@@ -38,9 +43,13 @@ class VideoForm extends React.Component<any, any> {
             if(data.id===id ){
                 if(data.status === 'draft'){
                     message.show("保存草稿成功!");
+                    history.push('/videos?status=draft');
+                    
                 }
                 if(data.status === "published"){
                     message.show("视频发布成功!");
+                    history.push('/videos?status=published');
+
                 }
             }
         })
@@ -69,7 +78,7 @@ class VideoForm extends React.Component<any, any> {
    
     render(){
         const { video } = this.props;
-        const { title, saving } = video;
+        const { title, saving, locked } = video;
         
         
         return (
@@ -98,7 +107,7 @@ class VideoForm extends React.Component<any, any> {
                     <div style={{
                         margin: 20,
                     }}>
-                        <TextField style={{
+                        <TextField disabled={locked} style={{
                             width: "100%",
                             minWidth: 310
                         }} label="视频标题" value={title} placeholder="标题" onChange={this.handleTitleInput} />
@@ -111,13 +120,18 @@ class VideoForm extends React.Component<any, any> {
                     <br/>
                     
                     <VideoUploader  />
-                    <div>
-                        <h2 style={{
-                            textAlign: 'center',
-                        }}>视频介绍或描述</h2>
-                        <TextEditor getRawHtml={this.getRawHtml} />
-                       
-                    </div>
+                    {
+                        !locked &&
+                        <div>
+                            <h2 style={{
+                                textAlign: 'center',
+                            }}>视频介绍或描述</h2>
+                            <TextEditor getRawHtml={this.getRawHtml} />
+                        
+                        </div>
+
+                    }
+                    
                     <br/>
                     <div style={{
                         display: 'flex',
@@ -138,4 +152,4 @@ class VideoForm extends React.Component<any, any> {
 }
 
 
-export default VideoForm;
+export default withRouter(VideoForm);

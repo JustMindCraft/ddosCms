@@ -5,8 +5,6 @@ export class Message {
     @observable content = "";
 
     @action show = (content: string) => {
-        console.log(content);
-        
         this.content = content;
         this.showable = true;
         setTimeout(()=>{

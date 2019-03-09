@@ -15,7 +15,8 @@ const styles = (theme:any) => createStyles({
       },
     },
     logo: {
-      marginTop: -20,
+      marginTop: -30,
+      marginBottom: 20,
       width: 200,
     },
     appBar: {
@@ -100,6 +101,7 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
             <React.Fragment>
               <Link to="/">
                 <img src={chashao} className={classes.logo} />
+                <br/>
               </Link>
                  <AppBar style={
                      {
@@ -109,8 +111,9 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
                     <Toolbar className={classes.toolBar}>
                         <Button className={classes.toolBarButton}>视频</Button>
                         <Button className={classes.toolBarButton}>文章</Button>
-                        <Button className={classes.toolBarButton}>设计</Button>
-                        <Button className={classes.toolBarButton}>区块链</Button>
+                        <Button className={classes.toolBarButton}>热点</Button>
+                        <Button className={classes.toolBarButton}>推荐</Button>
+                        <Button className={classes.toolBarButton}>标签云</Button>
                         <Button className={classes.toolBarButton}>经济</Button>
                         <Button className={classes.toolBarButton}>图片</Button>
                         <Button className={classes.toolBarButton}>资源</Button>

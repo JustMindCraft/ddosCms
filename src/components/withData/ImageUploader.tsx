@@ -36,9 +36,9 @@ class ImageUploader extends React.Component<any, IImageUploader> {
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
         xhr.upload.addEventListener("progress", (e) => {
             const progress = Math.round((e.loaded * 100.0) / e.total);
-            console.log(`fileuploadprogress data.loaded: ${e.loaded},
-             data.total: ${e.total}`);
-             console.log(progress);
+            // console.log(`fileuploadprogress data.loaded: ${e.loaded},
+            //  data.total: ${e.total}`);
+            //  console.log(progress);
             //  console.log(typeof progress);
         });
         xhr.onreadystatechange = (e) => {
@@ -100,7 +100,6 @@ class ImageUploader extends React.Component<any, IImageUploader> {
         const { uploading } = this.state;
         const { video } = this.props;
         const { locked, coverPublicId, cloudName } = video;
-        console.log(locked);
         
         return (
             <div style={{

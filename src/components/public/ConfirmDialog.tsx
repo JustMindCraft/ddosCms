@@ -12,6 +12,8 @@ interface IComfirmDialogProps{
     fullScreen: any,
     open: boolean,
     dialogBack: any,
+    title: string,
+    content: string,
 }
 class ComfirmDialog extends React.Component<IComfirmDialogProps> {
   
@@ -21,7 +23,7 @@ class ComfirmDialog extends React.Component<IComfirmDialogProps> {
   };
 
   handlePositive = () => {
-     return this.props.dialogBack(false);
+     return this.props.dialogBack(true);
   };
 
   handleNegative = () => {
@@ -29,7 +31,7 @@ class ComfirmDialog extends React.Component<IComfirmDialogProps> {
   }
 
   render() {
-    const { fullScreen, open } = this.props;
+    const { fullScreen, open, title, content } = this.props;
 
     return (
        
@@ -39,11 +41,10 @@ class ComfirmDialog extends React.Component<IComfirmDialogProps> {
           onClose={this.handleNegative}
           aria-labelledby="responsive-dialog-title"
         >
-          <DialogTitle id="responsive-dialog-title">{"Use Google's location service?"}</DialogTitle>
+          <DialogTitle id="responsive-dialog-title">{title}</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Let Google help apps determine location. This means sending anonymous location data to
-              Google, even when no apps are running.
+             {content}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
