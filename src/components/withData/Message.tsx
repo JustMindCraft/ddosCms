@@ -7,7 +7,6 @@ import { observer, inject } from 'mobx-react';
 class Message extends React.Component<any, any>{
     render(){
         const { showable, content } = this.props.message;
-        console.log(showable);
         
         return(
             <Snackbar anchorOrigin={{

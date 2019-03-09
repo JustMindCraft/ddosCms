@@ -1,12 +1,10 @@
 import React from 'react';
-import { Button, Typography, CircularProgress, Divider } from '@material-ui/core';
+import { Typography, CircularProgress, Divider } from '@material-ui/core';
 
 import { DefaultPlayer as Video } from 'react-html5video';
 import 'react-html5video/dist/styles.css';
 import { observer, inject } from 'mobx-react';
 import  WebTorrent from 'webtorrent';
-
-
 const  client = new WebTorrent();
 
 @inject('message')
@@ -32,11 +30,9 @@ class VideoUploader extends React.Component<any, any>{
             
                 torrent.files.forEach((file: any)=>{
                     
-                    console.log(file.name);
-                    
                     file.getBlobURL( (err:any, url:any) => {
-                        console.log(err);
-                        console.log(url);
+                        // console.log(err);
+                        // console.log(url);
                         this.setState({
                             seeding: false,
                             marginURI: torrent.magnetURI,

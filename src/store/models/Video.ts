@@ -20,6 +20,22 @@ export  class Video {
     //valid
     @observable validing = false;
     @observable validText = "未知错误";
+
+    @action reset = () => {
+        this.title = '';
+        this.coverPublicId = "";
+        this.coverUrl = "";
+        this.cloudName = "";
+        this.fileCaptionURI = "";
+        this.fileMagnetURI = "";
+        this.torrentDownloadURI ="";
+        this.saving = false;
+        this.uploading = false;
+        this.description = "";
+        this.status = "draft";
+        this.id = "";
+
+    }
     @computed get valid(){
         if(this.coverUrl === "http://res.cloudinary.com/ddycd5xyn/image/upload/a_0,c_fill,w_300/default.jpg")
         {
@@ -111,7 +127,40 @@ export  class Video {
     }
 
     @action publish(){
-
+        this.saving = true;
+        this.validing = true;
+        if(!this.valid){
+            this.saving = false;
+            return false;
+        }
+        const video = RootNode.get('videos/'+this.id).put({
+            title: this.title,
+            coverPublicId: this.coverPublicId,
+            coverUrl: this.coverUrl,
+            cloudName: this.cloudName,
+            fileMagnetURI: this.fileMagnetURI,
+            fileCaptionURI: this.fileCaptionURI,
+            torrentDownloadURI: this.torrentDownloadURI,
+            description: this.description,
+            status: "pubish",
+            id: this.id,
+            createdAt: now(),
+        },(ack:any)=>{
+            if(!ack.err){
+                RootNode.get('videos_count').once((data:any, key:string)=>{
+                    RootNode.get('videos_count').put({
+                        count: data? data.count+1: 1,
+                    });
+                })
+            }
+            console.log(ack);
+            
+        })
+        VideoNode.set(video, (ack:any)=>{
+            console.log("保存草稿", ack);
+            this.saving = false;
+            
+        });
     }
     @action saveDraft(){
         this.saving = true;
