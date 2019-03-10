@@ -9,6 +9,8 @@ import Typography from '@material-ui/core/Typography';
 import ShareIcon from '@material-ui/icons/Share';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import IconButton from '@material-ui/core/IconButton';
+import renderHTML from 'react-render-html';
+
 
 const styles = {
   card: {
@@ -20,24 +22,29 @@ const styles = {
     maxWidth: "100%",
   },
 };
+interface IMediaCardProps {
+  classes: any,
+  title: string,
+  coverUrl: string,
+  description: string,
+}
 
-const MediaCard = (props: any) => {
-  const { classes } = props;
+const MediaCard = (props: IMediaCardProps) => {
+  const { classes, title, coverUrl, description } = props;
   return (
     <Card className={classes.card}>
       <CardActionArea>
         <CardMedia
           className={classes.media}
-          image="https://cdn.dribbble.com/users/2738/screenshots/4954296/dragon_teaser.jpg"
+          image={coverUrl}
           title="Contemplative Reptile"
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
-            Lizard
+            {title}
           </Typography>
           <Typography component="p">
-            Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-            across all continents except Antarctica
+            {renderHTML(description)}
           </Typography>
         </CardContent>
       </CardActionArea>

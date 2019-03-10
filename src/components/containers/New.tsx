@@ -33,16 +33,16 @@ const  New = (props: INewPageProps) => {
                 <Chips text={"新闻栏目"} />
                 <Grid container spacing={24}>
                     <Grid item xs={12} sm={3} className={classes.center}>
-                            <MediaCards />
+                            {/* <MediaCards /> */}
                     </Grid>
                     <Grid item xs={12} sm={3} className={classes.center}>
-                            <MediaCards />
+                            {/* <MediaCards /> */}
                     </Grid>
                     <Grid item xs={12} sm={3} className={classes.center}>
-                            <MediaCards />
+                            {/* <MediaCards /> */}
                     </Grid>
                     <Grid item xs={12} sm={3} className={classes.center}>
-                            <MediaCards />
+                            {/* <MediaCards /> */}
                     </Grid>
                 </Grid>
             </div>
