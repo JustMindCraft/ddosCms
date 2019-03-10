@@ -159,11 +159,9 @@ export class DataProvider {
                 }
 
             })
-            let searchCondition = null;
-            if(item[searchKey]){
-                searchCondition = item[searchKey].toString().indexOf(this.searchString)>=0 || 
-                this.searchString==="";
-            }
+            const searchCondition = item[searchKey] && item[searchKey].toString().indexOf(this.searchString)>=0 || 
+            this.searchString==="";
+            
             if(item[searchKey] && searchCondition  && timeCondition && conditionMatch){
                 return item;
             }
@@ -276,6 +274,7 @@ export class DataProvider {
         
         switch (this.action) {
             case "list":
+            console.log(11)
                 return this.getList();
             
             case 'delete':
