@@ -59,4 +59,4 @@ const Recreation = (props: IRecreationProps) => {
     )
 }
 
-export default withStyles(styles)(Recreation);
+export default withStyles(styles)(Recreation) as any;

@@ -110,7 +110,6 @@ class ImageUploader extends React.Component<any, IImageUploader> {
     render(){
         const { uploading } = this.state;
         const {  disabled } = this.props;
-        console.log({disabled});
         
         return (
             <div style={{
@@ -121,23 +120,7 @@ class ImageUploader extends React.Component<any, IImageUploader> {
                     <Typography variant="headline" >{uploading? '正在上传封面' : "上传封面"}</Typography> <br/>
                     <input disabled={uploading || disabled} type="file" onChange={this.handleFileChange}  accept="image/*"  capture='camera'  multiple={false} />
                     <Divider />
-                <br/>
-                <div style={{
-                    width: "100%",
-                    textAlign: 'center'
-                }}>
-                {
-                    // uploading ? <CircularProgress color="secondary" />
-                    // :
-                    // <CloudinaryContext cloudName={cloudName}>
-                    //     <Image publicId={coverPublicId}>
-                    //         <Transformation width="300" crop="fill" angle="0"/>
-                    //     </Image>
-                    // </CloudinaryContext>
-
-                }
-                
-                </div>
+               
             </div>
         )
     }

@@ -1,10 +1,9 @@
 import React from 'react';
-import VideoForm from '../withData/VideoForm';
-import { Provider } from 'mobx-react';
-import video from '../../store/models/Video';
 import { Typography, Button, createStyles, withStyles, Fab } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-const BackListLink = (props:any) => <Link to='/videos' {...props} />
+const VideosLink = (props:any) => <Link to='/videos' {...props} />
+const PostsLink = (props:any) => <Link to='/posts' {...props} />
+const TagsLink = (props:any) => <Link to='/tags' {...props} />
 
 const styles = createStyles({
     button: {
@@ -13,7 +12,7 @@ const styles = createStyles({
     }
 })
 
-class NewVideo extends React.Component<any, any>{
+class Admin extends React.Component<any, any>{
 
     componentDidMount(){
 
@@ -27,19 +26,16 @@ class NewVideo extends React.Component<any, any>{
                 <Typography style={{
                     textAlign: 'center',
                 }} variant="display1" component="h1">
-                    新建视频
+                    管理
                 </Typography>
-                <Fab className={classes.button} 
-                component={BackListLink} 
-                variant="extended" 
-                color="primary">--返回视频列表---></Fab>
-                <Provider video={video}>
-                    <VideoForm />
-                </Provider>
+                <Button component={VideosLink}>视频管理</Button>
+               <Button  component={PostsLink}>文章管理</Button>
+               <Button  component={TagsLink}>标签管理</Button>
+              
             </React.Fragment>
         )
     }
 
 }
 
-export default withStyles(styles)(NewVideo);
+export default withStyles(styles)(Admin);
