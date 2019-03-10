@@ -1,50 +1,50 @@
 import React from 'react';
-import Clappr from 'clappr';
+import { DefaultPlayer as Video } from 'react-html5video';
+import 'react-html5video/dist/styles.css';
+import videoConnect from 'react-html5video';
 
 
 class VideoPlayer extends React.Component<any, any>{
 
-    player:any;
+  componentDidMount(){
     
-    constructor(props:any){
-        super(props);
-        this.player = null
-    }
-    
-    componentDidMount(){
-        this.change(this.props.source);
-    }
+  }
 
-    destroyPlayer() {
-        if (this.player) {
-          this.player.destroy();
+    componentWillReceiveProps(nextProps:any){
+      
+      if(nextProps.source!== this.props.source ){
+        const { videoEl, source, onSourceChange }  = nextProps;
+        if(onSourceChange){
+          onSourceChange(source);
         }
-        this.player = null;
-    }
-    change(source:Array<string>) {
-        if (this.player) {
-          this.destroyPlayer();
-        }
-        this.player = new Clappr.Player({
-          parent: this.refs.player,
-          source: source,
-          width: '100%',
-          height: '100%',
-          hlsjsConfig: {
-            enableWorker: true
-          }
-        });
+        videoEl.load();
+      }
+      
     }
 
     render(){
-        return (
-            <div>
-                <div ref="player">
-                </div>
-            </div>
-        )
+      const {source, poster, muted, autoPlay } = this.props;
+      return (
+        <Video autoPlay={autoPlay} loop muted={muted}
+                  controls={['PlayPause', 'Seek', 'Time', 'Volume', 'Fullscreen']}
+                  poster={poster==="" || !poster? 
+                  "http://res.cloudinary.com/ddycd5xyn/image/upload/a_0,c_fill,w_300/default.jpg"
+                  : 
+                  poster
+                 }
+                  onCanPlayThrough={() => {
+                      // Do stuff
+                  }}>
+                  <source src={source} type="video/mp4" />
+                  <track label="zh-cn" kind="subtitles" srcLang="en" src="" default />
+          </Video>
+      )
+
+      
+      
+        
     }
 }
 
-export default VideoPlayer;
+export default videoConnect(VideoPlayer);
 

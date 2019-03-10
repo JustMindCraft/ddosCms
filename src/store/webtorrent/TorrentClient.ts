@@ -8,9 +8,10 @@ class TorrentClient {
 
     @observable currentTorrent:any=null;
     @observable currentSourcesData:Array<string> = [];
-    @observable currentErrMessage = ""
+    @observable currentErrMessage = "";
+    @observable currentPlayingSource = null;
 
-    @computed currentSources(){
+    @computed get currentSources(){
 
         return this.currentSourcesData.slice();
     }
@@ -50,7 +51,10 @@ class TorrentClient {
                 if(err){
                     return this.currentErrMessage = err.message;
                 }
+                this.currentPlayingSource = url;
                 this.currentSourcesData.push(url);
+                console.log(url);
+                
             })
 
         })
@@ -62,8 +66,17 @@ class TorrentClient {
     @action getTorrent = (torrentId: string) => {
         return client.get(torrentId);
     }
-    @action addTorrent = (torrentId: string) => {
-        if(torrentId===""){
+
+    @action destroy = () => {
+        return client.destroy();
+    }
+    
+    @action addTorrent = (torrentId: string, cb?:(torrent: any)=>{}) => {
+        console.log(torrentId);
+        
+        if(torrentId==="" || typeof torrentId !== "string" || !torrentId ){
+            console.log('种子不合法');
+            
             return "setTorrentId first";
         }
         if(client.get(torrentId) === null){
@@ -71,21 +84,30 @@ class TorrentClient {
             this.adding = true;
             client.add(torrentId, (torrent:any)=>{
                 if(torrent){
-                    this.currentTorrent = torrent;
+                    
                     this.adding = false;
+                    if(cb){
+                        cb(torrent );
+                    }
                 }
             })
         }else{
             this.currentTorrent = client.get(torrentId);
+            if(cb){
+                cb(client.get(torrentId));
+            }
         }
 
     };
 
-    @action seedFile = (file:any) => {
+    @action seedFile = (file:any, cb?:(m:any, torrent:any)=>{}) => {
         this.seeding = true;
         client.seed(file, (torrent:any)=>{
             this.currentTorrent = torrent;
             this.seeding = false;
+            if(cb){
+                cb('做种成功!', torrent);
+            }
         })
     }
 

@@ -9,3 +9,4 @@ declare module 'gun/sea';
 declare module 'gun/nts';
 declare module 'gun/gun';
 declare module 'clappr';
+declare module 'clappr';

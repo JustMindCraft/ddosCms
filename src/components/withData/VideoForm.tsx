@@ -1,17 +1,46 @@
 import React from 'react';
-import { TextField, Paper, Button } from '@material-ui/core';
+import { TextField, Paper, Button, withStyles, createStyles, CircularProgress } from '@material-ui/core';
 import ImageUploader from './ImageUploader';
 import VideoUploader from './VideoUploader';
 import { observer, inject } from 'mobx-react';
 import TextEditor from './TextEditor';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { VideoNode } from '../../gunDB';
+import { VideoNode, RootNode } from '../../gunDB';
 import { withRouter } from 'react-router';
+import {Image, CloudinaryContext, Transformation} from 'cloudinary-react';
+import TorrentVideoPlayer from './TorrentVideoPlayer';
 
 
 
-@inject('video')
+
+
+const styles = createStyles({
+    paper: {
+        paddingTop: 20,
+        paddingLeft: 15,
+        paddingRight: 15,
+        paddingBottom: 100,
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: 800,
+        alignItems: 'center',
+        alignCentent: 'center',
+        justifyContent: 'space-around',
+    },
+    form: {
+        display: "flex",
+        flexDirection: 'column',
+        minHeight: 500,
+        alignItems: 'center',
+        alignCentent: 'center',
+        justifyContent: 'space-around',
+        width: "80%"
+    }
+})
+
+
 @inject('message')
+@inject('torrentClient')
 @observer
 class VideoForm extends React.Component<any, any> {
 
@@ -19,114 +48,89 @@ class VideoForm extends React.Component<any, any> {
     constructor(props: any){
         super(props);
         this.state = {
-            editorState: ""
+            editorState: "",
+            videoUploading: false,
+            magnetURI: "",
+            imageUploading: false,
+            coverUrl: "http://res.cloudinary.com/ddycd5xyn/image/upload/a_0,c_fill,w_300/default.jpg",
+            publicId: "",
+            cloudName: "",
         }
 
     }
     componentWillMount(){
-        const { video } = this.props;
-        video.reset();
+        RootNode.get('status').put("online");
+    }
+
+    componentWillUnmount(){
+        // client.remove(this.state.magnetURI);
+        RootNode.get('status').bye().put("offline");
     }
 
     componentWillReact(){
-        const { video, message, history } = this.props;
-        const { id, saving, validing, validText, setValiding } = video;
-        if(saving){
-            message.show("正在保存......");
-        }
-        if(validing){
-            message.show(validText);
-            setValiding(false);
-        }
-        VideoNode.map((item:any)=> item? (item.id===id? item: undefined): undefined).once((data:any, key:string)=>{
-            
-            if(data.id===id ){
-                if(data.status === 'draft'){
-                    message.show("保存草稿成功!");
-                    history.push('/videos?status=draft');
-                    
-                }
-                if(data.status === "published"){
-                    message.show("视频发布成功!");
-                    history.push('/videos?status=published');
+        
+    }
 
-                }
-            }
+    
+    handleVideoUploaderChange = (params:any) => {
+        console.log(params);
+        
+       this.setState({
+           magnetURI: params.magnetURI,
+           videoUploading: params.loading,
+       })
+        
+    }
+
+    handleImageUploaderChange = (params:any) => {
+        
+        this.setState({
+            coverUrl: params.coverUrl,
+            imageUploading: params.loading,
+            publicId: params.publicId,
+            cloudName: params.cloudName,
         })
-    }
-
-    handleTitleInput = (e:any) => {
-        const { video } = this.props;
-        video.setTitle(e.target.value);
-    }
-
-    saveDraft = () => {
-        const {video} = this.props;
-        video.saveDraft();
-        
-    }
-    publish = () => {
-        const { video } = this.props;
-        console.log(video);
-        
-    }
-
-    getRawHtml = (html:string) => {
-        const { video } = this.props;
-        video.setDescription(html);
     }
    
     render(){
-        const { video } = this.props;
-        const { title, saving, locked } = video;
+        const { classes, torrentClient } = this.props;
+        const { magnetURI, videoUploading, imageUploading, coverUrl, cloudName, publicId } = this.state;
+        
+
+        const locked = videoUploading || imageUploading;
+        console.log(magnetURI);
         
         
         return (
-            <Paper style={{
-                paddingTop: 20,
-                paddingLeft: 15,
-                paddingRight: 15,
-                paddingBottom: 100,
-                display: 'flex',
-                flexDirection: 'column',
-                minHeight: 800,
-                alignItems: 'center',
-                alignCentent: 'center',
-                justifyContent: 'space-around',
-                
-            }}>
-                <form style={{
-                    display: "flex",
-                    flexDirection: 'column',
-                    minHeight: 500,
-                    alignItems: 'center',
-                    alignCentent: 'center',
-                    justifyContent: 'space-around',
-                    width: "80%"
-                }}>
-                    <div style={{
-                        margin: 20,
-                    }}>
-                        <TextField disabled={locked} style={{
-                            width: "100%",
-                            minWidth: 310
-                        }} label="视频标题" value={title} placeholder="标题" onChange={this.handleTitleInput} />
-
-                    </div>
-                    
-                    <ImageUploader />
-                    
+            <Paper className={classes.paper}>
+                <form className={classes.form}>
                    
-                    <br/>
+                    <TextField disabled={locked} style={{
+                        minWidth: 310,
+                        width: "50%",
+                        marginBottom:70,
+                    }} label="视频标题"  placeholder="标题"  />
+
+                    <ImageUploader disabled={locked} onChange={this.handleImageUploaderChange} />
+                    {
+                        imageUploading ? <CircularProgress  color="secondary" /> :
+                        <div>
+                            <img src={coverUrl} alt=""/>
+                        </div>
+                    }
+                    <VideoUploader disabled={locked} onChange={this.handleVideoUploaderChange}  />
+                   
+                        <div>
+                            <TorrentVideoPlayer torrentId={magnetURI} poster={coverUrl} />
+                        </div>
                     
-                    <VideoUploader  />
                     {
                         !locked &&
                         <div>
                             <h2 style={{
                                 textAlign: 'center',
                             }}>视频介绍或描述</h2>
-                            <TextEditor getRawHtml={this.getRawHtml} />
+                            {/* <TextEditor getRawHtml={this.getRawHtml} /> */}
                         
                         </div>
 
@@ -141,8 +145,8 @@ class VideoForm extends React.Component<any, any> {
                         marginBottom: 100,
                         marginTop: 100
                     }}>
-                        <Button disabled={saving} onClick={this.saveDraft} variant="contained" color="secondary">保存草稿</Button>
-                        <Button disabled={saving} onClick={this.publish} variant="contained"  color="secondary">直接发布</Button>
+                        <Button disabled={locked }  variant="contained" color="secondary">保存草稿</Button>
+                        <Button disabled={locked } variant="contained"  color="secondary">直接发布</Button>
                     </div>
                 </form>
 
@@ -152,4 +156,4 @@ class VideoForm extends React.Component<any, any> {
 }
 
 
-export default withRouter(VideoForm);
+export default withRouter(withStyles(styles)(VideoForm) as any);

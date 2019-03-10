@@ -7,7 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from "@material-ui/icons/Delete"
 import EyeIcon from "@material-ui/icons/Visibility"
-import { Paper, Fab, CircularProgress, Typography, ListItemAvatar, Avatar, Toolbar, Button, Divider, AppBar, Tabs, Tab} from '@material-ui/core';
+import { Paper, Fab, CircularProgress, Typography, ListItemAvatar, Avatar, Toolbar, Button, Divider, AppBar, Tabs, Tab, LinearProgress} from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { Link, withRouter } from 'react-router-dom';
 import ConfirmDialog from '../public/ConfirmDialog';
@@ -20,6 +20,7 @@ import 'moment/locale/zh-cn';
 import message from '../../store/Message';
 import VideoDialogShow from './VideoDialogShow';
 import  WebTorrent from 'webtorrent';
+import { RootNode } from '../../gunDB';
 const  client = new WebTorrent();
 
 
@@ -77,6 +78,9 @@ const styles = (theme:any) => createStyles({
         minHeight: 500,
     },
     appbar: {
+    },
+    loadingText: {
+        textAlign: 'center'
     }
 });
 
@@ -100,7 +104,8 @@ class VideoList extends React.Component<IVideosProps, any> {
             magnetURI: "",//种子地址
             blobURI: '',//播放地址
             torrentFileBlobURL: "",//种子文件下载地址
-            torrentName: ''//种子文件名
+            torrentName: '',//种子文件名
+            loading: false,
         }
     }
     
@@ -115,6 +120,8 @@ class VideoList extends React.Component<IVideosProps, any> {
         setAction('list');
         setSourceIndexes(['title', 'description']);
         setCondition({...query});
+        console.log("prepare");
+
     }
 
     componentDidMount(){
@@ -131,6 +138,8 @@ class VideoList extends React.Component<IVideosProps, any> {
                 tabVal: 2,
             })
         }
+        console.log("doAction");
+        
         doAction();
     }
     changeTab = (event:any, value:number) =>{
@@ -174,8 +183,9 @@ class VideoList extends React.Component<IVideosProps, any> {
         
     }
 
-    handleDelete = (id:string) => {
-        
+    handleDelete = (e:any,id:string) => {
+        e.stopPropagation();
+        e.cancelBubble = true;
         const { dataProvider } = this.props;
         const { setOperateId, setAction, setConfirmOpen, setConfirmTitle,setShowDialogOpen, setConfirmContent } = dataProvider;
 
@@ -254,17 +264,44 @@ class VideoList extends React.Component<IVideosProps, any> {
     }
     componentWillUnmount(){
         // client.remove(this.state.magnetURI);
+        RootNode.get('status').bye().put("offline");
+        this.setState({
+            loading: false
+        })
+    }
+
+    handleNavToNewVideo = () => {
+        this.setState({
+            loading: true
+        })
+        const { history } = this.props;
+        setTimeout(()=>{
+            history.push('/videos/new')
+        }, 500)
+        
     }
   
     render() {
+        const { loading } = this.state;
         const { classes, dataProvider } = this.props;
+        if(loading){
+            //如果新的，页面比较重，加入加载过程
+            return (
+                <Paper className={classes.root}>
+                    <LinearProgress />
+                    <br />
+                    <div className={classes.loadingText}>跳转中</div>
+                </Paper>
+            )
+        }
+       
         const { list, confirmOpen, listLoading, confirmTitle, confirmContent, showDialogOpen, oneShow, operateId } = dataProvider;
         const { title, description, coverUrl } = oneShow;
 
 
         return (
         <Paper className={classes.paper}>
-        <SearchInput onChange={this.onSearchChange}/>
+        <SearchInput onChange={this.onSearchChange}/><br/>
         <AppBar className={classes.appbar} position="static" color="default">
                 <Tabs
                     value={this.state.tabVal}
@@ -288,7 +325,7 @@ class VideoList extends React.Component<IVideosProps, any> {
             :
             <List className={classes.root}>
             {list.length===0? "暂时没有数据": list.filter((video:any)=>video!==null).map((video:any, index:number) => (
-                <ListItem key={index} role={undefined} dense button >
+                <ListItem key={index} role={undefined} dense button  onClick={(e:any)=> this.handleView(video.id)}>
                     <ListItemAvatar>
                         <Avatar alt="Remy Sharp" src={video.coverUrl} />
                     </ListItemAvatar>
@@ -316,10 +353,8 @@ class VideoList extends React.Component<IVideosProps, any> {
                                         />
                                         (未发布)
                                     </div>
-                                    <IconButton  aria-label="view" onClick={(e:any)=> this.handleView(video.id)}>
-                                        <EyeIcon />
-                                    </IconButton>
-                                    <IconButton  aria-label="delete" onClick={(e:any)=>this.handleDelete(video.id)}>
+                                    
+                                    <IconButton  aria-label="delete" onClick={(e:any)=>this.handleDelete(e, video.id)}>
                                         <DeleteIcon />
                                     </IconButton>
                                     <IconButton  aria-label="edit">
@@ -336,15 +371,16 @@ class VideoList extends React.Component<IVideosProps, any> {
             </List>
         }
         
-            <Fab component={NewVideoButtonLink}  color="primary" aria-label="Add" className={classes.fab}>
+            <Fab  onClick={this.handleNavToNewVideo}  color="primary" aria-label="Add" className={classes.fab}>
                 <AddIcon />
             </Fab>
             <ConfirmDialog dialogBack={this.dialogBack} title={confirmTitle} content={confirmContent} open={confirmOpen} />
             <VideoDialogShow 
             blobURI={this.state.blobURI} 
             coverUrl={coverUrl} 
-            handleDelete={()=>this.handleDelete(operateId)} 
+            handleDelete={(e:any)=>this.handleDelete(e, operateId)} 
             title={title} content={description}  
+            magnetURI={this.state.magnetURI}
             open={showDialogOpen}  
             loading={this.state.videoLoading}
             ShowDialogBack={this.ShowDialogBack} 
