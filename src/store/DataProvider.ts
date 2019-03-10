@@ -123,6 +123,7 @@ export class DataProvider {
         }
         //搜索用正则表达可以实现更强大的功能，暂时不实现
         // console.log(item['title']);
+        // 
         // const searchRegExp = new RegExp("/%"+"案发"+"%/");
         // console.log("test", searchRegExp.test(item['title']));
         // console.log("search", item['title'].search(searchRegExp));
