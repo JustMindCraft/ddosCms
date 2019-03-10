@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import HomePage from './components/pages/Home';
 import Layout from './components/containers/Layout';
-import PostPage from './components/pages/Post';
+import PostPage from './components/pages/Posts';
 import TestPage from './components/pages/TestPage';
 import NewVideo from './components/pages/NewVideo';
 import Videos from './components/pages/Videos';
@@ -20,6 +20,7 @@ class App extends Component {
               <Route exact path="/" component={HomePage}/>
               <Route exact path="/posts/:id" component={PostPage}/>
               <Route exact path="/test" component={TestPage} />
+              <Route exact path="/posts" component={PostPage} />
               <Route exact path="/videos" component={Videos} />
               <Route exact path="/login" component={LoginPage} />
               <Route exact path="/signup" component={SignupPage} />
