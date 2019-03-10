@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography, Divider, createStyles, withStyles } from '@material-ui/core';
-import VideoList from '../withData/VideoList';
+import PostList from '../withData/PostList';
 
 const styles = createStyles({
   typography: {
@@ -21,7 +21,7 @@ class Posts extends React.Component<IPostsProps> {
           <br/>
           <Typography className={classes.typography} variant="h4">文章管理</Typography>
           <br/>
-          <VideoList />
+          <PostList />
       </React.Fragment>
        
      

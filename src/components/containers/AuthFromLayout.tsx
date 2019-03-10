@@ -29,7 +29,7 @@ interface IAuthFormLayoutProps {
     title: string;
 }
 
-class AuthFormLayout extends React.Component<IAuthFormLayoutProps>{
+class AuthFromLayout extends React.Component<IAuthFormLayoutProps>{
   render() {
     const { children, classes: s, title } = this.props
     return (
@@ -46,4 +46,4 @@ class AuthFormLayout extends React.Component<IAuthFormLayoutProps>{
 }
 
 
-export default withStyles(styles)(AuthFormLayout)
+export default withStyles(styles)(AuthFromLayout)
