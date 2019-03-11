@@ -11,6 +11,7 @@ import DetailPage from './components/pages/DetailPage';
 import EidtVideo from './components/pages/EidtVideo';
 import Admin from './components/pages/Admin';
 import ListAdmin from './components/withData/ListAdmin';
+import NewSource from './components/pages/NewSource';
 
 class App extends Component {
   render() {
@@ -27,7 +28,7 @@ class App extends Component {
               <Route exact path="/signup" component={SignupPage} />
               <Route exact path="/detail" component={DetailPage} />
               <Route exact path="/:source" component={ListAdmin} />
-              <Route exact path="/:source/new" component={NewVideo} />
+              <Route exact path="/:source/new" component={NewSource} />
               <Route exact path="/:source/:id" component={TestPage} />
               <Route exact path="/:source/:id/edit" component={EidtVideo} />
               <Route component={HomePage}/>
