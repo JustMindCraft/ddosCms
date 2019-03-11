@@ -6,7 +6,6 @@ import PostPage from './components/pages/Posts';
 import NewPost from './components/pages/NewPost';
 import TestPage from './components/pages/TestPage';
 import NewVideo from './components/pages/NewVideo';
-import Videos from './components/pages/Videos';
 import LoginPage from './components/pages/LoginPage';
 import SignupPage from './components/pages/SignupPage';
 import DetailPage from './components/pages/DetailPage';
@@ -14,6 +13,7 @@ import VideoDetail from './components/pages/VideoDetail';
 import EidtVideo from './components/pages/EidtVideo';
 import Admin from './components/pages/Admin';
 import ListAdmin from './components/withData/ListAdmin';
+import NewSource from './components/pages/NewSource';
 
 class App extends Component {
   render() {
@@ -24,7 +24,6 @@ class App extends Component {
              <Switch>
               <Route exact path="/" component={HomePage}/>
               <Route exact path="/posts" component={PostPage} />
-              <Route exact path="/videos" component={Videos} />
               <Route exact path="/posts/new" component={NewPost} />
               <Route exact path="/video/show/:id" component={VideoDetail} />
               <Route exact path="/videos/new" component={NewVideo} />
@@ -36,7 +35,7 @@ class App extends Component {
               <Route exact path="/signup" component={SignupPage} />
               <Route exact path="/detail" component={DetailPage} />
               <Route exact path="/:source" component={ListAdmin} />
-              <Route exact path="/:source/new" component={NewVideo} />
+              <Route exact path="/:source/new" component={NewSource} />
               <Route exact path="/:source/:id" component={TestPage} />
               <Route exact path="/:source/:id/edit" component={EidtVideo} />
               <Route component={HomePage}/>
