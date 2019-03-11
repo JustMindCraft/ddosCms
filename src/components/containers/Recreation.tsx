@@ -38,7 +38,7 @@ const Recreation = (props: IRecreationProps) => {
                 {list.map((item: any,index: number) => {
                     return(
                     <Grid item xs={12} sm={3} className={classes.center} key={index}>
-                        <MediaCards coverUrl={item.coverUrl} description={item.description} title={item.title}/>
+                        <MediaCards coverUrl={item.coverUrl} description={item.description} title={item.title} id={item.id}/>
                     </Grid>
                     )
                 })}
