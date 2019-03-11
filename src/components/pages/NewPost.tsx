@@ -20,7 +20,7 @@ class NewPost extends React.Component<any, any>{
     }
 
     render(){
-        const { classes } = this.props;
+        const { classes} = this.props;
         return (
             <React.Fragment>
                 <br/>
