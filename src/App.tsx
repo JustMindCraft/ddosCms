@@ -28,7 +28,7 @@ class App extends Component {
               <Route exact path="/detail" component={DetailPage} />
               <Route exact path="/posts/new" component={NewPost} />
               <Route exact path="/posts/:id" component={PostPage}/>
-              <Route exact path="/video/show" component={VideoDetail} />
+              <Route exact path="/video/show/:id" component={VideoDetail} />
               <Route exact path="/videos/new" component={NewVideo} />
               <Route exact path="/videos/:id" component={TestPage} />
               <Route component={HomePage}/>
