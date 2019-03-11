@@ -1,6 +1,11 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router';
+import Layout from '../containers/AuthFromLayout';
+import { DefaultPlayer as Video } from 'react-html5video';
+import 'react-html5video/dist/styles.css';
+import TorrentVideoPlayer from './TorrentVideoPlayer';
+
 interface IVideoDetailWithMobxProps {
     dataProvider: any,
     history: any,
@@ -12,7 +17,7 @@ class VideoDetailWithMobx extends React.Component<IVideoDetailWithMobxProps>{
     componentWillMount() {
         const { dataProvider } = this.props;
         const { setSource, setAction } = dataProvider;
-        setSource('views');
+        setSource('videos');
         setAction('view');
     }
     componentDidMount() {
@@ -27,6 +32,9 @@ class VideoDetailWithMobx extends React.Component<IVideoDetailWithMobxProps>{
         console.log(oneShow)
         return(
             <div>
+                    <Layout title="视频">
+                    <TorrentVideoPlayer  source={oneShow.magnetURI} poster={oneShow.coverUrl} />
+                </Layout>
             </div>
         )
     }

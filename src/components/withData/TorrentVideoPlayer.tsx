@@ -57,7 +57,7 @@ class TorrentVideoPlayer extends React.Component<any, any>{
         const { poster } = this.props;
         const { source } = this.state;
 
-        
+       console.log(this.props) 
         
         return (
             <div>
