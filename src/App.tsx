@@ -5,7 +5,6 @@ import Layout from './components/containers/Layout';
 import PostPage from './components/pages/Post';
 import TestPage from './components/pages/TestPage';
 import NewVideo from './components/pages/NewVideo';
-import Videos from './components/pages/Videos';
 import LoginPage from './components/pages/LoginPage';
 import SignupPage from './components/pages/SignupPage';
 import DetailPage from './components/pages/DetailPage';
