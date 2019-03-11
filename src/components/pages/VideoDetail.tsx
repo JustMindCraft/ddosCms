@@ -2,10 +2,12 @@ import React from 'react';
 import Layout from '../containers/AuthFromLayout';
 import { DefaultPlayer as Video } from 'react-html5video';
 import 'react-html5video/dist/styles.css';
+import  VideoDetailWithMobx  from '../withData/VieoDetailWithMobx';
 class VideoDetail extends React.Component {
     render() {
         return (
             <div>
+                <VideoDetailWithMobx />
                 <Layout title="视频">
                     <Video
                         controls={['PlayPause', 'Seek', 'Time', 'Volume', 'Fullscreen']}

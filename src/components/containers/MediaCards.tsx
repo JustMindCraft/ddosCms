@@ -13,7 +13,6 @@ import renderHTML from 'react-render-html';
 import { Link as RouterLink } from 'react-router-dom'
 import Link from '@material-ui/core/Link';
 
-const MyLink = (props:any) => <RouterLink to="/open-collective" {...props} />
 
 
 
@@ -35,10 +34,13 @@ interface IMediaCardProps {
   title: string,
   coverUrl: string,
   description: string,
+  id: string,
 }
 
 const MediaCard = (props: IMediaCardProps) => {
-  const { classes, title, coverUrl, description } = props;
+  const { classes, title, coverUrl, description,id } = props;
+  const Goto = `/video/show/${id}`
+  const MyLink = (props:any) => <RouterLink to={Goto} {...props} />
   return (
     <Link component={MyLink}>
       <Card className={classes.card}>
