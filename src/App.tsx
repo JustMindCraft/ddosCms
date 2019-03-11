@@ -12,7 +12,8 @@ import Admin from './components/pages/Admin';
 import ListAdmin from './components/withData/ListAdmin';
 import NewSource from './components/pages/NewSource';
 
-class App extends Component {
+class App extends Component<any, any> {
+  
   render() {
     return (
      

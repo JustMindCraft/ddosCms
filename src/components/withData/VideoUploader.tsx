@@ -1,8 +1,7 @@
 import React from 'react';
-import { Typography, CircularProgress, Divider } from '@material-ui/core';
+import { Typography, CircularProgress, Divider, Paper, Grid } from '@material-ui/core';
 import 'react-html5video/dist/styles.css';
 import { observer, inject } from 'mobx-react';
-import VideoPlayer from './VideoPlayer';
 
 @inject('message')
 @inject('torrentClient')
@@ -26,6 +25,15 @@ class VideoUploader extends React.Component<any, any>{
         const { seedFile } = torrentClient;
         return seedFile(file, (m:any, torrent:any)=>{
             message.show(m);
+            // const ti = setInterval(()=>{
+            //     console.log("ratio", torrent.ratio);
+            //     console.log("progress", torrent.progress);
+            //     console.log("uploaded", torrent.uploadSpeed);
+                
+            // }, 1000);
+            this.setState({
+                marginURI:  torrent.magnetURI
+            })
             this.props.onChange({
                 magnetURI: torrent.magnetURI,
                 loading: false,
@@ -77,20 +85,34 @@ class VideoUploader extends React.Component<any, any>{
     }
 
     render(){
-        const { torrentClient, disabled } = this.props;
-        const { seeding } = torrentClient;
+        const { disabled } = this.props;
+        const { seeding, marginURI } = this.state;;
+        console.log(marginURI);
         
         return(
-            <div style={{
+            <Paper style={{
                 display: 'flex',
                 flexDirection: 'column',
+                padding: 10,
+                width: "100%"
             }}>
-               
-                <Typography variant="headline" >{seeding? '正在上传视频，开始做种' : "上传视频"}</Typography> <br/>
-                    <input disabled={seeding || disabled} onClick={this.hanleFileInputClick} type="file"  onChange={this.handleFileChange} multiple={false} accept="video/*"  capture='camcorder' />
                 <Divider />
+                <Grid container spacing={8} alignItems="baseline"
+                    direction="column"
+                    justify="flex-start">
+                    <Grid item>
+                        <Typography variant="headline" >{seeding? '正在上传视频，开始做种' : "上传视频"}</Typography> <br/>
+                        <input disabled={seeding || disabled} onClick={this.hanleFileInputClick} type="file"  onChange={this.handleFileChange} multiple={false} accept="video/*"  capture='camcorder' />
+                     </Grid>
+                   
+                     <Grid item style={{
+                         wordBreak:"break-all",
+                     }}>
+                            磁力链接(请复制做种):&nbsp;<br/>{marginURI}
+                     </Grid>
+                </Grid>
             
-            </div>
+            </Paper>
                
         )
     }

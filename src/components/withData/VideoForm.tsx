@@ -202,7 +202,7 @@ class VideoForm extends React.Component<any, any> {
         
         return (
             <Paper className={classes.paper}>
-                <form className={classes.form} onSubmit={this.saveDraft}>
+                <div className={classes.form} onSubmit={this.saveDraft}>
                    
                     <TextField disabled={locked} style={{
                         minWidth: 310,
@@ -239,12 +239,6 @@ class VideoForm extends React.Component<any, any> {
 
                     <VideoUploader disabled={locked} onChange={this.handleVideoUploaderChange}  />
                    
-                        <div style={{
-                            minWidth: 310,
-                            width: "50%",
-                        }}>
-                            <TorrentVideoPlayer torrentId={magnetURI} poster={coverUrl} />
-                        </div>
                     
                     {
                         !locked &&
@@ -264,7 +258,7 @@ class VideoForm extends React.Component<any, any> {
                         <Button disabled={locked } type="submit" onClick={this.saveDraft}  variant="contained" color="secondary">保存草稿</Button>
                         <Button disabled={locked } variant="contained"  color="secondary">直接发布</Button>
                     </div>
-                </form>
+                </div>
 
             </Paper>
         )

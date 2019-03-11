@@ -72,7 +72,6 @@ class TorrentClient {
     }
     
     @action addTorrent = (torrentId: string, cb?:(torrent: any)=>{}) => {
-        console.log(torrentId);
         
         if(torrentId==="" || typeof torrentId !== "string" || !torrentId ){
             console.log('种子不合法');
@@ -82,7 +81,14 @@ class TorrentClient {
         if(client.get(torrentId) === null){
             //当前没有torrent,则加入当前的torrenId进入客户端
             this.adding = true;
-            client.add(torrentId, (torrent:any)=>{
+            client.add(torrentId, {
+                announce: [
+                    "tracker.openwebtorrent.com",
+                    "tracker.btorrent.xyz" ,
+                    "ws://139.198.12.23:9876",
+                    "ws://45.76.118.111:9876",
+                ],  
+            },  (torrent:any)=>{
                 if(torrent){
                     
                     this.adding = false;
@@ -102,11 +108,19 @@ class TorrentClient {
 
     @action seedFile = (file:any, cb?:(m:any, torrent:any)=>{}) => {
         this.seeding = true;
-        client.seed(file, (torrent:any)=>{
+        client.seed(file,{
+            announce: [
+                "tracker.openwebtorrent.com",
+                "tracker.btorrent.xyz",
+                "ws://139.198.12.23:9876",
+                "ws://45.76.118.111:9876",
+            ],  
+        }, (torrent:any)=>{
             this.currentTorrent = torrent;
             this.seeding = false;
             if(cb){
                 cb('做种成功!', torrent);
+                
             }
         })
     }
@@ -115,4 +129,18 @@ class TorrentClient {
 }
 
 const torrentClient = new TorrentClient();
+// const seed = Math.random();
+// let count = 1;
+// RootNode.get('videos').map().on((data:any, key:string)=>{
+//     if(data===null){
+//       return false;
+//     }
+//     if(!data){
+//       return false;
+//     }
+    
+//     if(data.magnetURI && Math.floor(seed*100)>=count++){
+//       torrentClient.addTorrent(data.magnetURI);
+//     }
+// })
 export default torrentClient;

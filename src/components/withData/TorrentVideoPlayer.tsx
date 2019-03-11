@@ -1,70 +1,105 @@
 import React from 'react';
-import VideoPlayer from './VideoPlayer';
 import { observer, inject } from 'mobx-react';
 
-@inject('torrentClient')
+import 'dplayer/dist/DPlayer.min.css';
+import DPlayer from 'dplayer';
+import  WebTorrent from 'webtorrent';
+import { LinearProgress } from '@material-ui/core';
+
+(window as any).WebTorrent = WebTorrent;
+
+
 @observer
 class TorrentVideoPlayer extends React.Component<any, any>{
+
 
     constructor(props:any){
         super(props);
         this.state = {
-            err: "",
-            source: ""
+           loading: true,
         }
     }
-    componentWillMount(){
-        const { torrentId } = this.props;
-       this.change(torrentId);
+
+
+    
+
+    change = (torrentId:string, poster:string) => {
+        console.log(torrentId);
+        
+        (this.refs.dplayer as any).innerHTML = "";
+        if(!torrentId && torrentId==="")
+        {
+            return false;
+        }
+        const dp = new DPlayer({
+            container: this.refs.dplayer as any,
+            hotkey: true,
+            autoplay: true,
+            video: {
+                url: torrentId,
+                type: 'webtorrent',
+                pic: poster,
+            }
+        });
+        
+        dp.on("loadeddata" as any, ()=>{
+            console.log("loadeddata");
+            dp.seek(0.01);
+            this.setState({
+                loading:false,
+            })
+            
+        })
+       
+        
+    }
+    componentDidMount(){
+        // const { torrentId, poster } = this.props;
+        // this.change(torrentId, poster);
+        
     }
 
-    change = (torrentId:string) => {
-        const { torrentClient } = this.props;
-        torrentClient.addTorrent(torrentId, (torrent: any)=>{
-            
-            torrent.files.forEach((file:any)=>{
-                console.log(file);
-                
-                file.getBlobURL((err:any, url:any)=>{
-                    console.log(err);
-                    console.log(url);
-                    
-                    
-                    if(err){
-                        return this.setState({
-                            err: err.message,
-                        })
-                    }
-                    return this.setState({
-                        source: url,
-                    })
-                    
-                })
-    
-            })
-        });
+    componentWillUnmount(){
+        
     }
 
     componentWillReceiveProps(nextProps: any){
         
-        if(this.props.torrentId !== nextProps.torrentId){
+        if(nextProps.torrentId){
             console.log("再次载入种子文件");
-            
-            this.change(nextProps.torrentId);
+           
+            this.change(nextProps.torrentId, nextProps.poster);
             
         }
     }
+
+    
     
     render(){
-        const { poster } = this.props;
-        const { source } = this.state;
 
-       console.log(source) 
+
         
         return (
-            <div>
-                <VideoPlayer source={source} muted={false} poster={poster} />
-            </div>
+            <React.Fragment>
+                <div  style={{
+                    minHeight: 400,
+                    display: !this.state.loading? "none" : "block",
+                    textAlign: 'center',
+                }}>
+                    <LinearProgress />
+                    <br/>
+                    <LinearProgress />
+                    <h1>播放器加载中</h1>
+                </div>
+                <div ref="dplayer"  style={{
+                    minHeight: 400,
+                    width: "90%",
+                    display: this.state.loading? "none" : "block",
+                }}>
+                
+                </div>
+            </React.Fragment>
+            
         )
     }
 }
