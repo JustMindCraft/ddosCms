@@ -6,6 +6,7 @@ import NewPage from '../containers/New';
 import Popular from '../containers/Popular';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import HomeWithMobx from '../withData/HomeWithMobx';
+import { Link } from 'react-router-dom';
 
 const styles = (theme: any) => createStyles({
   
@@ -58,6 +59,8 @@ class HomePage extends React.Component<IHomePageProps> {
         {/* Footer */}
         <footer className={classNames(classes.footer, classes.layout)}>
           CopyRight@JustMindCraft.co
+          <br/>
+          <Link to="/admin">管理中心</Link>
         </footer>
         {/* End footer */}
       </React.Fragment>
