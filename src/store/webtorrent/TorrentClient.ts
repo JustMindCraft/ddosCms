@@ -87,6 +87,7 @@ class TorrentClient {
                     "wss:tracker.btorrent.xyz" ,
                     "ws://139.198.12.23:9876",
                     "ws://45.76.118.111:9876",
+                    "ws://localhost",
                 ],  
             },  (torrent:any)=>{
                 if(torrent){
@@ -114,6 +115,7 @@ class TorrentClient {
                 "wss:tracker.btorrent.xyz",
                 "ws://139.198.12.23:9876",
                 "ws://45.76.118.111:9876",
+                "ws://localhost",
             ],  
         }, (torrent:any)=>{
             this.currentTorrent = torrent;
