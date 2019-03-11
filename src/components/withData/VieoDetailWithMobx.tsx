@@ -29,11 +29,11 @@ class VideoDetailWithMobx extends React.Component<IVideoDetailWithMobxProps>{
     }
     render() {
         const { oneShow } = this.props.dataProvider
-        console.log(oneShow)
+        console.log({oneShow})
         return(
             <div>
                     <Layout title="视频">
-                    <TorrentVideoPlayer  source={oneShow.magnetURI} poster={oneShow.coverUrl} />
+                    <TorrentVideoPlayer  torrentId={oneShow.magnetURI} poster={oneShow.coverUrl} />
                 </Layout>
             </div>
         )

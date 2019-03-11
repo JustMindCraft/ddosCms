@@ -48,6 +48,8 @@ class TorrentVideoPlayer extends React.Component<any, any>{
     componentWillReceiveProps(nextProps: any){
         
         if(this.props.torrentId !== nextProps.torrentId){
+            console.log("再次载入种子文件");
+            
             this.change(nextProps.torrentId);
             
         }
@@ -57,7 +59,7 @@ class TorrentVideoPlayer extends React.Component<any, any>{
         const { poster } = this.props;
         const { source } = this.state;
 
-       console.log(this.props) 
+       console.log(source) 
         
         return (
             <div>
