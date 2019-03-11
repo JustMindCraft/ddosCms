@@ -3,10 +3,8 @@ import classNames from 'classnames';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { withStyles, createStyles } from '@material-ui/core/styles';
 import NewPage from '../containers/New';
-import Recreation from '../containers/Recreation';
 import Popular from '../containers/Popular';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import chashao from '../../images/f25af2fe5058dac470d3d628c54b8373.png';
 import HomeWithMobx from '../withData/HomeWithMobx';
 
 const styles = (theme: any) => createStyles({

@@ -11,6 +11,9 @@ import LoginPage from './components/pages/LoginPage';
 import SignupPage from './components/pages/SignupPage';
 import DetailPage from './components/pages/DetailPage';
 import VideoDetail from './components/pages/VideoDetail';
+import EidtVideo from './components/pages/EidtVideo';
+import Admin from './components/pages/Admin';
+import ListAdmin from './components/withData/ListAdmin';
 
 class App extends Component {
   render() {
@@ -20,17 +23,22 @@ class App extends Component {
            <Layout>
              <Switch>
               <Route exact path="/" component={HomePage}/>
-              <Route exact path="/test" component={TestPage} />
               <Route exact path="/posts" component={PostPage} />
               <Route exact path="/videos" component={Videos} />
-              <Route exact path="/login" component={LoginPage} />
-              <Route exact path="/signup" component={SignupPage} />
-              <Route exact path="/detail" component={DetailPage} />
               <Route exact path="/posts/new" component={NewPost} />
-              <Route exact path="/posts/:id" component={PostPage}/>
               <Route exact path="/video/show/:id" component={VideoDetail} />
               <Route exact path="/videos/new" component={NewVideo} />
               <Route exact path="/videos/:id" component={TestPage} />
+              <Route exact path="/admin" component={Admin}/>
+              <Route exact path="/posts/:id" component={PostPage}/>
+              <Route exact path="/test" component={TestPage} />
+              <Route exact path="/login" component={LoginPage} />
+              <Route exact path="/signup" component={SignupPage} />
+              <Route exact path="/detail" component={DetailPage} />
+              <Route exact path="/:source" component={ListAdmin} />
+              <Route exact path="/:source/new" component={NewVideo} />
+              <Route exact path="/:source/:id" component={TestPage} />
+              <Route exact path="/:source/:id/edit" component={EidtVideo} />
               <Route component={HomePage}/>
             </Switch>
           </Layout>

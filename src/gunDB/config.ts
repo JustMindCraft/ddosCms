@@ -6,7 +6,7 @@ const config: IConfig ={
     hosts: [
         'https://gun.10000cars.com/gun'
     ],
-    rootId: 'site1'
+    rootId: window.location.host
 }
 
 export default  config;

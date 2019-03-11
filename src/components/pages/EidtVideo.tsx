@@ -13,7 +13,7 @@ const styles = createStyles({
     }
 })
 
-class NewVideo extends React.Component<any, any>{
+class EditVideo extends React.Component<any, any>{
 
     componentDidMount(){
 
@@ -27,7 +27,7 @@ class NewVideo extends React.Component<any, any>{
                 <Typography style={{
                     textAlign: 'center',
                 }} variant="display1" component="h1">
-                    新建视频
+                    编辑视频
                 </Typography>
                 <Fab className={classes.button} 
                 component={BackListLink} 
@@ -42,4 +42,4 @@ class NewVideo extends React.Component<any, any>{
 
 }
 
-export default withStyles(styles)(NewVideo);
+export default withStyles(styles)(EditVideo);

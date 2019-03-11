@@ -13,9 +13,9 @@ export class DataProvider {
     @observable searchIndexes = ['title', 'body', 'description', 'tags'];//需要被搜索的字段
 
     @observable loading = true;
-    @observable dataSource = [];
+    @observable dataSource:Array<any> = [];
     @observable checked=[];//选中的项目
-    @observable timeFromCondition= now()-1000*60*60*24;//说明查询的时间段, 默认是一天
+    @observable timeFromCondition= now()-1000*60*60*72;//说明查询的时间段, 默认是一天
     @observable timeEndCondition= now();//说明查询的时间段, 默认是一天
     @observable searchString = '';//模糊搜索的字符串
     @observable operateId=""; //当前操作的记录ID
@@ -25,6 +25,8 @@ export class DataProvider {
     //状态
     @observable oneLoading = false; //单个文件加载状态
     @observable listLoading = false;//列表加载状态
+    @observable creating = false;
+    @observable updating = false;
 
     //确认对话框
     @observable confirmOpen = false;
@@ -114,6 +116,10 @@ export class DataProvider {
         return this.timeFromCondition = time;
     }
 
+    @action setTimeEndCondition = (time: number) => {
+        return this.timeEndCondition = time;
+    }
+
     @action filterCondition = (item:any)=> {
         this.dataSource = [];
            
@@ -130,7 +136,7 @@ export class DataProvider {
         // console.log("index", );
         const timeCondition = item.createdAt >= this.timeFromCondition && item.createdAt <= this.timeEndCondition;
        
-
+        
         for (let index = 0; index < this.indexes.length; index++) {
             //搜索查询
             const searchKey = this.indexes[index];
@@ -168,17 +174,18 @@ export class DataProvider {
       }
 
     @action getList = () => {
-        
+        RootNode.get('status').put("online");
         this.listLoading = true;
         this.dataSource = [];
-        RootNode.get(this.source).map(this.filterCondition).once((data:any, key:string)=>{
-            if(data===null){
-              return false;
-            }
-            this.dataSource.unshift(data as never);
-            this.listLoading = false;
-            
-          })
+        RootNode.get(this.source).map((item:any)=>this.filterCondition(item)).once((data:any, key:string)=>{
+        if(data===null){    
+            return false;
+        }
+        this.dataSource.unshift(data);
+        
+        this.listLoading = false;
+        
+        })
           //手工加载完毕
           let timeout:any = null;
           timeout =  setTimeout(()=>{
@@ -195,6 +202,7 @@ export class DataProvider {
         RootNode.get(this.source)
         .map((item:any)=> item? (item.id===this.operateId? item: undefined): undefined )
         .once((data:any,key:string)=>{
+            
             RootNode.get(this.source).get(key).put(null, (ack:any)=>{
                 RootNode.get(this.source+'/'+this.operateId).put(null, (ack:any)=>{
 
@@ -202,6 +210,7 @@ export class DataProvider {
                         if(cb){
                             cb("删除数据成功");
                         }
+                        this.setTimeEndCondition(now());
                         this.doAction();
                     }
                 })
@@ -222,11 +231,59 @@ export class DataProvider {
         })
     }
 
-    @action doAction = (cb?:(m:any)=>{}) => {
+    @action createOne = (cb:(m:any)=>{}, data:any) => {
+
+        this.creating = true;
+
+        const uuid = require('uuid/v4')();
+
+        this.setOperateId(uuid);
+
+        const one = RootNode.get(this.source+"/"+this.operateId).put({...data, id: this.operateId}, (ack:any)=>{
+            if(!ack.err){
+                RootNode.get(this.source+"_count").once((data:any, key:string)=>{
+                    RootNode.get(this.source+"_count").put({
+                        count: data? data.count+1: 1,
+                    });
+                });
+            }
+            console.log(ack);
+            
+        });
+        RootNode.get(this.source).set(one, (ack:any)=>{
+            console.log("保存", ack);
+            this.creating = false;
+            if(!ack.err){
+                cb('保存草稿成功');
+            }
+        });
+    }
+
+    @action updateOne = (data:any) => {
+
+        this.updating = true;
+
+        const one = RootNode.get(this.source+"/"+this.operateId).put(data, (ack:any)=>{
+            if(!ack.err){
+                RootNode.get(this.source+"_count").once((data:any, key:string)=>{
+                    RootNode.get(this.source+"_count").put({
+                        count: data? data.count+1: 1,
+                    });
+                });
+            }
+            console.log(ack);
+            
+        });
+        RootNode.get(this.source).set(one, (ack:any)=>{
+            console.log("更新", ack);
+            this.updating = false;
+        });
+    }
+
+    @action doAction = (cb?:(m:any)=>{}, data?:any) => {
         
         switch (this.action) {
             case "list":
-            console.log(11)
                 return this.getList();
             
             case 'delete':
@@ -237,6 +294,18 @@ export class DataProvider {
 
             case 'view':
                 return this.getSingleData(cb);
+
+            case "create":
+                if(cb){
+                    return this.createOne(cb, data);
+                }else{
+                    return "callback missing"
+
+                }
+               
+
+            case "update":
+                return this.updateOne(data);
         
             default:
                 return this.getList();;

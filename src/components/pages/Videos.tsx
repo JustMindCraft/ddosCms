@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography, Divider, createStyles, withStyles } from '@material-ui/core';
-import VideoList from '../withData/VideoList';
+// import VideoList from '../withData/VideoList';
 
 const styles = createStyles({
   typography: {
@@ -21,7 +21,7 @@ class Videos extends React.Component<IVideosProps> {
           <br/>
           <Typography className={classes.typography} variant="h4">视频管理</Typography>
           <br/>
-          <VideoList />
+          {/* <VideoList /> */}
       </React.Fragment>
        
      

@@ -8,6 +8,7 @@ import withMobileDialog from '@material-ui/core/withMobileDialog';
 import renderHTML from 'react-render-html';
 import { DefaultPlayer as Video } from 'react-html5video';
 import 'react-html5video/dist/styles.css';
+import TorrentVideoPlayer from './TorrentVideoPlayer';
 
 
 interface IComfirmDialogProps{
@@ -21,7 +22,8 @@ interface IComfirmDialogProps{
     handleEdit:Function,
     coverUrl:string, 
     blobURI: string,
-    loading: boolean
+    loading: boolean,
+    magnetURI:string,
 
 }
 class VideoDialogShow extends React.Component<IComfirmDialogProps> {
@@ -38,7 +40,7 @@ class VideoDialogShow extends React.Component<IComfirmDialogProps> {
   }
 
   render() {
-    const { fullScreen, open, title, content, coverUrl, blobURI, loading } = this.props;
+    const { fullScreen, open, title, content, coverUrl, magnetURI, loading } = this.props;
 
     return (
        
@@ -51,15 +53,7 @@ class VideoDialogShow extends React.Component<IComfirmDialogProps> {
           <DialogTitle id="responsive-dialog-title">{title}</DialogTitle>
           <DialogContent>
          {
-              !loading && <Video 
-              controls={['PlayPause', 'Seek', 'Time', 'Volume', 'Fullscreen']}
-              poster={coverUrl}
-              onCanPlayThrough={() => {
-                  // Do stuff
-              }}>
-              <source src={blobURI} type="video/mp4" />
-              <track label="中文字幕" kind="subtitles" srcLang="en" src="" default />
-          </Video>
+              !loading && <TorrentVideoPlayer torrentId={magnetURI} poster={coverUrl}/>
          }
              {renderHTML(content?content:"<div>暂无简介</div>")}
           </DialogContent>
