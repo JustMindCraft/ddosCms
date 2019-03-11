@@ -1,10 +1,10 @@
 import React from 'react';
 import VideoForm from '../withData/VideoForm';
-import { Provider } from 'mobx-react';
-import video from '../../store/models/Video';
-import { Typography, Button, createStyles, withStyles, Fab } from '@material-ui/core';
-import { Link, withRouter } from 'react-router-dom';
-const BackListLink = (props:any) => <Link to='/videos' {...props} />
+import { Typography, createStyles, withStyles, Fab } from '@material-ui/core';
+import { withRouter } from 'react-router-dom';
+import PostForm from '../withData/PostForm';
+import post from '../../store/models/Post';
+import SourceListLink from '../containers/SourceListLink';
 
 const styles = createStyles({
     button: {
@@ -12,6 +12,7 @@ const styles = createStyles({
         zIndex: 100,
     }
 })
+
 
 class NewSource extends React.Component<any, any>{
         //根据不同的路由名称，加载不同的source，加载不同的新建source的表单
@@ -30,6 +31,11 @@ class NewSource extends React.Component<any, any>{
                 sourceName: "视频"
             })
         }
+        if(match.params.source === "posts"){
+            this.setState({
+                sourceName: "文章"
+            })
+        }
         
     }
     
@@ -42,7 +48,12 @@ class NewSource extends React.Component<any, any>{
             if(source==="videos"){
                 return  <VideoForm />
             }
+            if(source==="posts")
+                return <PostForm post={post} />
         }
+        
+        
+
         return (
             <React.Fragment>
                 <br/>
@@ -52,7 +63,7 @@ class NewSource extends React.Component<any, any>{
                     新建{sourceName}
                 </Typography>
                 <Fab className={classes.button} 
-                component={BackListLink} 
+                component={SourceListLink}
                 variant="extended" 
                 color="primary">--返回{sourceName}列表---></Fab>
                {sourceForm(source)}

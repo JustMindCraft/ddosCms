@@ -1,5 +1,6 @@
 import React from 'react';
 import VideoListShow from './VideoListShow';
+import PostListShow from './PostListShow';
 
 const SourceListShow = (props:any) => {
     const { source, list, onView, onDelete, onEdit } = props;
@@ -9,6 +10,10 @@ const SourceListShow = (props:any) => {
            return (
                <VideoListShow list={list} onView={onView} onDelete={onDelete} onEdit={onEdit} />
            )
+        case "posts":
+            return (
+                <PostListShow list={list} onView={onView} onDelete={onDelete} onEdit={onEdit} />
+            )
         default:
             return (
                 <div>

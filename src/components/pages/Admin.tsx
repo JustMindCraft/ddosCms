@@ -1,9 +1,9 @@
 import React from 'react';
 import { Typography, Button, createStyles, withStyles, Fab } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-const VideosLink = (props:any) => <Link to='/videos' {...props} />
-const PostsLink = (props:any) => <Link to='/posts' {...props} />
-const TagsLink = (props:any) => <Link to='/tags' {...props} />
+const VideosLink = (props:any) => <Link to='/admin/videos' {...props} />
+const PostsLink = (props:any) => <Link to='/admin/posts' {...props} />
+const TagsLink = (props:any) => <Link to='/admin/tags' {...props} />
 
 const styles = createStyles({
     button: {
