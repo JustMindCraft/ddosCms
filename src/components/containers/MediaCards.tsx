@@ -10,6 +10,14 @@ import ShareIcon from '@material-ui/icons/Share';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import IconButton from '@material-ui/core/IconButton';
 import renderHTML from 'react-render-html';
+import { Link as RouterLink } from 'react-router-dom'
+import Link from '@material-ui/core/Link';
+
+const MyLink = (props:any) => <RouterLink to="/open-collective" {...props} />
+
+
+
+
 
 
 const styles = {
@@ -32,33 +40,35 @@ interface IMediaCardProps {
 const MediaCard = (props: IMediaCardProps) => {
   const { classes, title, coverUrl, description } = props;
   return (
-    <Card className={classes.card}>
-      <CardActionArea>
-        <CardMedia
-          className={classes.media}
-          image={coverUrl}
-          title="Contemplative Reptile"
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            {title}
-          </Typography>
-          <Typography component="p">
-            {renderHTML(description)}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-      <CardActions>
-        <IconButton aria-label="Add to favorites">
-          <FavoriteIcon />
-          123
+    <Link component={MyLink}>
+      <Card className={classes.card}>
+        <CardActionArea>
+          <CardMedia
+            className={classes.media}
+            image={coverUrl}
+            title="Contemplative Reptile"
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="h2">
+              {title}
+            </Typography>
+            <Typography component="p">
+              {renderHTML(description)}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+        <CardActions>
+          <IconButton aria-label="Add to favorites">
+            <FavoriteIcon />
+            123
           </IconButton>
-        <IconButton aria-label="Share">
-          <ShareIcon />
-          321
+          <IconButton aria-label="Share">
+            <ShareIcon />
+            321
           </IconButton>
-      </CardActions>
-    </Card>
+        </CardActions>
+      </Card>
+    </Link>
   );
 }
 
