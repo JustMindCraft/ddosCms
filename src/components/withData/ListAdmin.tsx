@@ -38,6 +38,7 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
             torrentFileBlobURL: "",//种子文件下载地址
             torrentName: '',//种子文件名
             loading: false,
+            sourceName: ""
         }
     }
     
@@ -52,15 +53,30 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
         
         setSource(match.params.source);
         setAction('list');
-        setSourceIndexes(['title', 'description']);
+        if(match.params.source==="videos"){
+            setSourceIndexes(['title', 'description']);
+        }
+        if(match.params.source==="posts"){
+            setSourceIndexes(['title', 'content']);
+        }
         setCondition({...query});
         setTimeEndCondition(now());
-        console.log("prepare");
 
     }
 
     componentDidMount(){
-        const { dataProvider,location } = this.props;
+        const { dataProvider,location, match } = this.props;
+        if(match.params.source === "videos"){
+            this.setState({
+                sourceName: "视频"
+            })
+        }
+        if(match.params.source === "posts"){
+            this.setState({
+                sourceName: "文章"
+            })
+        }
+
         const { doAction, condition } = dataProvider;
         const query = queryString.parse(location.search);
         if(query.status==='draft'){
@@ -87,7 +103,7 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
             setAction('list');
             setSourceIndexes(['title', 'description']);
             setTimeEndCondition(now());
-            history.push('/'+source);
+            history.push('/admin/'+source);
             doAction();
         }
 
@@ -95,7 +111,7 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
             setCondition({status: 'draft'});
             setAction('list');
             setTimeEndCondition(now());
-            history.push('/'+source+'?status=draft');
+            history.push('/admin/'+source+'?status=draft');
             doAction();
         }
 
@@ -103,7 +119,7 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
             setCondition({status: 'published'});
             setAction('list');
             setTimeEndCondition(now());
-            history.push('/'+source+'?status=published');
+            history.push('/admin/'+source+'?status=published');
             doAction();
 
         }
@@ -213,13 +229,13 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
         })
     }
 
-    handleNavToNewVideo = () => {
+    handleNavToNewSource = () => {
         this.setState({
             loading: true
         })
-        const { history } = this.props;
+        const { history, match } = this.props;
         setTimeout(()=>{
-            history.push('/videos/new')
+            history.push('/admin/'+match.params.source+'/new')
         }, 500)
         
     }
@@ -228,7 +244,7 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
         e.cancelBubble = true;
         const { history } = this.props;
         setTimeout(()=>{
-            history.push('/videos/'+id+'/edit')
+            history.push('/admin/videos/'+id+'/edit')
         }, 500)
     }
 
@@ -243,7 +259,7 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
     }
   
     render() {
-        const { loading } = this.state;
+        const { loading, sourceName } = this.state;
         const { classes, dataProvider, match } = this.props;
 
         if(loading){
@@ -263,6 +279,9 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
 
         return (
         <Paper className={classes.paper}>
+         <br/>
+          <Typography className={classes.typography} variant="h4">{sourceName}管理</Typography>
+          <br/>
         <SearchInput onChange={this.onSearchChange}/><br/>
         <AppBar className={classes.appbar} position="static" color="default">
                 <Tabs
@@ -293,7 +312,7 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
               />
         }
         
-            <Fab  onClick={this.handleNavToNewVideo}  color="primary" aria-label="Add" className={classes.fab}>
+            <Fab  onClick={this.handleNavToNewSource}  color="primary" aria-label="Add" className={classes.fab}>
                 <AddIcon />
             </Fab>
             <Fab  onClick={this.backAdmin}  color="primary" aria-label="Add" className={classes.adminFab}>
@@ -301,14 +320,14 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
             </Fab>
             <ConfirmDialog dialogBack={this.dialogBack} title={confirmTitle} content={confirmContent} open={confirmOpen} />
             <VideoDialogShow 
-            blobURI={this.state.blobURI} 
-            coverUrl={coverUrl} 
-            handleDelete={(e:any)=>this.onDelete(e, operateId)} 
-            title={title} content={description}  
-            magnetURI={this.state.magnetURI}
-            open={showDialogOpen}  
-            loading={this.state.videoLoading}
-            ShowDialogBack={this.ShowDialogBack} 
+                blobURI={this.state.blobURI} 
+                coverUrl={coverUrl} 
+                handleDelete={(e:any)=>this.onDelete(e, operateId)} 
+                title={title} content={description}  
+                magnetURI={this.state.magnetURI}
+                open={showDialogOpen}  
+                loading={this.state.videoLoading}
+                ShowDialogBack={this.ShowDialogBack} 
             />
             {
                 !listLoading && 

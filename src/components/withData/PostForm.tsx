@@ -8,7 +8,6 @@ import { withRouter } from 'react-router';
 
 
 
-@inject('post')
 @inject('message')
 @observer
 class PostForm extends React.Component<any, any> {

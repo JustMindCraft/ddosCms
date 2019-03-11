@@ -4,7 +4,7 @@ import { Provider } from 'mobx-react';
 import video from '../../store/models/Video';
 import { Typography, Button, createStyles, withStyles, Fab } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-const BackListLink = (props:any) => <Link to='/videos' {...props} />
+const BackListLink = (props:any) => <Link to='/admin/videos' {...props} />
 
 const styles = createStyles({
     button: {
