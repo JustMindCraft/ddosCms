@@ -41,9 +41,6 @@ export class DataProvider {
 
     @observable singleData = new Map();
 
-    @observable sourceLocked = false;
-    
-
     @computed get list(){
         return this.dataSource.slice();
     }
@@ -177,12 +174,14 @@ export class DataProvider {
 
     @action getList = (cb?:(m:any)=>{}) => {
         RootNode.get('status').put("online");
+        console.log(this.source)
         this.listLoading = true;
         this.dataSource = [];
         RootNode.get(this.source).map((item:any)=>this.filterCondition(item)).once((data:any, key:string)=>{
         if(data===null){    
             return false;
         }
+        // console.log(1)
         this.dataSource.unshift(data);
         
         this.listLoading = false;

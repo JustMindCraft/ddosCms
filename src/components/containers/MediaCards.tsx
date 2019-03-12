@@ -38,9 +38,9 @@ interface IMediaCardProps {
 }
 
 const MediaCard = (props: IMediaCardProps) => {
-  const { classes, title, coverUrl, description,id } = props;
+  const { classes, title, coverUrl, description, id } = props;
   const Goto = `/video/show/${id}`
-  const MyLink = (props:any) => <RouterLink to={Goto} {...props} />
+  const MyLink = (props: any) => <RouterLink to={Goto} {...props} />
   return (
     <Link component={MyLink}>
       <Card className={classes.card}>
