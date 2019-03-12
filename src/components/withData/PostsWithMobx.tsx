@@ -6,11 +6,11 @@ interface IHomeWithMobxProps {
 }
 @inject('dataProvider')
 @observer
-class HomeWithMobx extends React.Component<IHomeWithMobxProps>{
+class  PostsWithMobx extends React.Component<IHomeWithMobxProps>{
     componentWillMount() {
         const { dataProvider } = this.props;
         const { setSource, setAction } = dataProvider;
-        setSource('videos');
+        setSource('posts');
         setAction('list');
     }
     componentDidMount() {
@@ -23,10 +23,10 @@ class HomeWithMobx extends React.Component<IHomeWithMobxProps>{
         console.log(list)
         return(
             <div>
-                <Recreation list={list} title={"视频"}/>
+                <Recreation list={list} title={"文章"}/>
             </div>
         )
     }
 }
 
-export default HomeWithMobx as any;
+export default PostsWithMobx as any;
