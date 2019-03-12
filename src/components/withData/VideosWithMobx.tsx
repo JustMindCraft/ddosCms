@@ -6,15 +6,16 @@ interface IHomeWithMobxProps {
 }
 @inject('dataProvider')
 @observer
-class HomeWithMobx extends React.Component<IHomeWithMobxProps>{
+class  VideosWithMobx extends React.Component<IHomeWithMobxProps>{
     componentWillMount() {
+        const { dataProvider } = this.props;
+     
+    }
+    componentDidMount() {
         const { dataProvider } = this.props;
         const { setSource, setAction } = dataProvider;
         setSource('videos');
         setAction('list');
-    }
-    componentDidMount() {
-        const { dataProvider } = this.props;
         const { doAction } = dataProvider;
         doAction()
     }
@@ -29,4 +30,4 @@ class HomeWithMobx extends React.Component<IHomeWithMobxProps>{
     }
 }
 
-export default HomeWithMobx as any;
+export default VideosWithMobx as any;

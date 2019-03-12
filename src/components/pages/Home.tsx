@@ -5,7 +5,8 @@ import { withStyles, createStyles } from '@material-ui/core/styles';
 import NewPage from '../containers/New';
 import Popular from '../containers/Popular';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import HomeWithMobx from '../withData/HomeWithMobx';
+import  VideosWithMobx from '../withData/VideosWithMobx';
+import PostsWithMobx from '../withData/PostsWithMobx';
 import { Link } from 'react-router-dom';
 
 const styles = (theme: any) => createStyles({
@@ -52,7 +53,8 @@ class HomePage extends React.Component<IHomePageProps> {
       <React.Fragment>
         <CssBaseline />
         <main className={classes.container}>
-         <HomeWithMobx /> 
+         <VideosWithMobx /> 
+         <PostsWithMobx />
           <Popular />
           <NewPage />
         </main>

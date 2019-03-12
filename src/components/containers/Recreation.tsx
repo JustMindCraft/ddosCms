@@ -37,23 +37,11 @@ const Recreation = (props: IRecreationProps) => {
             <Grid container spacing={24}>
                 {list.map((item: any,index: number) => {
                     return(
-                    <Grid item xs={12} sm={3} className={classes.center} key={index}>
+                    <Grid  xs={12} sm={4} className={classes.center} key={index}>
                         <MediaCards coverUrl={item.coverUrl} description={item.description} title={item.title} id={item.id}/>
                     </Grid>
                     )
                 })}
-                {/* <Grid item xs={12} sm={3} className={classes.center}>
-                            <MediaCards />
-                    </Grid>
-                    <Grid item xs={12} sm={3} className={classes.center}>
-                            <MediaCards />
-                    </Grid>
-                    <Grid item xs={12} sm={3} className={classes.center}>
-                            <MediaCards />
-                    </Grid>
-                    <Grid item xs={12} sm={3} className={classes.center}>
-                            <MediaCards />
-                    </Grid> */}
             </Grid>
         </div>
     )

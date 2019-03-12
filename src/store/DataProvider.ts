@@ -40,7 +40,9 @@ export class DataProvider {
     @observable showDialogTitle = false;//内容显示框只指定标题，其余内容在其他组件实现
 
     @observable singleData = new Map();
+
     
+   
 
     @computed get list(){
         return this.dataSource.slice();
@@ -175,12 +177,14 @@ export class DataProvider {
 
     @action getList = () => {
         RootNode.get('status').put("online");
+        console.log(this.source)
         this.listLoading = true;
         this.dataSource = [];
         RootNode.get(this.source).map((item:any)=>this.filterCondition(item)).once((data:any, key:string)=>{
         if(data===null){    
             return false;
         }
+        // console.log(1)
         this.dataSource.unshift(data);
         
         this.listLoading = false;
