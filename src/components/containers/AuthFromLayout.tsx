@@ -9,7 +9,7 @@ const styles = (theme:any) => createStyles({
     margin: '30px auto',
     display: 'flex',
     flexDirection: 'column',
-    padding: 32
+    padding: 12
   },
   titleWrap: {
     // backgroundColor: theme.palette.background.paper,
