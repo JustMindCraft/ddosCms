@@ -11,6 +11,7 @@ import EidtVideo from './components/pages/EidtVideo';
 import Admin from './components/pages/Admin';
 import ListAdmin from './components/withData/ListAdmin';
 import NewSource from './components/pages/NewSource';
+import NewHome from './components/pages/NewHome';
 
 class App extends Component<any, any> {
   
@@ -21,6 +22,7 @@ class App extends Component<any, any> {
            <Layout>
              <Switch>
               <Route exact path="/" component={HomePage}/>
+              <Route exact path="/home" component={NewHome}/>
               <Route exact path="/test" component={TestPage} />
               <Route exact path="/login" component={LoginPage} />
               <Route exact path="/signup" component={SignupPage} />
