@@ -15,25 +15,23 @@ interface IVideoDetailWithMobxProps {
 @observer
 class VideoDetailWithMobx extends React.Component<IVideoDetailWithMobxProps>{
     componentWillMount() {
-        const { dataProvider } = this.props;
-        const { setSource, setAction } = dataProvider;
-        setSource('videos');
-        setAction('view');
-    }
-    componentDidMount() {
         const { dataProvider, match } = this.props;
         const id =  match.params.id;
-        const { doAction, setOperateId } = dataProvider;
+        const { setSource, setAction, setOperateId, doAction } = dataProvider;
+        setSource('videos');
+        setAction('view');
         setOperateId(id)
         doAction()
     }
+    
     render() {
         const { oneShow } = this.props.dataProvider
-        console.log(oneShow)
+        console.log({oneShow})
+        const { title } = oneShow;
         return(
             <div>
-                    <Layout title="视频">
-                    <TorrentVideoPlayer  source={oneShow.magnetURI} poster={oneShow.coverUrl} />
+                <Layout title={title}>
+                    <TorrentVideoPlayer  torrentId={oneShow.magnetURI} poster={oneShow.coverUrl} />
                 </Layout>
             </div>
         )

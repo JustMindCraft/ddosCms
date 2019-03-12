@@ -9,12 +9,13 @@ interface IHomeWithMobxProps {
 class  VideosWithMobx extends React.Component<IHomeWithMobxProps>{
     componentWillMount() {
         const { dataProvider } = this.props;
-        const { setSource, setAction } = dataProvider;
-        setSource('videos');
-        setAction('list');
+     
     }
     componentDidMount() {
         const { dataProvider } = this.props;
+        const { setSource, setAction } = dataProvider;
+        setSource('videos');
+        setAction('list');
         const { doAction } = dataProvider;
         doAction()
     }

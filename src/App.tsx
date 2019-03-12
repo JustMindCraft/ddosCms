@@ -2,10 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import HomePage from './components/pages/Home';
 import Layout from './components/containers/Layout';
-import PostPage from './components/pages/Posts';
-import NewPost from './components/pages/NewPost';
 import TestPage from './components/pages/TestPage';
-import NewVideo from './components/pages/NewVideo';
 import LoginPage from './components/pages/LoginPage';
 import SignupPage from './components/pages/SignupPage';
 import DetailPage from './components/pages/DetailPage';
@@ -15,7 +12,8 @@ import Admin from './components/pages/Admin';
 import ListAdmin from './components/withData/ListAdmin';
 import NewSource from './components/pages/NewSource';
 
-class App extends Component {
+class App extends Component<any, any> {
+  
   render() {
     return (
      

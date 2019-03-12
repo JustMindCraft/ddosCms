@@ -40,6 +40,7 @@ export class DataProvider {
     @observable showDialogTitle = false;//内容显示框只指定标题，其余内容在其他组件实现
 
     @observable singleData = new Map();
+
     
 
     @computed get list(){
@@ -182,6 +183,7 @@ export class DataProvider {
         if(data===null){    
             return false;
         }
+        // console.log(1)
         this.dataSource.unshift(data);
         
         this.listLoading = false;
@@ -223,7 +225,7 @@ export class DataProvider {
 
     @action getSingleData = (cb?:(m:any)=>{}) => {
         this.oneLoading = true;
-        RootNode.get(this.source+'/'+this.operateId).once((data:any, key:string)=>{
+        RootNode.get(this.source+'/'+this.operateId).on((data:any, key:string)=>{
             this.singleData = data;
             this.oneLoading = false;
             if(cb){

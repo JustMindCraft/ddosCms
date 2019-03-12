@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextField, Paper, Button, withStyles, createStyles, CircularProgress } from '@material-ui/core';
+import { TextField, Paper, Button, withStyles, createStyles, CircularProgress, Divider, Switch } from '@material-ui/core';
 import ImageUploader from './ImageUploader';
 import VideoUploader from './VideoUploader';
 import { observer, inject } from 'mobx-react';
@@ -8,6 +8,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { RootNode, now } from '../../gunDB';
 import { withRouter } from 'react-router';
 import TorrentVideoPlayer from './TorrentVideoPlayer';
+import TagForm from '../public/TagForm';
 
 
 
@@ -63,7 +64,8 @@ class VideoForm extends React.Component<any, any> {
             cloudName: "",
             description: "",
             title: "",
-            isRecommend: ""
+            isRecommend: false,
+            tags: ["视频"],
         };
 
     }
@@ -133,6 +135,12 @@ class VideoForm extends React.Component<any, any> {
             isRecommend
         }
     }
+    getTags = (tags:any) => {
+        this.setState({
+            tags
+        })
+        
+    }
 
     saveDraft= (e:any) => {
 
@@ -154,7 +162,7 @@ class VideoForm extends React.Component<any, any> {
         if(operateId===""){
             doAction((m:any)=>{
                 message.show(m);
-                history.push('/videos');
+                history.push('/admin/videos');
 
             }, {
                 ...data,
@@ -178,10 +186,15 @@ class VideoForm extends React.Component<any, any> {
             title: e.target.value,
         })
     }
+    changeRecommend = (e:any) => {
+        this.setState({
+            isRecommend: e.target.checked,
+        })
+    }
    
     render(){
         const { classes } = this.props;
-        const { magnetURI, videoUploading, imageUploading, coverUrl, title } = this.state;
+        const { magnetURI, videoUploading, imageUploading, coverUrl, title, isRecommend } = this.state;
         
 
         const locked = videoUploading || imageUploading;
@@ -189,13 +202,28 @@ class VideoForm extends React.Component<any, any> {
         
         return (
             <Paper className={classes.paper}>
-                <form className={classes.form} onSubmit={this.saveDraft}>
+                <div className={classes.form} onSubmit={this.saveDraft}>
                    
                     <TextField disabled={locked} style={{
                         minWidth: 310,
                         width: "50%",
                         marginBottom:70,
                     }} label="视频标题" value={title}  placeholder="标题" onChange={this.onChange}  />
+                    <Divider variant="middle"/>
+                     <h2 style={{
+                                textAlign: 'center',
+                            }}>为视频添加标签</h2>
+                    <TagForm  tags={["视频"]} onTagsChange={this.getTags}/> 
+                    <hr/>
+                    <h2 style={{
+                                textAlign: 'center',
+                            }}>是否推荐</h2>
+                    <Switch
+                        value="recommand"
+                        checked={isRecommend}
+                        onChange={this.changeRecommend}
+                    />({isRecommend? "推荐": "不推荐"})
+                    <hr/>
 
                     <ImageUploader disabled={locked} onChange={this.handleImageUploaderChange} />
                     {
@@ -207,14 +235,10 @@ class VideoForm extends React.Component<any, any> {
                         }} src={coverUrl} alt=""/>
                         </div>
                     }
+                    <hr/>
+
                     <VideoUploader disabled={locked} onChange={this.handleVideoUploaderChange}  />
                    
-                        <div style={{
-                            minWidth: 310,
-                            width: "50%",
-                        }}>
-                            <TorrentVideoPlayer torrentId={magnetURI} poster={coverUrl} />
-                        </div>
                     
                     {
                         !locked &&
@@ -228,12 +252,13 @@ class VideoForm extends React.Component<any, any> {
 
                     }
                     
-                    <br/>
+                    <hr/>
+                    
                     <div className={classes.action}>
                         <Button disabled={locked } type="submit" onClick={this.saveDraft}  variant="contained" color="secondary">保存草稿</Button>
                         <Button disabled={locked } variant="contained"  color="secondary">直接发布</Button>
                     </div>
-                </form>
+                </div>
 
             </Paper>
         )

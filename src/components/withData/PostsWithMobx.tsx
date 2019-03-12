@@ -9,14 +9,15 @@ interface IHomeWithMobxProps {
 class  PostsWithMobx extends React.Component<IHomeWithMobxProps>{
     componentWillMount() {
         const { dataProvider } = this.props;
-        const { setSource, setAction } = dataProvider;
-        setSource('posts');
-        // setAction('list');
+       
     }
     componentDidMount() {
         const { dataProvider } = this.props;
+        const { setSource, setAction } = dataProvider;
+        setSource('posts');
+        setAction('list');
         const { doAction } = dataProvider;
-        // doAction()
+        doAction()
     }
     render() {
         const { list } = this.props.dataProvider

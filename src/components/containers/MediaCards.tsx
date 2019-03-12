@@ -42,7 +42,7 @@ const MediaCard = (props: IMediaCardProps) => {
   const Goto = `/video/show/${id}`
   const MyLink = (props: any) => <RouterLink to={Goto} {...props} />
   return (
-    // <Link component={MyLink}>
+    <Link component={MyLink}>
       <Card className={classes.card}>
         <CardActionArea>
           <CardMedia
@@ -70,7 +70,7 @@ const MediaCard = (props: IMediaCardProps) => {
           </IconButton>
         </CardActions>
       </Card>
-    // </Link>
+    </Link>
   );
 }
 
