@@ -14,10 +14,10 @@ class  PostsWithMobx extends React.Component<IHomeWithMobxProps>{
     componentDidMount() {
         const { dataProvider } = this.props;
         const { setSource, setAction } = dataProvider;
-        setSource('posts');
-        setAction('list');
+        // setSource('posts');
+        // setAction('list');
         const { doAction } = dataProvider;
-        doAction()
+        // doAction()
     }
     render() {
         const { list } = this.props.dataProvider

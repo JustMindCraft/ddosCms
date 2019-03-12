@@ -42,6 +42,7 @@ export class DataProvider {
     @observable singleData = new Map();
 
     
+   
 
     @computed get list(){
         return this.dataSource.slice();
