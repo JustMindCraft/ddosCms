@@ -175,6 +175,7 @@ export class DataProvider {
 
     @action getList = () => {
         RootNode.get('status').put("online");
+        console.log(this.source)
         this.listLoading = true;
         this.dataSource = [];
         RootNode.get(this.source).map((item:any)=>this.filterCondition(item)).once((data:any, key:string)=>{

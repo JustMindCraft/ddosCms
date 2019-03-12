@@ -35,27 +35,13 @@ const Recreation = (props: IRecreationProps) => {
         <div className={classes.root}>
             <Chips text={title} />
             <Grid container spacing={24}>
-           
                 {list.map((item: any,index: number) => {
                     return(
-                    <Grid  xs={12} sm={3} className={classes.center} key={index}>
-                    2131
-                        {/* <MediaCards coverUrl={item.coverUrl} description={item.description} title={item.title} id={item.id}/> */}
+                    <Grid  xs={12} sm={4} className={classes.center} key={index}>
+                        <MediaCards coverUrl={item.coverUrl} description={item.description} title={item.title} id={item.id}/>
                     </Grid>
                     )
                 })}
-                {/* <Grid item xs={12} sm={3} className={classes.center}>
-                            <MediaCards />
-                    </Grid>
-                    <Grid item xs={12} sm={3} className={classes.center}>
-                            <MediaCards />
-                    </Grid>
-                    <Grid item xs={12} sm={3} className={classes.center}>
-                            <MediaCards />
-                    </Grid>
-                    <Grid item xs={12} sm={3} className={classes.center}>
-                            <MediaCards />
-                    </Grid> */}
             </Grid>
         </div>
     )

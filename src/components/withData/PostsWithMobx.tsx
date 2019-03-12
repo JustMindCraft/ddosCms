@@ -11,19 +11,20 @@ class  PostsWithMobx extends React.Component<IHomeWithMobxProps>{
         const { dataProvider } = this.props;
         const { setSource, setAction } = dataProvider;
         setSource('posts');
-        setAction('list');
+        // setAction('list');
     }
     componentDidMount() {
         const { dataProvider } = this.props;
         const { doAction } = dataProvider;
-        doAction()
+        // doAction()
     }
     render() {
         const { list } = this.props.dataProvider
         console.log(list)
         return(
             <div>
-                <Recreation list={list} title={"文章"}/>
+                123
+                {/* <Recreation list={list} title={"文章"}/> */}
             </div>
         )
     }
