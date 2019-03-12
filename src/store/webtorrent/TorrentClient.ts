@@ -85,9 +85,8 @@ class TorrentClient {
                 announce: [
                     "wss:tracker.openwebtorrent.com",
                     "wss:tracker.btorrent.xyz" ,
-                    "ws://139.198.12.23:9876",
-                    "ws://45.76.118.111:9876",
-                    "ws://localhost",
+                    "wss://trackerxx.lododor.com",
+                    "wss://tracker.hanpeidou.life",
                 ],  
             },  (torrent:any)=>{
                 if(torrent){
@@ -113,9 +112,8 @@ class TorrentClient {
             announce: [
                 "wss:tracker.openwebtorrent.com",
                 "wss:tracker.btorrent.xyz",
-                "ws://139.198.12.23:9876",
-                "ws://45.76.118.111:9876",
-                "ws://localhost",
+                "wss://trackerxx.lododor.com",
+                "wss://tracker.hanpeidou.life",
             ],  
         }, (torrent:any)=>{
             this.currentTorrent = torrent;

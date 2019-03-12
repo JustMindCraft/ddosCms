@@ -9,10 +9,7 @@ import { LinearProgress } from '@material-ui/core';
 (window as any).WebTorrent = WebTorrent;
 
 
-@observer
 class TorrentVideoPlayer extends React.Component<any, any>{
-
-
     constructor(props:any){
         super(props);
         this.state = {
@@ -20,11 +17,9 @@ class TorrentVideoPlayer extends React.Component<any, any>{
         }
     }
 
-
-    
-
     change = (torrentId:string, poster:string) => {
         console.log(torrentId);
+        
         
         (this.refs.dplayer as any).innerHTML = "";
         if(!torrentId && torrentId==="")
@@ -54,19 +49,13 @@ class TorrentVideoPlayer extends React.Component<any, any>{
         
     }
     componentDidMount(){
-        // const { torrentId, poster } = this.props;
-        // this.change(torrentId, poster);
-        
+        const { torrentId, poster} = this.props;
+        this.change(torrentId, poster);
     }
-
-    componentWillUnmount(){
-        
-    }
-
+   
     componentWillReceiveProps(nextProps: any){
         
         if(nextProps.torrentId){
-            console.log("再次载入种子文件");
            
             this.change(nextProps.torrentId, nextProps.poster);
             

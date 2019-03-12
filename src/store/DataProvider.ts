@@ -222,7 +222,7 @@ export class DataProvider {
 
     @action getSingleData = (cb?:(m:any)=>{}) => {
         this.oneLoading = true;
-        RootNode.get(this.source+'/'+this.operateId).once((data:any, key:string)=>{
+        RootNode.get(this.source+'/'+this.operateId).on((data:any, key:string)=>{
             this.singleData = data;
             this.oneLoading = false;
             if(cb){
