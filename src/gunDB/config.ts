@@ -9,7 +9,7 @@ const config: IConfig ={
         "https://simontaosim.herokuapp.com/gun",
         "https://gun.hanpeidou.life/gun"
     ],
-    rootId: window.location.host
+    rootId: "lododor.com"
 }
 
 export default  config;
