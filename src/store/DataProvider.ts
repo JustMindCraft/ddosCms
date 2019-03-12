@@ -40,6 +40,8 @@ export class DataProvider {
     @observable showDialogTitle = false;//内容显示框只指定标题，其余内容在其他组件实现
 
     @observable singleData = new Map();
+
+    @observable sourceLocked = false;
     
 
     @computed get list(){
@@ -173,7 +175,7 @@ export class DataProvider {
         return undefined;
       }
 
-    @action getList = () => {
+    @action getList = (cb?:(m:any)=>{}) => {
         RootNode.get('status').put("online");
         this.listLoading = true;
         this.dataSource = [];
@@ -284,7 +286,12 @@ export class DataProvider {
         
         switch (this.action) {
             case "list":
-                return this.getList();
+                if(cb){
+                    return this.getList(cb);
+                }else{
+                    return this.getList();
+                }
+                
             
             case 'delete':
                 if(cb){
