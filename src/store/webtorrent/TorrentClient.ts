@@ -1,6 +1,7 @@
 import { observable, action, computed } from "mobx";
 import client from "./client";
 
+
 class TorrentClient {
     //使用全局的环境变量，使得单页应用总是处于做随机做种的状态
     @observable adding = false;
@@ -10,6 +11,8 @@ class TorrentClient {
     @observable currentSourcesData:Array<string> = [];
     @observable currentErrMessage = "";
     @observable currentPlayingSource = null;
+
+    @observable infoHash = "";
 
     @computed get currentSources(){
 
@@ -107,20 +110,33 @@ class TorrentClient {
 
     @action seedFile = (file:any, cb?:(m:any, torrent:any)=>{}) => {
         this.seeding = true;
-        client.seed(file,{
-            announce: [
-                "wss://tracker.openwebtorrent.com",
-                "wss://trackerxx.lododor.com",
-                "wss://tracker.hanpeidou.life",
-            ],  
-        }, (torrent:any)=>{
-            this.currentTorrent = torrent;
-            this.seeding = false;
-            if(cb){
-                cb('做种成功!', torrent);
+        if(this.infoHash!==""){
+            client.remove(this.infoHash);
+        }
+        try {
+            client.seed(file,{
+                announce: [
+                    "wss://tracker.openwebtorrent.com",
+                    "wss://trackerxx.lododor.com",
+                    "wss://tracker.hanpeidou.life",
+                ],  
+            }, (torrent:any)=>{
                 
-            }
-        })
+                this.infoHash = torrent.infoHash;
+                this.currentTorrent = torrent;
+                this.seeding = false;
+                if(cb){
+                    return cb('做种成功!', torrent);
+                }
+            })
+            
+            
+            
+        } catch (error) {
+            console.log(error);
+            
+        }
+        
     }
 
     

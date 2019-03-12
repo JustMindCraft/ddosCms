@@ -7,7 +7,6 @@ import { withStyles, createStyles } from '@material-ui/core/styles';
 import Message from '../withData/Message';
 import chashao from '../../images/f25af2fe5058dac470d3d628c54b8373.png';
 import { Link } from 'react-router-dom';
-import classNames from 'classnames';
 
 const styles = (theme: any) => createStyles({
     '@global': {
@@ -154,6 +153,7 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
                 </Grid>
                 {this.props.children}
                 <Message />
+                
             </React.Fragment>
         )
     }

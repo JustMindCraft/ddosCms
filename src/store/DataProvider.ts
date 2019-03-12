@@ -41,9 +41,6 @@ export class DataProvider {
 
     @observable singleData = new Map();
 
-    
-   
-
     @computed get list(){
         return this.dataSource.slice();
     }
@@ -175,7 +172,7 @@ export class DataProvider {
         return undefined;
       }
 
-    @action getList = () => {
+    @action getList = (cb?:(m:any)=>{}) => {
         RootNode.get('status').put("online");
         console.log(this.source)
         this.listLoading = true;
@@ -288,7 +285,12 @@ export class DataProvider {
         
         switch (this.action) {
             case "list":
-                return this.getList();
+                if(cb){
+                    return this.getList(cb);
+                }else{
+                    return this.getList();
+                }
+                
             
             case 'delete':
                 if(cb){
