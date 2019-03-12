@@ -19,32 +19,41 @@ class TorrentVideoPlayer extends React.Component<any, any>{
 
     change = (torrentId:string, poster:string) => {
         console.log(torrentId);
-        
+        if(torrentId==="" || !torrentId){
+            return false;
+        }
         
         (this.refs.dplayer as any).innerHTML = "";
         if(!torrentId && torrentId==="")
         {
+            
             return false;
         }
-        const dp = new DPlayer({
-            container: this.refs.dplayer as any,
-            hotkey: true,
-            autoplay: true,
-            video: {
-                url: torrentId,
-                type: 'webtorrent',
-                pic: poster,
-            }
-        });
-        
-        dp.on("loadeddata" as any, ()=>{
-            console.log("loadeddata");
-            dp.seek(0.01);
-            this.setState({
-                loading:false,
-            })
+        try {
+            const dp = new DPlayer({
+                container: this.refs.dplayer as any,
+                hotkey: true,
+                autoplay: true,
+                video: {
+                    url: torrentId,
+                    type: 'webtorrent',
+                    pic: poster,
+                }
+            });
             
-        })
+            dp.on("loadeddata" as any, ()=>{
+                console.log("loadeddata");
+                dp.seek(0.01);
+                this.setState({
+                    loading:false,
+                })
+                
+            })
+        } catch (error) {
+            console.log(error);
+            
+        }
+        
        
         
     }
