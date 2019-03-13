@@ -74,9 +74,7 @@ class VideoForm extends React.Component<any, any> {
         RootNode.get('status').put("online");
         const { dataProvider,match } = this.props;
         console.log(match.params.id);
-        
         const { setSource, setAction, setOperateId }  = dataProvider;
-        setSource('videos');
         setAction('create');
         setOperateId("");
         console.log("prepare");
@@ -157,24 +155,28 @@ class VideoForm extends React.Component<any, any> {
             return message.show('请务必上传视频，并且在本地做种');
         }
 
-        const { doAction, operateId, setAction } = dataProvider;
+        const { doAction, operateId, setAction, setTimeEndCondition } = dataProvider;
         console.log(operateId);
         if(operateId===""){
-            doAction((m:any)=>{
-                message.show(m);
-                history.push('/admin/videos');
-
-            }, {
+            doAction("videos", {
                 ...data,
                 createdAt: now(),
                 status: "draft"
+            }, (m:any)=>{
+                setTimeEndCondition(now());
+                history.push("/admin/videos")
+                return message.show(m);
             });
         }else{
             setAction('update');
-            doAction(null, {
+            doAction('videos',{
                 ...data,
-                updatedAt: now(),
+                createdAt: now(),
                 status: "draft"
+            },(m:any)=>{
+                message.show(m);
+                history.push('/admin/videos');
+
             });
         }
         

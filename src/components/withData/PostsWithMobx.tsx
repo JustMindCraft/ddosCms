@@ -9,23 +9,20 @@ interface IHomeWithMobxProps {
 class  PostsWithMobx extends React.Component<IHomeWithMobxProps>{
     componentWillMount() {
         const { dataProvider } = this.props;
+        const { setAction, doAction } = dataProvider;
+        setAction('list');
+        doAction("posts");
        
     }
     componentDidMount() {
-        const { dataProvider } = this.props;
-        const { setSource, setAction } = dataProvider;
-        // setSource('posts');
-        // setAction('list');
-        const { doAction } = dataProvider;
-        // doAction()
+        
     }
     render() {
-        const { list } = this.props.dataProvider
-        console.log(list)
+        const { getList } = this.props.dataProvider
+        const list = getList('posts');
         return(
             <div>
-                123
-                {/* <Recreation list={list} title={"文章"}/> */}
+                <Recreation list={list} title={"文章"}/>
             </div>
         )
     }

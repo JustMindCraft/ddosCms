@@ -47,25 +47,18 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
         const { dataProvider, location, match } = this.props;
 
         const query = queryString.parse(location.search);
+        dataProvider.setTimeEndCondition(now());
+        dataProvider.setCondition({...query})
+        dataProvider.setAction("list");
         
-        const { setSource, setAction, setSourceIndexes, setCondition, setTimeEndCondition } = dataProvider;
-        console.log(match);
-        
-        setSource(match.params.source);
-        setAction('list');
-        if(match.params.source==="videos"){
-            setSourceIndexes(['title', 'description']);
-        }
-        if(match.params.source==="posts"){
-            setSourceIndexes(['title', 'content']);
-        }
-        setCondition({...query});
-        setTimeEndCondition(now());
 
     }
 
     componentDidMount(){
         const { dataProvider,location, match } = this.props;
+        const { setTimeEndCondition } = dataProvider;
+        const source = match.params.source;
+        setTimeEndCondition(now());
         if(match.params.source === "videos"){
             this.setState({
                 sourceName: "视频"
@@ -77,7 +70,6 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
             })
         }
 
-        const { doAction, condition } = dataProvider;
         const query = queryString.parse(location.search);
         if(query.status==='draft'){
             this.setState({
@@ -89,9 +81,8 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
                 tabVal: 2,
             })
         }
-        console.log("doAction");
+        dataProvider.doAction(source);
         
-        doAction();
     }
     changeTab = (event:any, value:number) =>{
         const { history, dataProvider, match } = this.props;
@@ -104,7 +95,7 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
             setSourceIndexes(['title', 'description']);
             setTimeEndCondition(now());
             history.push('/admin/'+source);
-            doAction();
+            doAction(source);
         }
 
         if(value===1){
@@ -112,7 +103,7 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
             setAction('list');
             setTimeEndCondition(now());
             history.push('/admin/'+source+'?status=draft');
-            doAction();
+            doAction(source);
         }
 
         if(value===2){
@@ -120,7 +111,7 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
             setAction('list');
             setTimeEndCondition(now());
             history.push('/admin/'+source+'?status=published');
-            doAction();
+            doAction(source);
 
         }
         
@@ -138,7 +129,7 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
         const { setSearchString, setAction, doAction } = dataProvider;
         setSearchString(text);
         setAction('list');
-        doAction();
+        doAction(match.params.source);
         
     }
 
@@ -197,11 +188,11 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
     }
 
     dialogBack = (back:boolean) => {
-        const { dataProvider } = this.props;
-        const { setConfirmOpen, doAction } = dataProvider;
+        const { dataProvider, match } = this.props;
+        const { setConfirmOpen, doAction, operateId } = dataProvider;
         setConfirmOpen(false);
         if(back===true){
-            doAction((m:any)=>{
+            doAction(match.params.source, operateId, (m:any)=>{
                 message.show(m);
             });
         }else{
@@ -224,9 +215,7 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
     componentWillUnmount(){
         // client.remove(this.state.magnetURI);
         RootNode.get('status').bye().put("offline");
-        this.setState({
-            loading: false
-        })
+        
     }
 
     handleNavToNewSource = () => {
@@ -262,6 +251,9 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
         const { loading, sourceName } = this.state;
         const { classes, dataProvider, match } = this.props;
 
+        const { confirmTitle, confirmContent, confirmOpen, listLoading, getList } = dataProvider;
+
+
         if(loading){
             //如果新的，页面比较重，加入加载过程
             return (
@@ -273,9 +265,7 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
             )
         }
        
-        const { list, confirmOpen, listLoading, confirmTitle, confirmContent, showDialogOpen, oneShow, operateId } = dataProvider;
-        const { title, description, coverUrl } = oneShow;
-
+        const list = getList(match.params.source);
 
         return (
         <Paper className={classes.paper}>
@@ -319,7 +309,7 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
                 <AdminIcon />
             </Fab>
             <ConfirmDialog dialogBack={this.dialogBack} title={confirmTitle} content={confirmContent} open={confirmOpen} />
-            <VideoDialogShow 
+            {/* <VideoDialogShow 
                 blobURI={this.state.blobURI} 
                 coverUrl={coverUrl} 
                 handleDelete={(e:any)=>this.onDelete(e, operateId)} 
@@ -328,7 +318,7 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
                 open={showDialogOpen}  
                 loading={this.state.videoLoading}
                 ShowDialogBack={this.ShowDialogBack} 
-            />
+            /> */}
             {
                 !listLoading && 
             <Button disabled={listLoading}  variant="outlined" color="secondary" fullWidth>加载前一天的</Button>
