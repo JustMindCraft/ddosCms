@@ -6,8 +6,8 @@ const styles = (theme: any) => createStyles({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        margin: '0 4px',
-        padding: 4,
+        margin: '4px 4px',
+        padding: 6,
         color: 'rgba(0,0,0,.84)',
     },
     navTitle: {

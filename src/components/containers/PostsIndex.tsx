@@ -8,7 +8,10 @@ const styles = (theme: any) => createStyles({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        margin: 6,
+        margin: '6px 0',
+    },
+    content: {
+        padding: 6,
     },
     title: {
         color: 'rgba(0, 0, 0, 0.87)',
@@ -17,7 +20,7 @@ const styles = (theme: any) => createStyles({
         lineHeight: '1em',
     },
     intro: {
-
+        padding: 6,
     },
     text: {
         width: 200,

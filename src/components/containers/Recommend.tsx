@@ -1,19 +1,19 @@
 import React from 'react';
-import { withStyles, createStyles } from '@material-ui/core/styles';
-import TitleLayout from './TitleLayout';
+import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
+import TitleLayout from './TitleLayout';
+import { styles } from '../css/common';
 import Img from '../../images/800x600_teaser.png';
 import Icon from '../../images/video.svg';
-import { styles } from '../css/common';
 
 
-const VideosIndex = (props:any) => {
+
+const RecommendsIndex = (props:any) => {
     const { classes } = props;
-    console.log(props)
     return(
         <div>
-            <TitleLayout title="视频" />
-            <div className={classes.wrap}>
+          <TitleLayout title="推荐"/>
+          <div className={classes.wrap}>
                 <Paper className={classes.item}>
                     <img src={Img} className={classes.img}/>
                     <div className={classes.iconWrap}>
@@ -54,9 +54,8 @@ const VideosIndex = (props:any) => {
                         七龙珠
                     </div>
                 </Paper>
-            </div>
+                </div>
         </div>
     )
 }
-
-export default withStyles(styles)(VideosIndex)
+export default withStyles(styles)(RecommendsIndex)

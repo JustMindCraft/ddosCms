@@ -6,7 +6,7 @@ import ListSubheader from '@material-ui/core/ListSubheader';;
 import TitleLayout from '../containers/TitleLayout';
 import PostsIndex from '../containers/PostsIndex';
 import VideosIndex from '../containers/VideosIndex';
-
+import RecommendsIndex from '../containers/Recommend';
 
 const NewHome = () => {
     return (
@@ -14,6 +14,7 @@ const NewHome = () => {
             <TitleLayout title={"文章"} />
             <PostsIndex />
             <VideosIndex />
+            <RecommendsIndex />
         </div>
     )
 }
