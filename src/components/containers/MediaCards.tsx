@@ -54,8 +54,8 @@ const MediaCard = (props: IMediaCardProps) => {
             <Typography gutterBottom variant="h5" component="h2">
               {title}
             </Typography>
-            <Typography component="p">
-              {renderHTML(description)}
+            <Typography component="div">
+              {description? renderHTML(description) : renderHTML("<span></span>")}
             </Typography>
           </CardContent>
         </CardActionArea>

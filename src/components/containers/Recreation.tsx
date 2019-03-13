@@ -31,11 +31,13 @@ interface IRecreationProps {
 
 const Recreation = (props: IRecreationProps) => {
     const { classes, title, list } = props;
+    console.log(list);
+    
     return (
         <div className={classes.root}>
             <Chips text={title} />
             <Grid container spacing={24}>
-                {list.map((item: any,index: number) => {
+                {list && list.map((item: any,index: number) => {
                     return(
                     <Grid  xs={12} sm={4} className={classes.center} key={index}>
                         <MediaCards coverUrl={item.coverUrl} description={item.description} title={item.title} id={item.id}/>

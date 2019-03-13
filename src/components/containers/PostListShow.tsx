@@ -18,23 +18,23 @@ const PostListShow =  (props:any) =>
     const { classes, list }  =  props;
     return (
         <List className={classes.root}>
-        {list.length===0? "暂时没有数据": list.filter((video:any)=>video!==null).map((video:any, index:number) => (
-            <ListItem key={index} role={undefined} dense button  onClick={(e:any)=> props.onView(video.id)}>
+        {list && list.length===0? "暂时没有数据": list && list.filter((item:any)=>item!==null).map((item:any, index:number) => (
+            <ListItem key={index} role={undefined} dense button  onClick={(e:any)=> props.onView(item.id)}>
                 <ListItemAvatar>
-                    <Avatar alt="Remy Sharp" src={video.coverUrl} />
+                    <Avatar alt="Remy Sharp" src={item.coverUrl? item.coverUrl: "http://res.cloudinary.com/ddycd5xyn/image/upload/a_0,c_fill,w_300/default.jpg"} />
                 </ListItemAvatar>
-                <ListItemText primary={video.title} secondaryTypographyProps={{component: "div"}}  secondary={
+                <ListItemText primary={item.title} secondaryTypographyProps={{component: "div"}}  secondary={
                         <React.Fragment>
                             <div className={classes.itemTextSecondary}>
                                 
                                 <div>
-                                    {moment(video.createdAt).fromNow()}
+                                    {moment(item.createdAt).fromNow()}
                                 </div>
                                 <div style={{
                                         width: 300,
                                     }}>
-                                    {video.tags? 
-                                    video.tags.map((tag:string, index:number)=>
+                                    {item.tags? 
+                                    item.tags.map((tag:string, index:number)=>
                                             <span key={index}>{tag}</span>
                                     ):
                                     "没有标签"
@@ -47,11 +47,18 @@ const PostListShow =  (props:any) =>
                                     />
                                     (未发布)
                                 </div>
+                                <div>
+                                    <Switch
+                                        checked={false}
+                                        value="draft"
+                                    />
+                                    (未推荐)
+                                </div>
                                 
-                                <IconButton  aria-label="delete" onClick={(e:any)=>props.onDelete(e, video.id)}>
+                                <IconButton  aria-label="delete" onClick={(e:any)=>props.onDelete(e, item.id)}>
                                     <DeleteIcon />
                                 </IconButton>
-                                <IconButton  onClick={(e:any)=>props.onEdit(e, video.id)}   aria-label="edit">
+                                <IconButton  onClick={(e:any)=>props.onEdit(e, item.id)}   aria-label="edit">
                                     <EditIcon />
                                 </IconButton>
                                 

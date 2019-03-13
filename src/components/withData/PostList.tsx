@@ -284,7 +284,14 @@ class PostList extends React.Component<IVideosProps, any> {
                                                         value="draft"
                                                     />
                                                     (未发布)
-                                    </div>
+                                                </div>
+                                                <div>
+                                                    <Switch
+                                                        checked={false}
+                                                        value="draft"
+                                                    />
+                                                    (未推荐)
+                                                </div>
                                                 <IconButton aria-label="view" onClick={(e: any) => this.handleView(post.id)}>
                                                     <EyeIcon />
                                                 </IconButton>

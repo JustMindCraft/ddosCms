@@ -9,11 +9,11 @@ export class DataProvider {
     @observable condition = new Map()
     //之后会使用mongodb风格的条件查询语句，实现难度较大，暂时不实现, 这属性暂时实现基于gun key并集查询
 
-    @observable source = 'videos';
+    @observable sources:string[] = [];
     @observable searchIndexes = ['title', 'body', 'description', 'tags'];//需要被搜索的字段
 
     @observable loading = true;
-    @observable dataSource:Array<any> = [];
+    @observable dataSource:Map<string, Array<any>> = new Map();
     @observable checked=[];//选中的项目
     @observable timeFromCondition= now()-1000*60*60*72;//说明查询的时间段, 默认是一天
     @observable timeEndCondition= now();//说明查询的时间段, 默认是一天
@@ -40,10 +40,6 @@ export class DataProvider {
     @observable showDialogTitle = false;//内容显示框只指定标题，其余内容在其他组件实现
 
     @observable singleData = new Map();
-
-    @computed get list(){
-        return this.dataSource.slice();
-    }
 
     @computed get oneShow(){
         return toJS(this.singleData);
@@ -78,13 +74,7 @@ export class DataProvider {
         this.action = action;
     }
 
-    @action setSource = (source:any) => {
-        this.source = source
-
-    }
-
     @action setSearchString = (searchString:string) => {
-        this.dataSource = [];
         this.searchString = searchString;
         if(this.indexes.includes('tags')){
             //保证模糊搜索能够匹配tags;
@@ -120,35 +110,36 @@ export class DataProvider {
     }
 
     @action filterCondition = (item:any)=> {
-        this.dataSource = [];
-           
             
         if(!item || item === null){
           return undefined;
         }
-        //搜索用正则表达可以实现更强大的功能，暂时不实现
-        // console.log(item['title']);
-        // 
-        // const searchRegExp = new RegExp("/%"+"案发"+"%/");
-        // console.log("test", searchRegExp.test(item['title']));
-        // console.log("search", item['title'].search(searchRegExp));
-        // console.log("index", );
+
         const timeCondition = item.createdAt >= this.timeFromCondition && item.createdAt <= this.timeEndCondition;
-       
+        // console.log("时间范围", timeCondition);
+        
         
         for (let index = 0; index < this.indexes.length; index++) {
             //搜索查询
             const searchKey = this.indexes[index];
             let conditionMatch = false;
+            // console.log("status", this.condition.get("status"));
             if(this.condition.size===0){
+                // 查询有结果
+                // console.log("查询条件是空的");
+                
                 conditionMatch = true;
+            }else{
+                // console.log("条件有多少？", this.condition.size);
+                
             }
             this.condition.forEach((value:any, key:string)=>{
                 //条件查询
                 if(key==='tags'){
                     //对于标签查询,我们求交集
                     if(!item[key]){
-                        return conditionMatch = false;
+                        //对于没有tags的记录，我们总是把他们返回出来
+                        return conditionMatch = true;
                     }
                     const intersection = item[key].filter((v:string) => value.includes(v))
                     if(intersection.length>0){
@@ -162,77 +153,98 @@ export class DataProvider {
                 }
 
             })
-            const searchCondition = item[searchKey] && item[searchKey].toString().indexOf(this.searchString)>=0 || 
-            this.searchString==="";
-            
+            let searchCondition = false;
+            if(item[searchKey] && item[searchKey].toString().indexOf(this.searchString)>=0){
+                // console.log("搜索有结果");
+                
+                searchCondition = true;
+            }
+            if(this.searchString === "" ){
+                // console.log("搜索有结果");
+
+                searchCondition = true;
+            }
             if(item[searchKey] && searchCondition  && timeCondition && conditionMatch){
                 return item;
             }
         }
         return undefined;
       }
+    
+    
+    @action getList = (source:string) => {
+        
+        return this.dataSource.get(source);
+    };
 
-    @action getList = (cb?:(m:any)=>{}) => {
+    @action getData = (sourceName:string, cb?:(m:any)=>void) => {
         RootNode.get('status').put("online");
-        console.log(this.source)
         this.listLoading = true;
-        this.dataSource = [];
-        RootNode.get(this.source).map((item:any)=>this.filterCondition(item)).once((data:any, key:string)=>{
-        if(data===null){    
-            return false;
-        }
-        // console.log(1)
-        this.dataSource.unshift(data);
-        
-        this.listLoading = false;
-        
-        })
-          //手工加载完毕
-          let timeout:any = null;
-          timeout =  setTimeout(()=>{
-              if(this.list.length===0){
-                this.listLoading = false;
-              }
-              clearTimeout(timeout);
-          }, 5432)
-
-    }
-
-    @action delete = (cb?:(m:string)=>{}) => {
-        this.setAction("list");
-        RootNode.get(this.source)
-        .map((item:any)=> item? (item.id===this.operateId? item: undefined): undefined )
-        .once((data:any,key:string)=>{
+        this.dataSource.set(sourceName, []);
+        RootNode.get(sourceName).map((item:any)=>this.filterCondition(item)).on((data:any, key:string)=>{
+            if(data===null){    
+                return false;
+            }
+            console.log('每次回来的数据',{sourceName, data});
             
-            RootNode.get(this.source).get(key).put(null, (ack:any)=>{
-                RootNode.get(this.source+'/'+this.operateId).put(null, (ack:any)=>{
-
-                    if(!ack.err){
-                        if(cb){
-                            cb("删除数据成功");
-                        }
-                        this.setTimeEndCondition(now());
-                        this.doAction();
-                    }
-                })
-                
-            })
+            const list = this.dataSource.get(sourceName);
+            if(list){
+                list.unshift(data);
+            }
+            this.listLoading = false;
         })
+        
+          //手工加载完毕
+        let timeout:any = null;
+        timeout =  setTimeout(()=>{
+            const list = this.dataSource.get(sourceName);
+            if(list && list.length===0){
+                this.listLoading = false;
+            }
+            clearTimeout(timeout);
+        }, 5432)
+
+    }
+
+    @action delete = (sourceName:string, cb?:(m:string)=>void) => {
+        console.log('开始删除', this.operateId);
+        
+            RootNode.get(sourceName)
+            .map((item:any)=> item? (item.id===this.operateId? item: undefined): undefined )
+            .once((data:any,key:string)=>{
+                console.log(key, data);
+                RootNode.get(sourceName).get(key).put(null, (ack:any)=>{
+                    RootNode.get(sourceName+'/'+this.operateId).put(null, (ack:any)=>{
+    
+                        if(!ack.err){
+                            if(cb){
+                                cb("删除数据成功");
+                                this.setAction("list");
+                            }
+                            this.setTimeEndCondition(now());
+                            this.doAction(sourceName);
+                        }
+                    })
+                    
+                })
+            });
         
     }
 
-    @action getSingleData = (cb?:(m:any)=>{}) => {
+    @action getSingleData = (sourceName:string, cb:(m:any)=>void) => {
         this.oneLoading = true;
-        RootNode.get(this.source+'/'+this.operateId).on((data:any, key:string)=>{
+        RootNode.get(sourceName+'/'+this.operateId).on((data:any, key:string)=>{
             this.singleData = data;
             this.oneLoading = false;
             if(cb){
                 cb(data);
             }
         })
+           
+       
     }
 
-    @action createOne = (cb:(m:any)=>{}, data:any) => {
+    @action createOne = (sourceName:string, data:any, cb:(m:any)=>void, ) => {
 
         this.creating = true;
 
@@ -240,10 +252,10 @@ export class DataProvider {
 
         this.setOperateId(uuid);
 
-        const one = RootNode.get(this.source+"/"+this.operateId).put({...data, id: this.operateId}, (ack:any)=>{
+        const one = RootNode.get(sourceName+"/"+this.operateId).put({...data, id: this.operateId}, (ack:any)=>{
             if(!ack.err){
-                RootNode.get(this.source+"_count").once((data:any, key:string)=>{
-                    RootNode.get(this.source+"_count").put({
+                RootNode.get(sourceName+"_count").once((data:any, key:string)=>{
+                    RootNode.get(sourceName+"_count").put({
                         count: data? data.count+1: 1,
                     });
                 });
@@ -251,7 +263,7 @@ export class DataProvider {
             console.log(ack);
             
         });
-        RootNode.get(this.source).set(one, (ack:any)=>{
+        RootNode.get(sourceName).set(one, (ack:any)=>{
             console.log("保存", ack);
             this.creating = false;
             if(!ack.err){
@@ -260,14 +272,14 @@ export class DataProvider {
         });
     }
 
-    @action updateOne = (data:any) => {
+    @action updateOne = (sourceName:string, data:any) => {
 
         this.updating = true;
 
-        const one = RootNode.get(this.source+"/"+this.operateId).put(data, (ack:any)=>{
+        const one = RootNode.get(sourceName+"/"+this.operateId).put(data, (ack:any)=>{
             if(!ack.err){
-                RootNode.get(this.source+"_count").once((data:any, key:string)=>{
-                    RootNode.get(this.source+"_count").put({
+                RootNode.get(sourceName+"_count").once((data:any, key:string)=>{
+                    RootNode.get(sourceName+"_count").put({
                         count: data? data.count+1: 1,
                     });
                 });
@@ -275,46 +287,54 @@ export class DataProvider {
             console.log(ack);
             
         });
-        RootNode.get(this.source).set(one, (ack:any)=>{
+        RootNode.get(sourceName).set(one, (ack:any)=>{
             console.log("更新", ack);
             this.updating = false;
         });
     }
 
-    @action doAction = (cb?:(m:any)=>{}, data?:any) => {
-        
+    @action doAction = (sourceName:string, data?:any, cb?:(m:any)=>void,) => {
+        if(!sourceName || typeof sourceName !== "string"){
+            throw "必须配给资源名";
+            
+        }
+        console.log(this.action)
+
         switch (this.action) {
             case "list":
                 if(cb){
-                    return this.getList(cb);
+                    return this.getData(sourceName, cb);
                 }else{
-                    return this.getList();
+                    return this.getData(sourceName);
                 }
                 
             
             case 'delete':
                 if(cb){
-                    return this.delete(cb);
+                    return this.delete(sourceName, cb);
                 }
-                return this.delete();
+                return this.delete(sourceName);
 
             case 'view':
-                return this.getSingleData(cb);
+                if(cb){
+                    return this.getSingleData(sourceName, cb);
+                }
+                return this.getSingleData(sourceName, (m:any)=>{} );
 
             case "create":
                 if(cb){
-                    return this.createOne(cb, data);
+                    return this.createOne(sourceName, data, cb);
                 }else{
-                    return "callback missing"
+                    throw "create, callback missing"
 
                 }
                
 
             case "update":
-                return this.updateOne(data);
+                return this.updateOne(sourceName, data);
         
             default:
-                return this.getList();;
+                return this.getData(sourceName);
         }
     }
 }

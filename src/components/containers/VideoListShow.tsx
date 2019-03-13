@@ -18,7 +18,7 @@ const VideoListShow =  (props:any) =>
     const { classes, list }  =  props;
     return (
         <List className={classes.root}>
-        {list.length===0? "暂时没有数据": list.filter((video:any)=>video!==null).map((video:any, index:number) => (
+        {list && list.length===0? "暂时没有数据": list && list.filter((video:any)=>video!==null).map((video:any, index:number) => (
             <ListItem key={index} role={undefined} dense button  onClick={(e:any)=> props.onView(video.id)}>
                 <ListItemAvatar>
                     <Avatar alt="Remy Sharp" src={video.coverUrl} />
@@ -46,6 +46,13 @@ const VideoListShow =  (props:any) =>
                                         value="draft"
                                     />
                                     (未发布)
+                                </div>
+                                <div>
+                                    <Switch
+                                        checked={false}
+                                        value="draft"
+                                    />
+                                    (未推荐)
                                 </div>
                                 
                                 <IconButton  aria-label="delete" onClick={(e:any)=>props.onDelete(e, video.id)}>

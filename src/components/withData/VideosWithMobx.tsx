@@ -1,6 +1,7 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import Recreation from '../containers/Recreation';
+import { now } from '../../gunDB';
 interface IHomeWithMobxProps {
     dataProvider: any,
 }
@@ -9,19 +10,19 @@ interface IHomeWithMobxProps {
 class  VideosWithMobx extends React.Component<IHomeWithMobxProps>{
     componentWillMount() {
         const { dataProvider } = this.props;
+        const { setAction, doAction, setTimeEndCondition, setCondition } = dataProvider;
+        setTimeEndCondition(now());
+        setCondition({});
+        setAction('list');
+        doAction("videos")
      
     }
-    componentDidMount() {
-        const { dataProvider } = this.props;
-        const { setSource, setAction } = dataProvider;
-        setSource('videos');
-        setAction('list');
-        const { doAction } = dataProvider;
-        doAction()
-    }
+   
     render() {
-        const { list } = this.props.dataProvider
-        console.log(list)
+        const { getList } = this.props.dataProvider
+        const list = getList("videos");
+        console.log({list});
+        
         return(
             <div>
                 <Recreation list={list} title={"视频"}/>
