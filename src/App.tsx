@@ -12,6 +12,7 @@ import Admin from './components/pages/Admin';
 import ListAdmin from './components/withData/ListAdmin';
 import NewSource from './components/pages/NewSource';
 import NewHome from './components/pages/NewHome';
+import './components/css/common.css';
 
 class App extends Component<any, any> {
   

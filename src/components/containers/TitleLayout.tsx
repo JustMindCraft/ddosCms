@@ -8,6 +8,7 @@ const styles = (theme: any) => createStyles({
         justifyContent: 'space-between',
         margin: '0 4px',
         padding: 4,
+        color: 'rgba(0,0,0,.84)',
     },
     navTitle: {
         fontWeight: 700,
