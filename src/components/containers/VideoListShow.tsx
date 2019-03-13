@@ -47,6 +47,13 @@ const VideoListShow =  (props:any) =>
                                     />
                                     (未发布)
                                 </div>
+                                <div>
+                                    <Switch
+                                        checked={false}
+                                        value="draft"
+                                    />
+                                    (未推荐)
+                                </div>
                                 
                                 <IconButton  aria-label="delete" onClick={(e:any)=>props.onDelete(e, video.id)}>
                                     <DeleteIcon />

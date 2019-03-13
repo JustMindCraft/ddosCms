@@ -52,7 +52,7 @@ class NewSource extends React.Component<any, any>{
                 return  <VideoForm />
             }
             if(source==="posts"){
-                return <PostForm post={post} />
+                return <PostForm />
             }
         }
 

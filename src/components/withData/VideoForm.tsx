@@ -7,7 +7,6 @@ import TextEditor from './TextEditor';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { RootNode, now } from '../../gunDB';
 import { withRouter } from 'react-router';
-import TorrentVideoPlayer from './TorrentVideoPlayer';
 import TagForm from '../public/TagForm';
 
 
@@ -26,6 +25,7 @@ const styles = createStyles({
         alignItems: 'center',
         alignCentent: 'center',
         justifyContent: 'space-around',
+        color: 'black'
     },
     form: {
         display: "flex",
