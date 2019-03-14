@@ -50,13 +50,21 @@ class VideoPreview extends React.Component<any, any> {
 
     componentWillMount(){
         const { id, source, dataProvider } = this.props;
-        const { setAction, doAction, setOperateId } = dataProvider;
+        const { setAction, doAction, setOperateId, singleData} = dataProvider;
+       
         setAction("view");
         setOperateId(id);
         doAction(source);
         console.log(id);
         console.log(source);
         
+    }
+
+    componentDidMount(){
+        const {  dataProvider } = this.props;
+        const { singleData} = dataProvider;
+        document.title = "预览 | " + singleData.title;
+
     }
 
     handleTagClick = (tag:string) => {
