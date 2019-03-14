@@ -42,7 +42,8 @@ const styles = createStyles({
         justifyContent: 'space-between',
         width: "80%",
         marginBottom: 100,
-        marginTop: 100
+        marginTop: 100,
+        zIndex:9999
     }
 })
 
@@ -122,7 +123,7 @@ class VideoForm extends React.Component<any, any> {
             publicId, 
             description,
             title,
-            isRecommend
+            isRecommend, tags
         } = this.state; 
         return  { magnetURI, 
             coverUrl, 
@@ -130,7 +131,7 @@ class VideoForm extends React.Component<any, any> {
             publicId, 
             description,
             title,
-            isRecommend
+            isRecommend, tags
         }
     }
     getTags = (tags:any) => {
@@ -156,7 +157,7 @@ class VideoForm extends React.Component<any, any> {
         }
 
         const { doAction, operateId, setAction, setTimeEndCondition } = dataProvider;
-        console.log(operateId);
+        console.log(data);
         if(operateId===""){
             doAction("videos", {
                 ...data,
@@ -174,13 +175,55 @@ class VideoForm extends React.Component<any, any> {
                 createdAt: now(),
                 status: "draft"
             },(m:any)=>{
-                message.show(m);
+                setTimeEndCondition(now());
                 history.push('/admin/videos');
+                return message.show(m);
 
             });
         }
         
         
+    }
+
+    publish = (e:any) => {
+        e.preventDefault();
+        const data = this.videoData;
+        const { message, dataProvider, history } = this.props;
+        if(data.title===""){
+            return message.show("视频标题不得为空");
+        }
+        if(data.coverUrl===""){
+            return message.show("请务必上传图片封面")
+        }
+        if(data.magnetURI===""){
+            return message.show('请务必上传视频，并且在本地做种');
+        }
+
+        const { doAction, operateId, setAction, setTimeEndCondition } = dataProvider;
+        console.log(data);
+        if(operateId===""){
+            doAction("videos", {
+                ...data,
+                createdAt: now(),
+                status: "published"
+            }, (m:any)=>{
+                setTimeEndCondition(now());
+                history.push("/admin/videos")
+                return message.show(m);
+            });
+        }else{
+            setAction('update');
+            doAction('videos',{
+                ...data,
+                createdAt: now(),
+                status: "published"
+            },(m:any)=>{
+                setTimeEndCondition(now());
+                history.push('/admin/videos');
+                return message.show(m);
+
+            });
+        }
     }
 
     onChange = (e:any) =>{
@@ -258,7 +301,7 @@ class VideoForm extends React.Component<any, any> {
                     
                     <div className={classes.action}>
                         <Button disabled={locked } type="submit" onClick={this.saveDraft}  variant="contained" color="secondary">保存草稿</Button>
-                        <Button disabled={locked } variant="contained"  color="secondary">直接发布</Button>
+                        <Button disabled={locked } variant="contained" onClick={this.publish}  color="secondary">直接发布</Button>
                     </div>
                 </div>
 

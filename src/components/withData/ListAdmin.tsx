@@ -9,7 +9,6 @@ import { observer, inject } from 'mobx-react';
 import SearchInput from '../public/SearchInput';
 import queryString from 'query-string'
 import message from '../../store/Message';
-import VideoDialogShow from './VideoDialogShow';
 import  WebTorrent from 'webtorrent';
 import { RootNode, now } from '../../gunDB';
 import SourceListShow from '../containers/SouceListShow';
@@ -148,42 +147,9 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
     }
 
     onView = (id:string) => {
-        const { dataProvider } = this.props;
-        const { setOperateId, setAction, setShowDialogOpen, doAction } = dataProvider;
-        setOperateId(id);
-        setAction('view');
-        setShowDialogOpen(true);
-        this.setState({
-            videoLoading: true,
-        })
-        doAction((video:any)=>{
-            const { fileMagnetURI } = video;
-            
-            client.add(fileMagnetURI, (torrent:any)=>{
-                console.log(torrent);
-                
-                torrent.files.forEach((file: any)=>{
-                    console.log(file);
-                    
-                    file.getBlobURL( (err:any, url:any) => {
-                        console.log(err);
-                        console.log(url);
-                        
-                        
-                        this.setState({
-                            marginURI: torrent.magnetURI,
-                            blobURI: url,
-                            torrentFileBlobURL: torrent.torrentFileBlobURL,
-                            torrentName: torrent.name,
-                            videoLoading: this.state.blobURI!==url,
-                        });
-                        
-                    })
-                    
-                })
-            })
-        });
-        
+        const { history, match } = this.props;
+        const source = match.params.source;
+        history.push(`/admin/${source}/${id}/preview`);
         
     }
 
@@ -251,8 +217,8 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
         const { loading, sourceName } = this.state;
         const { classes, dataProvider, match } = this.props;
 
-        const { confirmTitle, confirmContent, confirmOpen, listLoading, getList } = dataProvider;
-
+        const { confirmTitle, confirmContent, confirmOpen, listLoading, getList, getTagList } = dataProvider;
+        
 
         if(loading){
             //如果新的，页面比较重，加入加载过程
@@ -299,8 +265,10 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
                 onView={this.onView} 
                 onDelete={this.onDelete}
                 onEdit={this.onEdit}
+                getTagList={getTagList}
               />
-        }
+            }
+        
         
             <Fab  onClick={this.handleNavToNewSource}  color="primary" aria-label="Add" className={classes.fab}>
                 <AddIcon />
@@ -318,13 +286,12 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
                 open={showDialogOpen}  
                 loading={this.state.videoLoading}
                 ShowDialogBack={this.ShowDialogBack} 
-            /> */}
+            /> */}  
             {
                 !listLoading && 
             <Button disabled={listLoading}  variant="outlined" color="secondary" fullWidth>加载前一天的</Button>
 
             }
-            
 
         </Paper>
         );

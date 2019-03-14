@@ -13,6 +13,7 @@ import ListAdmin from './components/withData/ListAdmin';
 import NewSource from './components/pages/NewSource';
 import NewHome from './components/pages/NewHome';
 import './components/css/common.css';
+import SourcePreview from './components/pages/SourcePreview';
 
 class App extends Component<any, any> {
   
@@ -32,8 +33,8 @@ class App extends Component<any, any> {
               <Route exact path="/admin" component={Admin}/>
               <Route exact path="/admin/:source" component={ListAdmin} />
               <Route exact path="/admin/:source/new" component={NewSource} />
-              <Route exact path="/admin/:source/:id" component={TestPage} />
               <Route exact path="/admin/:source/:id/edit" component={EidtVideo} />
+              <Route exact path="/admin/:source/:id/preview" component={SourcePreview} />
               <Route component={HomePage}/>
             </Switch>
           </Layout>

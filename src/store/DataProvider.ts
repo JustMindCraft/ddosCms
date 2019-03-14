@@ -173,9 +173,13 @@ export class DataProvider {
     
     
     @action getList = (source:string) => {
-        
+
         return this.dataSource.get(source);
     };
+
+    @action getTagList = (sourceName:string, id:string) => {
+       return this.dataSource.get(sourceName+"/tags/"+id);
+    }
 
     @action getData = (sourceName:string, cb?:(m:any)=>void) => {
         RootNode.get('status').put("online");
@@ -185,13 +189,17 @@ export class DataProvider {
             if(data===null){    
                 return false;
             }
-            console.log('每次回来的数据',{sourceName, data});
+            // console.log('每次回来的数据',{sourceName, data});
             
             const list = this.dataSource.get(sourceName);
             if(list){
                 list.unshift(data);
             }
+            
+           
             this.listLoading = false;
+
+            
         })
         
           //手工加载完毕
@@ -212,7 +220,6 @@ export class DataProvider {
             RootNode.get(sourceName)
             .map((item:any)=> item? (item.id===this.operateId? item: undefined): undefined )
             .once((data:any,key:string)=>{
-                console.log(key, data);
                 RootNode.get(sourceName).get(key).put(null, (ack:any)=>{
                     RootNode.get(sourceName+'/'+this.operateId).put(null, (ack:any)=>{
     
@@ -240,6 +247,12 @@ export class DataProvider {
                 cb(data);
             }
         })
+         //手工加载完毕
+         let timeout:any = null;
+         timeout =  setTimeout(()=>{
+            this.oneLoading = false;
+            clearTimeout(timeout);
+         }, 5432)
            
        
     }
@@ -248,9 +261,42 @@ export class DataProvider {
 
         this.creating = true;
 
+        const tags = data.tags;
         const uuid = require('uuid/v4')();
 
+        if(tags){
+            tags.forEach((tag:string, index: number) => {
+                console.log({tag});
+                const tagOne = RootNode.get(sourceName+"/tags/"+uuid).get(index).put({
+                    name: tag,
+                    id: uuid,
+                }, (ack:any)=>{
+                    console.log(ack);
+                    RootNode.get("tags").map((item:any)=>item? item&&item.name!==tag: undefined).once((data:any, key:string)=>{
+                        console.log({data, key});
+                        
+                        if(data && data.name===tag){
+                           return false;
+                        }
+                        RootNode.get("tags").get(key).put({
+                                name: tag,
+                                id: uuid,
+                        }, (ack:any)=>{
+                            console.log(ack);
+                            
+                        })
+                       
+                    })
+                });
+                RootNode.get("tags").set(tagOne);
+               
+            });
+        }
+
+        
+
         this.setOperateId(uuid);
+        
 
         const one = RootNode.get(sourceName+"/"+this.operateId).put({...data, id: this.operateId}, (ack:any)=>{
             if(!ack.err){
@@ -294,11 +340,11 @@ export class DataProvider {
     }
 
     @action doAction = (sourceName:string, data?:any, cb?:(m:any)=>void,) => {
+        this.dataSource.set(sourceName, []);
         if(!sourceName || typeof sourceName !== "string"){
             throw "必须配给资源名";
             
         }
-        console.log(this.action)
 
         switch (this.action) {
             case "list":

@@ -4,7 +4,8 @@ import { observer, inject } from 'mobx-react';
 import 'dplayer/dist/DPlayer.min.css';
 import DPlayer from 'dplayer';
 import  WebTorrent from 'webtorrent';
-import { LinearProgress } from '@material-ui/core';
+import { LinearProgress, Typography, withWidth } from '@material-ui/core';
+import { isWidthDown, isWidthUp } from '@material-ui/core/withWidth';
 
 (window as any).WebTorrent = WebTorrent;
 
@@ -75,7 +76,7 @@ class TorrentVideoPlayer extends React.Component<any, any>{
     
     render(){
 
-
+        const isPc = isWidthUp("sm",  this.props.width);
         
         return (
             <React.Fragment>
@@ -84,15 +85,19 @@ class TorrentVideoPlayer extends React.Component<any, any>{
                     display: !this.state.loading? "none" : "block",
                     textAlign: 'center',
                 }}>
-                    <LinearProgress />
+                    <br/>
                     <br/>
                     <LinearProgress />
-                    <h1>播放器加载中</h1>
+                    <Typography variant="display1">视频载入中</Typography>
+                    <LinearProgress />
+                    <br/>
                 </div>
                 <div ref="dplayer"  style={{
-                    minHeight: 400,
-                    width: "90%",
-                    display: this.state.loading? "none" : "block",
+                   display: this.state.loading? "none" : "flex", width: isPc? "65%" : "100%",
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    alignCentent: 'center',
+                    justifyContent: 'baseline',
                 }}>
                 
                 </div>
@@ -103,4 +108,4 @@ class TorrentVideoPlayer extends React.Component<any, any>{
 }
 
 
-export default TorrentVideoPlayer;
+export default withWidth()(TorrentVideoPlayer);
