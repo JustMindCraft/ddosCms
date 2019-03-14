@@ -1,15 +1,13 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
-
-import 'dplayer/dist/DPlayer.min.css';
-import DPlayer from 'dplayer';
 import  WebTorrent from 'webtorrent';
 import { LinearProgress, Typography, withWidth } from '@material-ui/core';
-import { isWidthDown, isWidthUp } from '@material-ui/core/withWidth';
+import { isWidthUp } from '@material-ui/core/withWidth';
 
 (window as any).WebTorrent = WebTorrent;
 
-
+@inject('torrentClient')
+@observer
 class TorrentVideoPlayer extends React.Component<any, any>{
     constructor(props:any){
         super(props);
@@ -19,42 +17,27 @@ class TorrentVideoPlayer extends React.Component<any, any>{
     }
 
     change = (torrentId:string, poster:string) => {
-        console.log(torrentId);
-        if(torrentId==="" || !torrentId){
-            return false;
-        }
-        
-        (this.refs.dplayer as any).innerHTML = "";
-        if(!torrentId && torrentId==="")
-        {
-            
-            return false;
-        }
-        try {
-            const dp = new DPlayer({
-                container: this.refs.dplayer as any,
-                hotkey: true,
-                autoplay: true,
-                video: {
-                    url: torrentId,
-                    type: 'webtorrent',
-                    pic: poster,
-                }
-            });
-            
-            dp.on("loadeddata" as any, ()=>{
-                console.log("loadeddata");
-                dp.seek(0.01);
-                this.setState({
-                    loading:false,
-                })
-                
+        this.setState({
+            loading:true,
+        })
+        const { torrentClient } = this.props;
+        torrentClient.addTorrent(torrentId, (torrent:any)=>{
+            const file = torrent.files.find((file:any)=>{
+                return file.name.endsWith('.mp4')
             })
-        } catch (error) {
-            console.log(error);
-            
-        }
-        
+            file.appendTo(this.refs.dplayer,{
+                autoplay: true,
+                controls: true,
+            }, (err:any, video:any)=>{
+                console.log(video);
+                console.log(err);
+                
+                
+            });
+            this.setState({
+                loading:false,
+            })
+        })
        
         
     }
