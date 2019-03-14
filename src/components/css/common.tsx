@@ -18,6 +18,8 @@ export const styles = (theme: any) => createStyles({
         display: 'flex',
         flexDirection: 'row',
         flexWrap: 'wrap',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     item: {
         flexBasis: '46%',
@@ -25,6 +27,13 @@ export const styles = (theme: any) => createStyles({
         margin: 2,
         padding: 4,
     },
+    '@media (min-width: 960px)': {
+        item: {
+            flexBasis: '18%',
+            margin: 10,
+            padding: 2,
+        },
+     },
     img: {
         width: '100%',
         height: 100,

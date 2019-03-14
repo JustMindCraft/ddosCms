@@ -54,6 +54,16 @@ const RecommendsIndex = (props:any) => {
                         七龙珠
                     </div>
                 </Paper>
+                <Paper className={classes.item}>
+                    <img src={Img} className={classes.img}/>
+                    <div className={classes.iconWrap}>
+                        <img src={Icon} className={classes.icon}/>
+                        <div className={classes.hits}>999</div>
+                    </div>
+                    <div className={classes.title}>
+                        七龙珠
+                    </div>
+                </Paper>
                 </div>
         </div>
     )
