@@ -26,7 +26,7 @@ class TorrentVideoPlayer extends React.Component<any, any>{
             const file = torrent.files.find((file:any)=>{
                 return file.name.endsWith('.mp4')
             })
-            file.appendTo(this.refs.dplayer,{
+            file.renderTo(this.refs.dplayer,{
                 autoplay: true,
                 controls: true,
             }, (err:any, video:any)=>{
@@ -77,13 +77,14 @@ class TorrentVideoPlayer extends React.Component<any, any>{
                     <LinearProgress />
                     <br/>
                 </div>
-                <div ref="dplayer"  style={{
+                <div style={{
                    display: this.state.loading? "none" : "flex", width: isPc? "65%" : "100%",
                     flexDirection: 'column',
                     alignItems: 'center',
                     alignCentent: 'center',
                     justifyContent: 'baseline',
                 }}>
+                    <video src=""  ref="dplayer"></video>
                 
                 </div>
             </React.Fragment>
