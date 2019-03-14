@@ -16,32 +16,47 @@ class TorrentVideoPlayer extends React.Component<any, any>{
         }
     }
 
+
     change = (torrentId:string, poster:string) => {
+        if(!torrentId){
+            return this.setState({
+                loading:false,
+            });
+        }
         this.setState({
             loading:true,
         });
-        const isPc = isWidthUp("sm",  this.props.width);
         const { torrentClient } = this.props;
-        torrentClient.addTorrent(torrentId, (torrent:any)=>{
-            const file = torrent.files.find((file:any)=>{
-                return file.name.endsWith('.mp4')
-            })
-            file.renderTo(this.refs.dplayer,{
-                autoplay: true,
-                controls: true,
-            }, (err:any, video:any)=>{
-                console.log(video);
-                video.style.width = "100%"
-                video.controls = true,
-                video.autoplay = true,
-                console.log(err);
+        setTimeout(()=>{
+            torrentClient.addTorrent(torrentId, (torrent:any)=>{
+                if(torrent === "setTorrentId first"){
+                    this.setState({
+                        loading:true,
+                    });
+                    return false;
+                }
+                console.log("files",torrent.files);
                 
-                
+                return torrent.files.forEach((file:any)=>{
+                    console.log(file);
+                    
+                    file.renderTo(this.refs.dplayer,{
+                        autoplay: true,
+                        controls: true,
+                    }, (err:any, video:any)=>{
+                        console.log(video);
+                        video.style.width = "100%"
+                        video.controls = true,
+                        video.autoplay = true,
+                        console.log(err);
+                        this.setState({
+                            loading:false,
+                        })
+                    });
+                })
             });
-            this.setState({
-                loading:false,
-            })
-        })
+        }, 200);
+        
        
         
     }
