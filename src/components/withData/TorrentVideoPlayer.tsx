@@ -86,7 +86,7 @@ class TorrentVideoPlayer extends React.Component<any, any>{
                     alignCentent: 'center',
                     justifyContent: 'baseline',
                 }}>
-                    <video src=""  ref="dplayer"></video>
+                    <video src="" style={{width: "100%"}}  ref="dplayer"></video>
                 
                 </div>
             </React.Fragment>
