@@ -19,7 +19,8 @@ class TorrentVideoPlayer extends React.Component<any, any>{
     change = (torrentId:string, poster:string) => {
         this.setState({
             loading:true,
-        })
+        });
+        const isPc = isWidthUp("sm",  this.props.width);
         const { torrentClient } = this.props;
         torrentClient.addTorrent(torrentId, (torrent:any)=>{
             const file = torrent.files.find((file:any)=>{
@@ -30,6 +31,7 @@ class TorrentVideoPlayer extends React.Component<any, any>{
                 controls: true,
             }, (err:any, video:any)=>{
                 console.log(video);
+                video.style.width = "100%"
                 console.log(err);
                 
                 
