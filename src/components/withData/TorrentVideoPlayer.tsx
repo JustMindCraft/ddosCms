@@ -32,6 +32,8 @@ class TorrentVideoPlayer extends React.Component<any, any>{
             }, (err:any, video:any)=>{
                 console.log(video);
                 video.style.width = "100%"
+                video.controls = true,
+                video.autoplay = true,
                 console.log(err);
                 
                 
