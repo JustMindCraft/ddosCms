@@ -20,6 +20,7 @@ class Admin extends React.Component<any, any>{
 
     render(){
         const { classes } = this.props;
+        document.title = "管理中心"
         return (
             <React.Fragment>
                 <br/>

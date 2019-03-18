@@ -1,9 +1,7 @@
 import React from 'react';
 import { withStyles, createStyles } from '@material-ui/core/styles';
-import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
 import FaceIcon from '@material-ui/icons/Face';
-import DoneIcon from '@material-ui/icons/Done';
 
 const styles = (theme:any) =>  createStyles({
     root: {
@@ -25,7 +23,7 @@ const Chips = (props:IChipsProps) => {
       <div className={classes.root}>
         <Chip
           icon={<FaceIcon />}
-          label={text}
+          label={"最新"+text}
           className={classes.chip}
           color="primary"        />
       </div>

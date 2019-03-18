@@ -44,6 +44,8 @@ class LoginPage extends React.Component<ILoginPageProps> {
 
   render() {
     const { classes } = this.props;
+    document.title = "登录"
+
     return (
       <React.Fragment>
         <CssBaseline />

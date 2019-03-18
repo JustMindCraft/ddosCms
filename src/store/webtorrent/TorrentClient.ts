@@ -48,23 +48,6 @@ class TorrentClient {
     }
     
 
-    @observable setCurrentSources = () => {
-        this.currentTorrent.files.forEach((file:any)=>{
-            file.getBlobURL((err:any, url:any)=>{
-                if(err){
-                    return this.currentErrMessage = err.message;
-                }
-                this.currentPlayingSource = url;
-                this.currentSourcesData.push(url);
-                console.log(url);
-                
-            })
-
-        })
-    }
-
-    
-
    
     @action getTorrent = (torrentId: string) => {
         return client.get(torrentId);

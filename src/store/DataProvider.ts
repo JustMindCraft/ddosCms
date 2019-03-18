@@ -111,6 +111,9 @@ export class DataProvider {
           return undefined;
         }
 
+       
+        
+
         const timeCondition = item.createdAt >= this.timeFromCondition && item.createdAt <= this.timeEndCondition;
         // console.log("时间范围", timeCondition);
         
@@ -118,6 +121,8 @@ export class DataProvider {
         for (let index = 0; index < this.indexes.length; index++) {
             //搜索查询
             const searchKey = this.indexes[index];
+            // console.log(item[searchKey]);
+            
             let conditionMatch = false;
             // console.log("status", this.condition.get("status"));
             
@@ -127,7 +132,7 @@ export class DataProvider {
                 
                 conditionMatch = true;
             }else{
-                // console.log("条件有多少？", this.condition.size);
+                console.log("条件有多少？", this.condition.size);
                 
             }
             this.condition.forEach((value:any, key:string)=>{
@@ -174,8 +179,6 @@ export class DataProvider {
             if(data===null){    
                 return false;
             }
-            console.log(data);
-            
             
             const list = this.dataSource.get(sourceName);
             if(list){
@@ -201,10 +204,32 @@ export class DataProvider {
     }
 
     @action delete = (sourceName:string, cb?:(m:string)=>void) => {
+            if(sourceName === "tags"){
+                return RootNode.get(sourceName)
+                .map((item:any)=> item? (item.name===this.operateId? item: undefined): undefined )
+                .once((data:any,key:string)=>{
+                    
+                    RootNode.get(sourceName).get(key).put(null, (ack:any)=>{
+                        RootNode.get(sourceName+'/'+this.operateId).put(null, (ack:any)=>{
         
-            RootNode.get(sourceName)
+                            if(!ack.err){
+                                if(cb){
+                                    cb("删除数据成功");
+                                    this.setAction("list");
+                                }
+                                this.setTimeEndCondition(now());
+                                this.doAction(sourceName);
+                            }
+                        })
+                        
+                    })
+                });
+            }
+        
+            return RootNode.get(sourceName)
             .map((item:any)=> item? (item.id===this.operateId? item: undefined): undefined )
             .once((data:any,key:string)=>{
+                
                 RootNode.get(sourceName).get(key).put(null, (ack:any)=>{
                     RootNode.get(sourceName+'/'+this.operateId).put(null, (ack:any)=>{
     
@@ -254,7 +279,7 @@ export class DataProvider {
         for (const key in tags) {
             if (tags.hasOwnProperty(key)) {
                 const tag = tags[key];
-                const tagOne = RootNode.get("tags/"+tag).put({name: tag, contentId: uuid})
+                const tagOne = RootNode.get("tags/"+tag).put({name: tag, contentId: uuid, createdAt: now(), isTop:false})
                 RootNode.get("tags").set(tagOne, (ack:any)=>{
                     console.log(ack);
                     
@@ -296,7 +321,7 @@ export class DataProvider {
         for (const key in tags) {
             if (tags.hasOwnProperty(key)) {
                 const tag = tags[key];
-                const tagOne = RootNode.get("tags/"+tag).put({name: tag, contentId: this.operateId})
+                const tagOne = RootNode.get("tags/"+tag).put({name: tag, isTop:false, contentId: this.operateId, createdAt: now()})
                 RootNode.get("tags").set(tagOne, (ack:any)=>{
                     console.log(ack);
                     

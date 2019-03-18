@@ -80,11 +80,9 @@ export  class Post {
                     });
                 })
             }
-            console.log(ack);
             
         })
         PostNode.set(post, (ack:any)=>{
-            console.log("保存草稿", ack);
             this.saving = false;
             
         });
@@ -115,7 +113,6 @@ export  class Post {
             
         })
         PostNode.set(post, (ack:any)=>{
-            console.log("保存草稿", ack);
             this.saving = false;
             
         });

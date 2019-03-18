@@ -36,7 +36,6 @@ class Login extends Component<ILoginProps>{
     errors.account = !account ? '不能为空' : ''
     errors.password = !password ? '密码错误' : ''
     if (!isEmpty(errors)) {
-      console.log(1)
       this.setState({ errors: { ...errors } })
       return 
     }
@@ -44,7 +43,6 @@ class Login extends Component<ILoginProps>{
 
   handleChange = (field:any, e:any) => {
     const value = e.target.value.trim()
-    console.log(value)
     this.setState({ [field]: value })
   }
 
@@ -60,7 +58,7 @@ class Login extends Component<ILoginProps>{
             value={account}
             onChange={this.handleChange.bind(this, 'account')}
             margin="dense"
-            label="手机号"
+            label="用户名"
             helperText={<span className={s.error}>{errors.account}</span>}
           />
 

@@ -19,8 +19,6 @@ class PostListSHow extends React.Component<any, any>{
 
     componentWillReceiveProps(nextProps:any){
         if(nextProps !== this.props){
-            console.log('items list change');
-            
         }
         
     }

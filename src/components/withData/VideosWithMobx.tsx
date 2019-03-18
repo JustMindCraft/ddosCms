@@ -21,7 +21,6 @@ class  VideosWithMobx extends React.Component<IHomeWithMobxProps>{
     render() {
         const { getList } = this.props.dataProvider
         const list = getList("videos");
-        console.log({list});
         
         return(
             <div>

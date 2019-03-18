@@ -25,12 +25,7 @@ class VideoUploader extends React.Component<any, any>{
         const { seedFile } = torrentClient;
         return seedFile(file, (m:any, torrent:any)=>{
             message.show(m);
-            // const ti = setInterval(()=>{
-            //     console.log("ratio", torrent.ratio);
-            //     console.log("progress", torrent.progress);
-            //     console.log("uploaded", torrent.uploadSpeed);
-                
-            // }, 1000);
+           
             this.setState({
                 marginURI:  torrent.magnetURI
             })
@@ -87,7 +82,6 @@ class VideoUploader extends React.Component<any, any>{
     render(){
         const { disabled } = this.props;
         const { seeding, marginURI } = this.state;;
-        console.log(marginURI);
         
         return(
             <Paper style={{

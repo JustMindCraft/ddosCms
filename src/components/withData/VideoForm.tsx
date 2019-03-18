@@ -81,7 +81,6 @@ class VideoForm extends React.Component<any, any> {
     componentDidMount(){
         const { dataProvider,match } = this.props;
         const { setAction, setOperateId, doAction }  = dataProvider;
-        console.log(match.params.id);
         
         if(match.params.id){
             setAction("view");
@@ -108,10 +107,8 @@ class VideoForm extends React.Component<any, any> {
         const { singleData }  = dataProvider;
         const { tags, tagLoaded, isEditLoading } = this.state;
         let tagsLength = tags.length;
-        console.log({tagsLength});
         
         if(match.params.id === singleData.id && !isEditLoading){
-            console.log("确实是编辑模式");
                 if(tagLoaded === false){
                     RootNode.get(match.params.source+"/"+singleData.id+"/tags").map().once((tag:any, key:string)=>{
                         
@@ -137,7 +134,6 @@ class VideoForm extends React.Component<any, any> {
 
     
     handleVideoUploaderChange = (params:any) => {
-        console.log(params);
         
        this.setState({
            magnetURI: params.magnetURI,
@@ -208,9 +204,7 @@ class VideoForm extends React.Component<any, any> {
         }
 
         const { doAction, operateId, setAction, setTimeEndCondition } = dataProvider;
-        console.log(operateId);
         
-        console.log(data);
         if(operateId==="" || !operateId){
             doAction("videos", {
                 ...data,
@@ -253,7 +247,6 @@ class VideoForm extends React.Component<any, any> {
         }
 
         const { doAction, operateId, setAction, setTimeEndCondition } = dataProvider;
-        console.log(data);
         if(operateId==="" || !operateId){
             doAction("videos", {
                 ...data,

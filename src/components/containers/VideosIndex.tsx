@@ -47,7 +47,6 @@ const styles = (theme: any) => createStyles({
 
 const VideosIndex = (props:any) => {
     const { classes } = props;
-    console.log(props)
     return(
         <div>
             <TitleLayout title="视频" />

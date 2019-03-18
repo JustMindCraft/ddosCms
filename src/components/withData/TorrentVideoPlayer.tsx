@@ -42,7 +42,6 @@ class TorrentVideoPlayer extends React.Component<any, any>{
 
                     return false;
                 }
-                console.log("files",torrent.files);
                 if(!torrent){
                     clearInterval(timer);
 
@@ -96,11 +95,9 @@ class TorrentVideoPlayer extends React.Component<any, any>{
                 autoplay: true,
                 controls: true,
             }, (err:any, video:any)=>{
-                console.log(video);
                 video.style.width = "100%"
                 video.controls = true,
                 video.autoplay = true,
-                console.log(err);
                 this.setState({
                     loading:false,
                     files: [],
@@ -117,7 +114,6 @@ class TorrentVideoPlayer extends React.Component<any, any>{
             files: []
         });
         history.block((location:any, action:any) => {
-            console.log(location, action);
                 
         });
           

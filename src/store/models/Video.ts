@@ -157,7 +157,6 @@ export  class Video {
             
         })
         VideoNode.set(video, (ack:any)=>{
-            console.log("保存草稿", ack);
             this.saving = false;
             
         });
@@ -193,7 +192,6 @@ export  class Video {
             
         })
         VideoNode.set(video, (ack:any)=>{
-            console.log("保存草稿", ack);
             this.saving = false;
             
         });

@@ -13,12 +13,6 @@ import renderHTML from 'react-render-html';
 import { Link as RouterLink } from 'react-router-dom'
 import Link from '@material-ui/core/Link';
 
-
-
-
-
-
-
 const styles = {
   card: {
     maxWidth: 345,
@@ -54,9 +48,7 @@ const MediaCard = (props: IMediaCardProps) => {
             <Typography gutterBottom variant="h5" component="h2">
               {title}
             </Typography>
-            <Typography component="div">
-              {description? renderHTML(description) : renderHTML("<span></span>")}
-            </Typography>
+           
           </CardContent>
         </CardActionArea>
         <CardActions>

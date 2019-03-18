@@ -79,7 +79,6 @@ class PostForm extends React.Component<any, any> {
     componentDidMount(){
         const { dataProvider,match } = this.props;
         const { setAction, setOperateId, doAction }  = dataProvider;
-        console.log(match.params.id);
         
         if(match.params.id){
             setAction("view");
@@ -106,10 +105,8 @@ class PostForm extends React.Component<any, any> {
         const { singleData }  = dataProvider;
         const { tags, tagLoaded, isEditLoading } = this.state;
         let tagsLength = tags.length;
-        console.log({tagsLength});
         
         if(match.params.id === singleData.id && !isEditLoading){
-            console.log("确实是编辑模式");
                 if(tagLoaded === false){
                     RootNode.get(match.params.source+"/"+singleData.id+"/tags").map().once((tag:any, key:string)=>{
                         
@@ -135,7 +132,6 @@ class PostForm extends React.Component<any, any> {
 
     
     handleVideoUploaderChange = (params:any) => {
-        console.log(params);
         
        this.setState({
            magnetURI: params.magnetURI,
@@ -204,9 +200,7 @@ class PostForm extends React.Component<any, any> {
         
 
         const { doAction, operateId, setAction, setTimeEndCondition } = dataProvider;
-        console.log(operateId);
         
-        console.log(data);
         if(operateId==="" || !operateId){
             doAction("posts", {
                 ...data,
@@ -247,7 +241,6 @@ class PostForm extends React.Component<any, any> {
         
 
         const { doAction, operateId, setAction, setTimeEndCondition } = dataProvider;
-        console.log(data);
         if(operateId==="" || !operateId){
             doAction("posts", {
                 ...data,
@@ -287,9 +280,6 @@ class PostForm extends React.Component<any, any> {
     render(){
         const { classes } = this.props;
         const { imageUploading, coverUrl, title, isRecommend, tags, body } = this.state;
-        
-        console.log({body});
-        
         
         
         return (

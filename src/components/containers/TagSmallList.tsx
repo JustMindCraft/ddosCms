@@ -40,7 +40,6 @@ class TagSmallList extends React.Component<any, any>{
     componentDidMount()
     {
         const { recordId, source } = this.props;
-        console.log("didmount");
         
         this.setState({
             loading: true,
@@ -55,7 +54,6 @@ class TagSmallList extends React.Component<any, any>{
             loading: true,
             tags: [],
         })
-        console.log("propsChange");
 
         if(nextProps !== this.props){
             
@@ -71,7 +69,7 @@ class TagSmallList extends React.Component<any, any>{
     }
 
     componentDidUpdate(){
-        
+
     }
 
     componentWillUnmount(){
@@ -82,7 +80,6 @@ class TagSmallList extends React.Component<any, any>{
     }
     render(){
         const { loading, tags } = this.state;
-        console.log("render");
         return (
             <div>
                 {

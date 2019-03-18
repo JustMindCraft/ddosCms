@@ -50,6 +50,9 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
         dataProvider.setTimeEndCondition(now());
         dataProvider.setCondition({...query})
         dataProvider.setAction("list");
+        if(match.params.source === "tags"){
+            dataProvider.setSourceIndexes(['name']);
+        }
         
 
     }
@@ -67,6 +70,11 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
         if(match.params.source === "posts"){
             this.setState({
                 sourceName: "文章"
+            })
+        }
+        if(match.params.source === "tags"){
+            this.setState({
+                sourceName: "标签"
             })
         }
 
@@ -150,7 +158,6 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
     onView = (id:string) => {
         const { history, match } = this.props;
         const source = match.params.source;
-        console.log(source);
         
         history.push(`/admin/${source}/${id}/preview`);
         
@@ -173,7 +180,6 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
     onRecommend = (e:any, item:any) => {
         e.stopPropagation();
         e.cancelBubble = true;
-        console.log({...item});
         const { message, dataProvider, match, location } = this.props;
         const { doAction, setOperateId, setAction, setTimeEndCondition } = dataProvider;
         const source = match.params.source;
@@ -198,7 +204,6 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
     onPublish = (e:any, item:any) => {
         e.stopPropagation();
         e.cancelBubble = true;
-        console.log({...item});
         const { message, dataProvider, match, location } = this.props;
         const { doAction, setOperateId, setAction, setTimeEndCondition } = dataProvider;
         const source = match.params.source;
@@ -279,13 +284,18 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
        
         const list = getList(match.params.source);
 
+
+        
+
+        
+
         return (
         <Paper className={classes.paper}>
          <br/>
           <Typography className={classes.typography} variant="h4">{sourceName}管理</Typography>
           <br/>
         <SearchInput onChange={this.onSearchChange}/><br/>
-        <AppBar className={classes.appbar} position="static" color="default">
+        {match.params.source!=="tags" && <AppBar className={classes.appbar} position="static" color="default">
                 <Tabs
                     value={this.state.tabVal}
                     onChange={this.changeTab}
@@ -297,7 +307,7 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
                     <Tab label="草稿" />
                     <Tab label="已发布" />
                 </Tabs>
-            </AppBar>
+            </AppBar>}
         {
             listLoading ? 
             <div className={classes.loading}>
@@ -317,10 +327,14 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
               />
             }
         
-        
-            <Fab  onClick={this.handleNavToNewSource}  color="primary" aria-label="Add" className={classes.fab}>
-                <AddIcon />
-            </Fab>
+            {
+                match.params.source!=="tags" && 
+                <Fab  onClick={this.handleNavToNewSource}  color="primary" aria-label="Add" className={classes.fab}>
+                    <AddIcon />
+                </Fab>
+
+            }
+            
             <Fab  onClick={this.backAdmin}  color="primary" aria-label="Add" className={classes.adminFab}>
                 <AdminIcon />
             </Fab>

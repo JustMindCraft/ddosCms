@@ -1,12 +1,11 @@
 import React from 'react';
 import { Paper, createStyles, withStyles, CircularProgress, Typography, Fab } from '@material-ui/core';
 import { observer, inject } from 'mobx-react';
-import TorrentVideoPlayer from './TorrentVideoPlayer';
 import TagSmallList from '../containers/TagSmallList';
 import renderHTML from 'react-render-html';
 import { Link } from 'react-router-dom';
 
-const VideoListLink = (props:any)=> <Link to='/admin/videos' {...props} />;
+const VideoListLink = (props:any)=> <Link to='/admin/posts' {...props} />;
 
 const styles = createStyles({
     paper: {
@@ -21,14 +20,8 @@ const styles = createStyles({
         justifyContent: 'space-around',
         color: 'black',
     },
-    player: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        alignCentent: 'center',
-        justifyContent: 'baseline',
-    },
-    description:{
+    
+    body:{
         paddingTop: 20,
         paddingLeft: 15,
         paddingRight: 15,
@@ -44,7 +37,7 @@ const styles = createStyles({
 
 @inject('dataProvider')
 @observer
-class VideoPreview extends React.Component<any, any> {
+class PostPreview extends React.Component<any, any> {
     constructor(props:any) {
         super(props)
         
@@ -78,9 +71,7 @@ class VideoPreview extends React.Component<any, any> {
                     >
                     --返回列表--->
                 </Fab>
-                <div className={classes.player}>
-                    <TorrentVideoPlayer torrentId={singleData.magnetURI} poster={singleData.coverUrl} />
-                 </div>
+              
                  <Paper className={classes.paper}>
                 {
                     oneLoading ? 
@@ -89,11 +80,11 @@ class VideoPreview extends React.Component<any, any> {
                     </div>
                     :
                     <React.Fragment>
-                        <Typography variant="subheading" component="div" >
+                        <Typography variant="title" component="div" >
                             <div style={{
                             textAlign: 'center'
                                 }}>
-                                {singleData.title}
+                                {singleData.title}.....(预览)
                             </div>
                         </Typography>
                          
@@ -103,30 +94,21 @@ class VideoPreview extends React.Component<any, any> {
                          <div style={{
                             textAlign: 'center'
                         }}>
-                             <TagSmallList source="videos" 
+                             <TagSmallList source="posts" 
                              recordId={singleData.id} onClick={this.handleTagClick}/>
                          </div>
                          <div>
                              <br />
                          </div>
-                         <div>
-                             <Typography variant="subtitle1">磁力地址：</Typography>
-                            <textarea style={{
-                                width: "90%",
-                                minWidth: 260,
-                                minHeight: 76
-                            }} defaultValue={singleData.magnetURI} />
-                                
-                         </div>
+                        
                          <div>
                              <br />
                          </div>
-                         <Paper className={classes.description}>
-                            <Typography variant="subtitle1">视频介绍:</Typography>
+                         <Paper className={classes.body}>
                             <Typography variant="body1" component="div" >
                                 {   
-                                    singleData.description ? 
-                                    renderHTML(singleData.description) 
+                                    singleData.body ? 
+                                    renderHTML(singleData.body) 
                                     : 
                                     renderHTML("<span></span>")
                                 }
@@ -143,4 +125,4 @@ class VideoPreview extends React.Component<any, any> {
     }
 }
 
-export default withStyles(styles)(VideoPreview);
+export default withStyles(styles)(PostPreview);

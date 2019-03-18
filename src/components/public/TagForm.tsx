@@ -38,7 +38,6 @@ class TagForm extends React.Component<ITagFormProps, any>{
     }
    
     handleDelete = (index:number) => {
-        console.log(index);
         
         const {tags } = this.state;
         const changeTags = [

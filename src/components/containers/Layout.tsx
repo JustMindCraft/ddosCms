@@ -7,6 +7,7 @@ import { withStyles, createStyles } from '@material-ui/core/styles';
 import Message from '../withData/Message';
 import chashao from '../../images/f25af2fe5058dac470d3d628c54b8373.png';
 import { Link } from 'react-router-dom';
+import { RootNode } from '../../gunDB';
 
 const styles = (theme: any) => createStyles({
     '@global': {
@@ -89,7 +90,8 @@ interface ILayoutProps {
     classes: any
 }
 interface ILayoutState {
-    top: number
+    top: number,
+    tags: Array<any>,
 }
 class Layout extends React.Component<ILayoutProps, ILayoutState> {
 
@@ -97,6 +99,7 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
         super(props);
         this.state = {
             top: 0,
+            tags: [],
         }
     }
 
@@ -108,10 +111,28 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
             })
         }
     }
+    componentDidMount(){
+        RootNode.get("tags").map((tag:any) => (tag && tag.isTop) === true ? tag: undefined)
+        .on((data:any, key:string)=>{
+            const { tags } = this.state;
+            if(data===null){
+                return false;
+            }
+           
+            if(tags.includes(data.name)){
+                return false;
+            }
+            tags.unshift(data.name);
+            return this.setState({
+                tags,
+            })
+            
+        })
+    }
     render() {
         const { classes } = this.props;
 
-        const { top } = this.state;
+        const { top, tags } = this.state;
 
         return (
             <React.Fragment>
@@ -119,14 +140,7 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
                     <Link to="/">
                         <img src={chashao} className={classes.logo} />
                     </Link>
-                    {/* <div className={classes.headerButton}>
-                        <Button variant="contained" className={classNames(classes.button,classes.headerRight)}>
-                            Sign In
-                        </Button>
-                        <Button variant="contained" className={classNames(classes.button,classes.headerRight)}>
-                            Sign In
-                        </Button>
-                    </div> */}
+                   
                 </div>
                 <AppBar style={
                     {
@@ -134,18 +148,17 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
                     }
                 } position="fixed" color="default" className={classes.appBar}>
                     <Toolbar className={classes.toolBar}>
-                        <Button className={classes.toolBarButton}>视频</Button>
                         <Button className={classes.toolBarButton}>文章</Button>
                         <Button className={classes.toolBarButton}>热点</Button>
                         <Button className={classes.toolBarButton}>推荐</Button>
                         <Button className={classes.toolBarButton}>标签云</Button>
-                        <Button className={classes.toolBarButton}>经济</Button>
-                        <Button className={classes.toolBarButton}>图片</Button>
-                        <Button className={classes.toolBarButton}>资源</Button>
-                        <Button className={classes.toolBarButton}>科技</Button>
-                        <Button className={classes.toolBarButton}>商业</Button>
-                        <Button className={classes.toolBarButton}>人生</Button>
-                        <Button className={classes.toolBarButton}>趣闻</Button>
+                        <Button className={classes.toolBarButton}>视频</Button>
+
+                        {
+                            tags.map((tag:any, index:number)=>
+                            <Button key={index} className={classes.toolBarButton}>{tag}</Button>
+                            )
+                        }
                     </Toolbar>
                 </AppBar>
                 <Grid>

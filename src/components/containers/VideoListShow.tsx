@@ -19,7 +19,6 @@ class VideoListShow extends React.Component<any, any>{
 
     componentWillReceiveProps(nextProps:any){
         if(nextProps !== this.props){
-            console.log('videos list change');
             
         }
         
