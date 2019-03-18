@@ -54,6 +54,10 @@ class TorrentVideoPlayer extends React.Component<any, any>{
                     return false;
                     
                 }
+                this.setState({
+                    loading: false,
+                    files: torrent.files
+                })
                 
             });
         }, 200);
@@ -77,7 +81,7 @@ class TorrentVideoPlayer extends React.Component<any, any>{
         return files.length!==0 && files.forEach((file:any)=>{
 
             if(!file){
-                this.setState({
+                return this.setState({
                     loading:false,
                     files: []
                 });
@@ -87,9 +91,14 @@ class TorrentVideoPlayer extends React.Component<any, any>{
                 autoplay: true,
                 controls: true,
             }, (err:any, video:any)=>{
+                if(!video){
+                    return false;
+                }
                 video.style.width = "100%"
                 video.controls = true,
                 video.autoplay = true,
+                console.log(video);
+                
                 
                 this.setState({
                     loading:false,
@@ -141,14 +150,14 @@ class TorrentVideoPlayer extends React.Component<any, any>{
                     <LinearProgress />
                     <br/>
                 </div>
-                <div style={{
+                <div  style={{
                    display: this.state.loading? "none" : "flex", width: isPc? "65%" : "100%",
                     flexDirection: 'column',
                     alignItems: 'center',
                     alignCentent: 'center',
                     justifyContent: 'baseline',
                 }}>
-                    <video src="" style={{width: "100%"}} autoPlay={true} controls={true} ref="dplayer"></video>
+                    <video  style={{width: "100%"}} autoPlay={true} controls={true} ref="dplayer"></video>
                 
                 </div>
             </React.Fragment>
