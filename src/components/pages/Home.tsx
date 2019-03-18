@@ -13,9 +13,9 @@ const styles = (theme: any) => createStyles({
     alignItems: "baseline",
     flexWrap: "wrap",
     flexShrink: "initial",
-    paddingLeft: "5%",
-    paddingRight: "5%",
-    width: "100%"
+    paddingLeft: 5,
+    width: "100%",
+    maxWidth: 1336
   },
   
   

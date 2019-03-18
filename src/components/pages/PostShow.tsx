@@ -30,7 +30,7 @@ const styles = createStyles({
         alignItems: 'stretch',
         alignCentent: 'baseline',
         justifyContent: 'space-around',
-        maxWidth: 800,
+        maxWidth: 1366,
         wordBreak:"break-all",
         width:"100%"
     }
@@ -70,7 +70,6 @@ class PostShow extends React.Component<any, any> {
             <React.Fragment>
                 
              
-              <Paper className={classes.paper}>
                 {
                     oneLoading ? 
                     <div>
@@ -128,7 +127,6 @@ class PostShow extends React.Component<any, any> {
                     </React.Fragment>
                 }
 
-                 </Paper>
                  
                  
             </React.Fragment>

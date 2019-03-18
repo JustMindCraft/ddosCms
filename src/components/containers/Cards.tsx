@@ -5,14 +5,14 @@ import { Paper, Typography, createStyles, withStyles } from '@material-ui/core';
 
 const styles = (theme: any) => createStyles({
     cardItem:  {
-        maxWidth: 300,
+        maxWidth: 250,
         marginTop: 10,
         marginBottom: 10,
         marginRight: 10,
         cursor: "pointer",
         textDecoration: "none",
         [theme.breakpoints.down('xs')]: {
-          width: 134
+          width: 165
         },
       },
 });

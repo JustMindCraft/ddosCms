@@ -6,47 +6,20 @@ import Cards from '../containers/Cards';
 
 
 const styles = (theme: any) => createStyles({
-  
-    cardHeader: {
-      backgroundColor: theme.palette.grey[200],
-      
-    },
-    cardPricing: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'baseline',
-      marginBottom: theme.spacing.unit * 2,
-    },
-    cardActions: {
-      [theme.breakpoints.up('sm')]: {
-        paddingBottom: theme.spacing.unit * 2,
-      },
-    },
+
    
     container: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: "space-around",
-      alignItems: "baseline",
-      flexWrap: "wrap",
-      flexShrink: "initial",
-      paddingLeft: "5%",
-      paddingRight: "5%",
-      width: "100%"
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: "space-around",
+        alignItems: "baseline",
+        flexWrap: "wrap",
+        flexShrink: "initial",
+        paddingLeft: 5,
+        width: "100%",
+        maxWidth: 1336
     },
-    cardItem:  {
-      maxWidth: 300,
-      marginTop: 10,
-      marginBottom: 10,
-      marginRight: 10,
-      cursor: "pointer",
-      [theme.breakpoints.down('xs')]: {
-        width: "40%"
-      },
-    },
-    cardTitle: {
-  
-    }
+    
   });
 
 class SearchPage extends React.Component<any, any>{

@@ -33,6 +33,7 @@ const ListStyles = (theme:any) => createStyles({
         alignItems: 'center',
         alignCentent: 'center',
         justifyContent: 'space-around',
+        width: "100%"
       },
       
       toolBar: {

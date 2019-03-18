@@ -191,10 +191,11 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
                         }
                     </Toolbar>
                 </AppBar>
-                <Grid>
-
-                </Grid>
+                <Grid container style={{
+                    justifyContent: "center",
+                }}>
                 {this.props.children}
+                </Grid>
                 <Message />
                  {/* Footer */}
                 <footer className={classNames(classes.footer, classes.layout)}>

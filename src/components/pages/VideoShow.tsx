@@ -19,6 +19,8 @@ const styles = createStyles({
         alignCentent: 'center',
         justifyContent: 'space-around',
         color: 'black',
+        width: "100%"
+
     },
     player: {
         display: 'flex',
@@ -26,6 +28,7 @@ const styles = createStyles({
         alignItems: 'center',
         alignCentent: 'center',
         justifyContent: 'baseline',
+        width: "100%"
     },
     description:{
         paddingTop: 20,
@@ -37,7 +40,9 @@ const styles = createStyles({
         alignItems: 'stretch',
         alignCentent: 'baseline',
         justifyContent: 'space-around',
-        maxWidth: 800
+        maxWidth: 1366,
+        width: "100%"
+
     }
     
 })
@@ -76,7 +81,6 @@ class VideoShow extends React.Component<any, any> {
                 <div className={classes.player}>
                     <TorrentVideoPlayer torrentId={singleData.magnetURI} poster={singleData.coverUrl} />
                  </div>
-                 <Paper className={classes.paper}>
                 {
                     oneLoading ? 
                     <div>
@@ -96,7 +100,8 @@ class VideoShow extends React.Component<any, any> {
                              <br />
                          </div>
                          <div style={{
-                            textAlign: 'center'
+                            textAlign: 'center',
+                            width: "100%"
                         }}>
                              <TagSmallList source="videos" 
                              recordId={singleData.id} onClick={this.handleTagClick}/>
@@ -134,7 +139,6 @@ class VideoShow extends React.Component<any, any> {
                     </React.Fragment>
                 }
 
-                 </Paper>
                  
             </React.Fragment>
             

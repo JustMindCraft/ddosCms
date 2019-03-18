@@ -13,6 +13,7 @@ const styles = createStyles({
     button: {
         position: 'fixed',
         zIndex: 100,
+        left: 0,
     }
 })
 
@@ -71,7 +72,7 @@ class NewSource extends React.Component<any, any>{
             <React.Fragment>
                 <br/>
                 <Typography style={{
-                    textAlign: 'center',
+                    textAlign: 'center', width: "100%"
                 }} variant="display1" component="h1">
                     新建{sourceName}
                 </Typography>
