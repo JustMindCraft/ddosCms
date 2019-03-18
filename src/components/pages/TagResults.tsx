@@ -149,7 +149,7 @@ class TagResults extends React.Component<IHomePageProps, any> {
                 }}>
             <Typography variant="title">相关视频</Typography>
             </div>
-            <Cards list={videos} source="posts" />
+            <Cards list={videos} source="videos" />
             
         </main>
        
