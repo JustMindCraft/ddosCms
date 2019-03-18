@@ -1,34 +1,11 @@
 import React from 'react';
-import classNames from 'classnames';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { withStyles, createStyles } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
-import { Paper, Typography, Divider } from '@material-ui/core';
 import { RootNode } from '../../gunDB';
-
+import Cards from '../containers/Cards';
+import { Typography } from '@material-ui/core';
 const styles = (theme: any) => createStyles({
-  
-  cardHeader: {
-    backgroundColor: theme.palette.grey[200],
-    
-  },
-  cardPricing: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'baseline',
-    marginBottom: theme.spacing.unit * 2,
-  },
-  cardActions: {
-    [theme.breakpoints.up('sm')]: {
-      paddingBottom: theme.spacing.unit * 2,
-    },
-  },
-  footer: {
-    marginTop: theme.spacing.unit * 8,
-    borderTop: `1px solid ${theme.palette.divider}`,
-    padding: `${theme.spacing.unit * 6}px 0`,
-    textAlign: "center",
-  },
+ 
   container: {
     display: 'flex',
     flexDirection: 'row',
@@ -40,24 +17,9 @@ const styles = (theme: any) => createStyles({
     paddingRight: "5%",
     width: "100%"
   },
-  cardItem:  {
-    maxWidth: 300,
-    marginTop: 10,
-    marginBottom: 10,
-    marginRight: 10,
-    cursor: "pointer",
-    [theme.breakpoints.down('xs')]: {
-      width: "40%"
-    },
-  },
-  cardTitle: {
-
-  }
+  
+  
 });
-
-
-
-
 
 interface IHomePageProps {
   classes: any,
@@ -82,7 +44,6 @@ class HomePage extends React.Component<IHomePageProps, any> {
       if(data===null){
         return false;
       }
-      console.log(data);
 
       videos.unshift(data);
       this.setState({
@@ -110,6 +71,8 @@ class HomePage extends React.Component<IHomePageProps, any> {
     const { classes } = this.props;
 
     const { videos, posts } = this.state;
+
+    document.title = "叉烧俱乐部"
     
     return (
       <React.Fragment>
@@ -121,28 +84,12 @@ class HomePage extends React.Component<IHomePageProps, any> {
         }}>
           <Typography variant="title">最新文章</Typography>
         </div>
-        {
-          posts.length!==0 && posts.map((post:any, index:number)=>
-            <Paper className={classes.cardItem} key={index}>
-              <img src={post.coverUrl} alt={post.title} style={{
-              width: "100%"
-                
-              }} />
-              <div style={{
-                padding: 5
-              }}>
-                <Typography variant="title">{post.title}</Typography>
-                <Typography variant="subtitle2" style={{
-                  textAlign: "right"
-                }}>阅读(0)</Typography>
-              </div>
-             
-            </Paper>
-          )
-        }
+        <Cards list={posts} source="posts" />
+        
          <hr style={{
           width: "100%"
         }}/>
+
          <div style={{
           width: "100%",
           marginTop: 30
@@ -150,35 +97,11 @@ class HomePage extends React.Component<IHomePageProps, any> {
           <Typography variant="title">最新视频</Typography>
         </div>
        
-        {
-          videos.length!==0 && videos.map((video:any, index:number)=>
-            <Paper className={classes.cardItem} key={index}>
-              <img src={video.coverUrl} alt={video.title} style={{
-              width: "100%"
-                
-              }} />
-              <div style={{
-                padding: 5
-              }}>
-              <Typography variant="title">{video.title}</Typography>
-              <Typography variant="subtitle2" style={{
-                textAlign: "right"
-              }}>观看(0)</Typography>
-              </div>
-              
-            </Paper>
-          )
-        }
+        <Cards list={videos} source="videos" />
           
         
         </main>
-        {/* Footer */}
-        <footer className={classNames(classes.footer, classes.layout)}>
-          CopyRight@JustMindCraft.co
-          <br/>
-          <Link to="/admin">管理中心</Link>
-        </footer>
-        {/* End footer */}
+       
       </React.Fragment>
     )
   }

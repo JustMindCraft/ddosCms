@@ -28,12 +28,12 @@ const styles = {
 };
 
 function CustomizedInputBase(props:any) {
-  const { classes } = props;
+  const { classes, onFocus } = props;
 
   return (
     <Paper className={classes.root} elevation={1}>
     
-      <InputBase onChange={(e:any)=>props.onChange(e.target.value)} className={classes.input} placeholder="搜索: 标题|标签|介绍" />
+      <InputBase autoFocus={props.autoFocus} onFocus={onFocus} onChange={(e:any)=>props.onChange(e.target.value)} className={classes.input} placeholder="搜索: 标题|标签|介绍" />
       <IconButton className={classes.iconButton} aria-label="搜索">
         <SearchIcon />
       </IconButton>

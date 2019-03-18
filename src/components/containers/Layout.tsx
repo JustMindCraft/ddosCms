@@ -6,8 +6,14 @@ import Toolbar from '@material-ui/core/Toolbar';
 import { withStyles, createStyles } from '@material-ui/core/styles';
 import Message from '../withData/Message';
 import chashao from '../../images/f25af2fe5058dac470d3d628c54b8373.png';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { RootNode } from '../../gunDB';
+import { Typography } from '@material-ui/core';
+import classNames from 'classnames';
+import SearchInput from '../public/SearchInput';
+
+const HomeLink = (props:any)=> <Link to='/' {...props} />;
+
 
 const styles = (theme: any) => createStyles({
     '@global': {
@@ -18,6 +24,7 @@ const styles = (theme: any) => createStyles({
     header: {
         display: 'flex',
         justifyContent: 'space-between',
+        alignItems: 'center'
     },
     headerButton: {
         display: 'flex',
@@ -35,6 +42,7 @@ const styles = (theme: any) => createStyles({
         marginTop: -30,
         marginBottom: 20,
         width: 200,
+        display: 'inline-block'
     },
     appBar: {
         position: 'fixed',
@@ -59,6 +67,12 @@ const styles = (theme: any) => createStyles({
     toolBarButton: {
         fontSize: "1.2rem",
     },
+    footer: {
+        marginTop: theme.spacing.unit * 8,
+        borderTop: `1px solid ${theme.palette.divider}`,
+        padding: `${theme.spacing.unit * 6}px 0`,
+        textAlign: "center",
+    },
 
     heroContent: {
         maxWidth: 600,
@@ -79,15 +93,14 @@ const styles = (theme: any) => createStyles({
             paddingBottom: theme.spacing.unit * 2,
         },
     },
-    footer: {
-        marginTop: theme.spacing.unit * 8,
-        borderTop: `1px solid ${theme.palette.divider}`,
-        padding: `${theme.spacing.unit * 6}px 0`,
-    },
+    
 });
 
 interface ILayoutProps {
-    classes: any
+    classes: any,
+    history: any,
+    match: any,
+    location:any,
 }
 interface ILayoutState {
     top: number,
@@ -129,17 +142,33 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
             
         })
     }
-    render() {
-        const { classes } = this.props;
 
+    onFocus = (e:any) => {
+        const { history } = this.props;
+        history.push("/search")
+    }
+
+    render() {
+        const { classes, location } = this.props;
         const { top, tags } = this.state;
 
+        
         return (
             <React.Fragment>
                 <div className={classes.header}>
                     <Link to="/">
                         <img src={chashao} className={classes.logo} />
+                       
                     </Link>
+                    <Typography variant="subtitle1">基于的区块链内容收集</Typography>
+                   <div>
+                       {
+                           location.pathname !== "/search"  &&
+                            <SearchInput autoFocus={false} onFocus={this.onFocus} />
+                       }
+                    
+                   </div>
+                   
                    
                 </div>
                 <AppBar style={
@@ -148,7 +177,8 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
                     }
                 } position="fixed" color="default" className={classes.appBar}>
                     <Toolbar className={classes.toolBar}>
-                        <Button className={classes.toolBarButton}>文章</Button>
+                        <Button component={HomeLink} className={classes.toolBarButton}>首页</Button>
+                        <Button component={HomeLink} className={classes.toolBarButton}>文章</Button>
                         <Button className={classes.toolBarButton}>热点</Button>
                         <Button className={classes.toolBarButton}>推荐</Button>
                         <Button className={classes.toolBarButton}>标签云</Button>
@@ -166,10 +196,17 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
                 </Grid>
                 {this.props.children}
                 <Message />
-                
+                 {/* Footer */}
+                <footer className={classNames(classes.footer, classes.layout)}>
+                    CopyRight@JustMindCraft.co
+                    <br/>
+                    <Typography>本站内容来自网络，如有侵权，请通知我们删除。xsqfeather@gmail.com</Typography>
+                    <Link to="/admin">管理中心</Link>
+                </footer>
+                {/* End footer */}
             </React.Fragment>
         )
     }
 }
 
-export default withStyles(styles)(Layout)
+export default withRouter(withStyles(styles)(Layout) as any)

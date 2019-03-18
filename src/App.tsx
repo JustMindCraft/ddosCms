@@ -8,6 +8,9 @@ import NewSource from './components/pages/NewSource';
 import './components/css/common.css';
 import SourcePreview from './components/pages/SourcePreview';
 import EditSource from './components/pages/EditSource';
+import SearchPage from './components/pages/Search';
+import VideoShow from './components/pages/VideoShow';
+import PostShow from './components/pages/PostShow';
 
 class App extends Component<any, any> {
   
@@ -21,9 +24,10 @@ class App extends Component<any, any> {
               <Route exact path="/tags/:tag" component={HomePage} />
               <Route exact path="/recommend" component={HomePage} />
               <Route exact path="/hot" component={HomePage} />
-              <Route exact path="/search" component={HomePage} />
+              <Route exact path="/search" component={SearchPage} />
               <Route exact path="/login" component={HomePage} />
-              <Route exact path="/detail/:id" component={HomePage} />
+              <Route exact path="/videos/:id" component={VideoShow} />
+              <Route exact path="/posts/:id" component={PostShow} />
               <Route exact path="/admin" component={Admin}/>
               <Route exact path="/admin/:source" component={ListAdmin} />
               <Route exact path="/admin/:source/new" component={NewSource} />
