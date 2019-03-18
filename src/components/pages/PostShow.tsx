@@ -30,7 +30,9 @@ const styles = createStyles({
         alignItems: 'stretch',
         alignCentent: 'baseline',
         justifyContent: 'space-around',
-        maxWidth: 800
+        maxWidth: 800,
+        wordBreak:"break-all",
+        width:"100%"
     }
     
 })
