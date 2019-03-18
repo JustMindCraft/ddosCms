@@ -4,6 +4,7 @@ import { observer, inject } from 'mobx-react';
 import TagSmallList from '../containers/TagSmallList';
 import renderHTML from 'react-render-html';
 import { Link, withRouter } from 'react-router-dom';
+import { RootNode } from '../../gunDB';
 
 
 const styles = createStyles({
@@ -41,23 +42,40 @@ const styles = createStyles({
 @observer
 class PostShow extends React.Component<any, any> {
     constructor(props:any) {
-        super(props)
+        super(props);
+        RootNode.get('status').put("online");
         
     }
 
     componentWillMount(){
         const { match,  dataProvider } = this.props;
-        const { setAction, doAction, setOperateId } = dataProvider;
+        const { setAction, doAction, setOperateId, singleData } = dataProvider;
 
-        document.body.scrollTop = document.documentElement.scrollTop = 0;       
+        document.body.scrollTop = document.documentElement.scrollTop = 0; 
+        let countVisited = singleData.visited;
+        if(!countVisited){
+            countVisited = 0;
+        }      
         setAction("view");
         setOperateId(match.params.id);
-        doAction("posts");
+        doAction("posts", (m:any)=>{
+            console.log(m);
+            
+            setAction('update');
+            doAction('posts',{
+                visited: ++countVisited,
+                tags: singleData.tags,
+            },(m:any)=>{
+            console.log("统计", m);
+
+        });
+        });
         
     }
 
     handleTagClick = (tag:string) => {
-        
+        const { history } = this.props;
+        history.push('/tags/'+tag);
 
     }
 

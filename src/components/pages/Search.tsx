@@ -3,6 +3,7 @@ import SearchInput from '../public/SearchInput';
 import { createStyles, CssBaseline, withStyles, Typography, Paper } from '@material-ui/core';
 import { RootNode } from '../../gunDB';
 import Cards from '../containers/Cards';
+import { Link } from 'react-router-dom';
 
 
 const styles = (theme: any) => createStyles({
@@ -19,6 +20,17 @@ const styles = (theme: any) => createStyles({
         width: "100%",
         maxWidth: 1336
     },
+    cardItem:  {
+        maxWidth: 250,
+        marginTop: 10,
+        marginBottom: 10,
+        marginRight: 10,
+        cursor: "pointer",
+        textDecoration: "none",
+        [theme.breakpoints.down('xs')]: {
+          width: 165
+        },
+      },
     
   });
 
@@ -36,21 +48,29 @@ class SearchPage extends React.Component<any, any>{
 
     findTags = (text:string) => {
         const { tags } = this.state;
-        RootNode.get("tags/"+text)
-        // .map((tag:any)=>(tag && tag.name===text)? tag : undefined)
+        RootNode.get("tags")
+        .map((tag:any)=>(tag && tag.name===text)? tag : undefined)
         .on((data:any, key:any)=>{
-            
+
                 console.log("获取标签");
                 
                 console.log(key, data);
                 RootNode.get("videos/"+data.contentId).once((data:any, key:string)=>{
-                    // tags.unshift(data)
-                    console.log("标签数据", data);
+                    if(data && data.status==="published"){
+                        tags.unshift(data);
+                        this.setState({
+                            tags,
+                        })
+                    }
                     
                 })
                 RootNode.get("posts/"+data.contentId).once((data:any, key:string)=>{
-                    // tags.unshift(data)
-                    console.log("标签数据2", data, key);
+                    if(data && data.status==="published"){
+                        tags.unshift(data);
+                        this.setState({
+                            tags,
+                        })
+                    }
                     
                 })
                 
@@ -143,7 +163,7 @@ class SearchPage extends React.Component<any, any>{
         
         const { classes } = this.props;
         const {  posts, videos, tags, searchText } = this.state;
-
+        
         return (
             <React.Fragment>
                  <CssBaseline />
@@ -185,6 +205,8 @@ class SearchPage extends React.Component<any, any>{
                    
                     {
                         tags.length!==0 && tags.map((item:any, index:number)=>
+                            <Link key={index} to={"/"+(item.body?"posts":"videos")+"/"+item.id}  className={classes.cardItem}>
+
                             <Paper className={classes.cardItem} key={index}>
                                 <img src={item.coverUrl} alt={item.title} style={{
                                     width: "100%"
@@ -196,10 +218,11 @@ class SearchPage extends React.Component<any, any>{
                                     <Typography variant="title">{item.title}</Typography>
                                     <Typography variant="subtitle2" style={{
                                     textAlign: "right"
-                                    }}>访问(0)</Typography>
+                                    }}>{item.body?"阅读":"观看"}(0)</Typography>
                                 </div>
                             
                             </Paper>
+                            </Link>
                         )
                     }
 

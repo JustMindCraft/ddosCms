@@ -13,6 +13,11 @@ import classNames from 'classnames';
 import SearchInput from '../public/SearchInput';
 
 const HomeLink = (props:any)=> <Link to='/' {...props} />;
+const PostsLink = (props:any)=> <Link to='/posts' {...props} />;
+const HotLink = (props:any)=> <Link to='/hot' {...props} />;
+const TagsLink = (props:any)=> <Link to='/tags' {...props} />;
+const RecommendLink = (props:any)=> <Link to='/recommend' {...props} />;
+const VideosLink = (props:any)=> <Link to='/videos' {...props} />;
 
 
 const styles = (theme: any) => createStyles({
@@ -54,6 +59,7 @@ const styles = (theme: any) => createStyles({
     },
     toolbarTitle: {
         flex: 1,
+        textDecoration: "none"
     },
 
     toolBar: {
@@ -63,9 +69,11 @@ const styles = (theme: any) => createStyles({
         justifyItems: 'center',
         justifyContent: 'space-between',
         fontSize: "1.2rem",
+        textDecoration: "none"
     },
     toolBarButton: {
         fontSize: "1.2rem",
+        textDecoration: "none"
     },
     footer: {
         marginTop: theme.spacing.unit * 8,
@@ -166,6 +174,9 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
                            location.pathname !== "/search"  &&
                             <SearchInput autoFocus={false} onFocus={this.onFocus} />
                        }
+                       <br/>
+                       <br/>
+                       <br/>
                     
                    </div>
                    
@@ -178,15 +189,20 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
                 } position="fixed" color="default" className={classes.appBar}>
                     <Toolbar className={classes.toolBar}>
                         <Button component={HomeLink} className={classes.toolBarButton}>首页</Button>
-                        <Button component={HomeLink} className={classes.toolBarButton}>文章</Button>
-                        <Button className={classes.toolBarButton}>热点</Button>
-                        <Button className={classes.toolBarButton}>推荐</Button>
-                        <Button className={classes.toolBarButton}>标签云</Button>
-                        <Button className={classes.toolBarButton}>视频</Button>
+                        <Button component={PostsLink} className={classes.toolBarButton}>文章</Button>
+                        <Button component={HotLink} className={classes.toolBarButton}>热点</Button>
+                        <Button component={RecommendLink} className={classes.toolBarButton}>推荐</Button>
+                        <Button component={TagsLink} className={classes.toolBarButton}>标签云</Button>
+                        <Button component={VideosLink} className={classes.toolBarButton}>视频</Button>
 
                         {
                             tags.map((tag:any, index:number)=>
-                            <Button key={index} className={classes.toolBarButton}>{tag}</Button>
+                            <Link key={index} to={"/tags/"+tag} style={{
+                                textDecoration: "none"
+                            }}>
+                            <Button className={classes.toolBarButton}>{tag}</Button>
+                            </Link>
+                            
                             )
                         }
                     </Toolbar>

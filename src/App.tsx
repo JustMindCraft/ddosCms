@@ -11,6 +11,12 @@ import EditSource from './components/pages/EditSource';
 import SearchPage from './components/pages/Search';
 import VideoShow from './components/pages/VideoShow';
 import PostShow from './components/pages/PostShow';
+import Posts from './components/pages/Posts';
+import Hot from './components/pages/Hot';
+import Recommend from './components/pages/Recommend';
+import Tags from './components/pages/Tags';
+import TagResults from './components/pages/TagResults';
+import Videos from './components/pages/Videos';
 
 class App extends Component<any, any> {
   
@@ -21,9 +27,12 @@ class App extends Component<any, any> {
            <Layout>
              <Switch>
               <Route exact path="/" component={HomePage}/>
-              <Route exact path="/tags/:tag" component={HomePage} />
-              <Route exact path="/recommend" component={HomePage} />
-              <Route exact path="/hot" component={HomePage} />
+              <Route exact path="/tags" component={Tags} />
+              <Route exact path="/tags/:tag" component={TagResults} />
+              <Route exact path="/recommend" component={Recommend} />
+              <Route exact path="/hot" component={Hot} />
+              <Route exact path="/posts" component={Posts} />
+              <Route exact path="/videos" component={Videos} />
               <Route exact path="/search" component={SearchPage} />
               <Route exact path="/login" component={HomePage} />
               <Route exact path="/videos/:id" component={VideoShow} />

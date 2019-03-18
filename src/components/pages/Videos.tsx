@@ -25,50 +25,23 @@ interface IHomePageProps {
   classes: any,
 }
 
-class HomePage extends React.Component<IHomePageProps, any> {
+class Videos extends React.Component<IHomePageProps, any> {
 
   constructor(props:any){
     super(props);
     this.state = {
       videos: [],
-      posts: [],
       hotVideos: [],
-      hotPosts: []
+      rVideos: [],
     }
   }
 
   componentWillMount(){
-    const { videos, posts, hotVideos, hotPosts} = this.state;
-    RootNode.get("videos")
-    .map(
-      (video:any) => (video && video.visited >=2) ? video:undefined
-    ).once((data: any, key:string)=>{
-      if(data===null){
-        return false;
-      }
-
-      hotVideos.unshift(data);
-      this.setState({
-        hotVideos,
-      })
-      
-    })
-    RootNode.get("videos")
-    .map(
-      (video:any) => (video && video.status === "published") ? video:undefined
-    ).once((data: any, key:string)=>{
-      if(data===null){
-        return false;
-      }
-
-      videos.unshift(data);
-      this.setState({
-        videos,
-      })
-      
-    })
+    const { videos, hotVideos, rVideos} = this.state;
+    
+   
     //===================hostPost
-    RootNode.get("posts")
+    RootNode.get("videos")
     .map(
       (post:any) => (post && post.visited >= 2) ? post:undefined
     ).once((data: any, key:string)=>{
@@ -76,13 +49,15 @@ class HomePage extends React.Component<IHomePageProps, any> {
         return false;
       }
       
-      hotPosts.unshift(data);
+      hotVideos.unshift(data);
       this.setState({
-        hotPosts,
+        hotVideos,
       })
       
     })
-    RootNode.get("posts")
+
+    //==================最新
+    RootNode.get("videos")
     .map(
       (post:any) => (post && post.status === "published") ? post:undefined
     ).once((data: any, key:string)=>{
@@ -90,9 +65,24 @@ class HomePage extends React.Component<IHomePageProps, any> {
         return false;
       }
       
-      posts.unshift(data);
+      videos.unshift(data);
       this.setState({
-        posts,
+        videos,
+      })
+      
+    })
+    //======推荐
+    RootNode.get("videos")
+    .map(
+      (post:any) => (post && post.isRecommend) ? post:undefined
+    ).once((data: any, key:string)=>{
+      if(data===null){
+        return false;
+      }
+      
+      rVideos.unshift(data);
+      this.setState({
+        rVideos,
       })
       
     })
@@ -101,7 +91,7 @@ class HomePage extends React.Component<IHomePageProps, any> {
   render() {
     const { classes } = this.props;
 
-    const { videos, posts, hotPosts, hotVideos } = this.state;
+    const { videos, hotVideos, rVideos } = this.state;
 
     document.title = "叉烧俱乐部"
     
@@ -113,9 +103,21 @@ class HomePage extends React.Component<IHomePageProps, any> {
           width: "100%",
           marginTop: 30
         }}>
-          <Typography variant="title">热点文章</Typography>
+          <Typography variant="title">推荐视频</Typography>
         </div>
-        <Cards list={hotPosts} source="posts" />
+        <Cards list={rVideos} source="videos" />
+        
+         
+        <hr style={{
+          width: "100%"
+        }}/>
+        <div style={{
+          width: "100%",
+          marginTop: 30
+        }}>
+          <Typography variant="title">热点视频</Typography>
+        </div>
+        <Cards list={hotVideos} source="videos" />
         
          
         <hr style={{
@@ -125,34 +127,11 @@ class HomePage extends React.Component<IHomePageProps, any> {
           width: "100%",
           marginTop: 30
         }}>
-          <Typography variant="title">最新文章</Typography>
-        </div>
-        <Cards list={posts} source="posts" />
-        
-         <hr style={{
-          width: "100%"
-        }}/>
-
-         <div style={{
-          width: "100%",
-          marginTop: 30
-        }}>
-          <Typography variant="title">热点视频</Typography>
-        </div>
-       
-        <Cards list={hotVideos} source="videos" />
-        <hr style={{
-          width: "100%"
-        }}/>
-
-         <div style={{
-          width: "100%",
-          marginTop: 30
-        }}>
           <Typography variant="title">最新视频</Typography>
         </div>
-       
         <Cards list={videos} source="videos" />
+        
+        
         
         </main>
        
@@ -162,4 +141,4 @@ class HomePage extends React.Component<IHomePageProps, any> {
 
 }
 
-export default withStyles(styles)(HomePage);
+export default withStyles(styles)(Videos);

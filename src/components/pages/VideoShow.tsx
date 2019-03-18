@@ -65,10 +65,28 @@ class VideoShow extends React.Component<any, any> {
         document.body.scrollTop = document.documentElement.scrollTop = 0; 
         
     }
+    componentDidMount(){
+        const { dataProvider } = this.props;
+        const { doAction, setAction, singleData } = dataProvider;
+        let countVisited = singleData.visited;
+        if(!countVisited){
+            countVisited = 0;
+        }
+        setAction('update');
+        doAction('videos',{
+            visited: ++countVisited,
+            tags: singleData.tags
+        },(m:any)=>{
+           console.log("统计", m);
+           
+
+        });
+    }
 
     handleTagClick = (tag:string) => {
         
-
+        const { history } = this.props;
+        history.push('/tags/'+tag);
     }
 
     render(){

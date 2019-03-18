@@ -187,6 +187,9 @@ export class DataProvider {
             
            
             this.listLoading = false;
+            if(cb){
+                cb(1);
+            }
 
             
         })
@@ -197,6 +200,9 @@ export class DataProvider {
             const list = this.dataSource.get(sourceName);
             if(list && list.length===0){
                 this.listLoading = false;
+            }
+            if(cb){
+                cb(0);
             }
             clearTimeout(timeout);
         }, 5432)
@@ -210,7 +216,7 @@ export class DataProvider {
                 .once((data:any,key:string)=>{
                     
                     RootNode.get(sourceName).get(key).put(null, (ack:any)=>{
-                        RootNode.get(sourceName+'/'+this.operateId).put(null, (ack:any)=>{
+                        RootNode.get(sourceName+'/'+this.operateId+"/"+data.contentId).put(null, (ack:any)=>{
         
                             if(!ack.err){
                                 if(cb){
@@ -279,7 +285,7 @@ export class DataProvider {
         for (const key in tags) {
             if (tags.hasOwnProperty(key)) {
                 const tag = tags[key];
-                const tagOne = RootNode.get("tags/"+tag).put({name: tag, contentId: uuid, createdAt: now(), isTop:false})
+                const tagOne = RootNode.get("tags/"+tag+"/"+uuid).put({name: tag, contentId: uuid, createdAt: now(), isTop:false})
                 RootNode.get("tags").set(tagOne, (ack:any)=>{
                     console.log(ack);
                     
@@ -314,21 +320,40 @@ export class DataProvider {
 
         this.updating = true;
         const tags = data.tags;
-        console.log({tags});
         
         RootNode.get(sourceName+"/"+this.operateId+"/tags").put(null).put({...tags});
+        if(tags && tags!==undefined){
+            for (const key in tags) {
+                if(!tags){
+                    continue;
 
-        for (const key in tags) {
-            if (tags.hasOwnProperty(key)) {
-                const tag = tags[key];
-                const tagOne = RootNode.get("tags/"+tag).put({name: tag, isTop:false, contentId: this.operateId, createdAt: now()})
-                RootNode.get("tags").set(tagOne, (ack:any)=>{
-                    console.log(ack);
+                }
+                if(tags === undefined){
+                    continue;
+                }
+               
+                if ( tags.hasOwnProperty(key)) {
+                    if(tags === undefined){
+                        continue;
+                    }
+                    if(!tags){
+                        continue;
+
+                    }
+                    const tag = tags[key];
+                    const tagOne = RootNode.get("tags/"+tag+"/"+this.operateId).put({name: tag, contentId: this.operateId, createdAt: now(), isTop:false})
+                    RootNode.get("tags").set(tagOne, (ack:any)=>{
+                        console.log(ack);
+                        
+                        
+                    });
+                    continue;
                     
-                });
-                
+                }
             }
         }
+
+        
 
         const one = RootNode.get(sourceName+"/"+this.operateId).put({...data, id: this.operateId}, (ack:any)=>{
             console.log(ack);

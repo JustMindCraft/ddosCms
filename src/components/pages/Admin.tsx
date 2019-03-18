@@ -25,7 +25,7 @@ class Admin extends React.Component<any, any>{
             <React.Fragment>
                 <br/>
                 <Typography style={{
-                    textAlign: 'center',
+                    textAlign: 'center', width: "100%"
                 }} variant="display1" component="h1">
                     管理
                 </Typography>

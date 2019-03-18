@@ -43,7 +43,7 @@ class TagListShow extends React.Component<any, any>{
             }
             return RootNode.get('tags').get(key).put(null, (ack:any)=>{
                 
-                const tagOne = RootNode.get("tags/"+tagName).put(
+                const tagOne = RootNode.get("tags/"+tagName+"/"+data.contentId).put(
                     {
                         name: data.name, 
                         contentId: data.contentId, 

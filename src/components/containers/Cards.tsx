@@ -22,7 +22,7 @@ const Cards = (props:any) => {
     return (
         <React.Fragment>
         {
-            list.length!==0 && list.map((item:any, index:number)=>
+            list && list.length!==0 && list.map((item:any, index:number)=>
             <Link key={index} to={"/"+source+"/"+item.id}  className={classes.cardItem}>
               <Paper className={classes.cardItem}>
                   <img src={item.coverUrl} alt={item.title} style={{
@@ -35,7 +35,12 @@ const Cards = (props:any) => {
                     <Typography variant="title">{item.title}</Typography>
                     <Typography variant="subtitle2" style={{
                       textAlign: "right"
-                    }}>{source==="posts"? "阅读(0)" : "观看(0)"}</Typography>
+                    }}>{
+                      source==="posts"? 
+                      "阅读("+(item.visited? item.visited: 0)+")" :
+                       "观看("+(item.visited? item.visited: 0)+")"
+                       }
+                       </Typography>
                   </div>
                 
                 </Paper>

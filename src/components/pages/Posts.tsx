@@ -25,48 +25,21 @@ interface IHomePageProps {
   classes: any,
 }
 
-class HomePage extends React.Component<IHomePageProps, any> {
+class Posts extends React.Component<IHomePageProps, any> {
 
   constructor(props:any){
     super(props);
     this.state = {
-      videos: [],
       posts: [],
-      hotVideos: [],
-      hotPosts: []
+      hotPosts: [],
+      rPosts: [],
     }
   }
 
   componentWillMount(){
-    const { videos, posts, hotVideos, hotPosts} = this.state;
-    RootNode.get("videos")
-    .map(
-      (video:any) => (video && video.visited >=2) ? video:undefined
-    ).once((data: any, key:string)=>{
-      if(data===null){
-        return false;
-      }
-
-      hotVideos.unshift(data);
-      this.setState({
-        hotVideos,
-      })
-      
-    })
-    RootNode.get("videos")
-    .map(
-      (video:any) => (video && video.status === "published") ? video:undefined
-    ).once((data: any, key:string)=>{
-      if(data===null){
-        return false;
-      }
-
-      videos.unshift(data);
-      this.setState({
-        videos,
-      })
-      
-    })
+    const { posts, hotPosts, rPosts} = this.state;
+    
+   
     //===================hostPost
     RootNode.get("posts")
     .map(
@@ -82,6 +55,8 @@ class HomePage extends React.Component<IHomePageProps, any> {
       })
       
     })
+
+    //==================最新
     RootNode.get("posts")
     .map(
       (post:any) => (post && post.status === "published") ? post:undefined
@@ -96,12 +71,27 @@ class HomePage extends React.Component<IHomePageProps, any> {
       })
       
     })
+    //======推荐
+    RootNode.get("posts")
+    .map(
+      (post:any) => (post && post.isRecommend) ? post:undefined
+    ).once((data: any, key:string)=>{
+      if(data===null){
+        return false;
+      }
+      
+      rPosts.unshift(data);
+      this.setState({
+        rPosts,
+      })
+      
+    })
   }
 
   render() {
     const { classes } = this.props;
 
-    const { videos, posts, hotPosts, hotVideos } = this.state;
+    const { posts, hotPosts, rPosts } = this.state;
 
     document.title = "叉烧俱乐部"
     
@@ -109,6 +99,18 @@ class HomePage extends React.Component<IHomePageProps, any> {
       <React.Fragment>
         <CssBaseline />
         <main className={classes.container}>
+        <div style={{
+          width: "100%",
+          marginTop: 30
+        }}>
+          <Typography variant="title">推荐文章</Typography>
+        </div>
+        <Cards list={rPosts} source="posts" />
+        
+         
+        <hr style={{
+          width: "100%"
+        }}/>
         <div style={{
           width: "100%",
           marginTop: 30
@@ -129,30 +131,7 @@ class HomePage extends React.Component<IHomePageProps, any> {
         </div>
         <Cards list={posts} source="posts" />
         
-         <hr style={{
-          width: "100%"
-        }}/>
-
-         <div style={{
-          width: "100%",
-          marginTop: 30
-        }}>
-          <Typography variant="title">热点视频</Typography>
-        </div>
-       
-        <Cards list={hotVideos} source="videos" />
-        <hr style={{
-          width: "100%"
-        }}/>
-
-         <div style={{
-          width: "100%",
-          marginTop: 30
-        }}>
-          <Typography variant="title">最新视频</Typography>
-        </div>
-       
-        <Cards list={videos} source="videos" />
+        
         
         </main>
        
@@ -162,4 +141,4 @@ class HomePage extends React.Component<IHomePageProps, any> {
 
 }
 
-export default withStyles(styles)(HomePage);
+export default withStyles(styles)(Posts);
