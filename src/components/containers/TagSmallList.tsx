@@ -11,16 +11,16 @@ class TagSmallList extends React.Component<any, any>{
             loading: false,
         }
     }
-    componentWillMount()
-    {
-        const { recordId, source } = this.props;
-        const { tags } = this.state;
-        this.setState({
-            loading: true,
-        })
-        RootNode.get(source+"/tags/"+recordId).map().once((tag:any, key:string)=>{
-            if(tag && tag.name){
-                tags.push(tag.name);
+
+
+    change = (source:string, recordId: string) => {
+        const tags:string[] = [];
+        RootNode.get(source+"/"+recordId+"/tags")
+        .map((item:any)=>item!==null?item:undefined)
+        .on((tag:any, key:string)=>{
+            
+            if(tag){
+                tags.push(tag);
             }
            this.setState({
                tags,
@@ -36,12 +36,41 @@ class TagSmallList extends React.Component<any, any>{
             });
             clearTimeout(timeout);
         }, 1500);
+    }
+    componentDidMount()
+    {
+        const { recordId, source } = this.props;
+        console.log("didmount");
+        
+        this.setState({
+            loading: true,
+        })
+        this.change(source, recordId);
+       
+        
+    }
+
+    componentWillReceiveProps(nextProps:any){
+        this.setState({
+            loading: true,
+            tags: [],
+        })
+        console.log("propsChange");
+
+        if(nextProps !== this.props){
+            
+            this.change(nextProps.source, nextProps.recordId);
+        } 
         
     }
     handleClick = (e:any, tag:string) => {
         e.stopPropagation();
         e.cancelBubble = true;
        this.props.onClick(tag);
+        
+    }
+
+    componentDidUpdate(){
         
     }
 
@@ -53,6 +82,7 @@ class TagSmallList extends React.Component<any, any>{
     }
     render(){
         const { loading, tags } = this.state;
+        console.log("render");
         return (
             <div>
                 {

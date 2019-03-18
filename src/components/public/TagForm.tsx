@@ -72,6 +72,7 @@ class TagForm extends React.Component<ITagFormProps, any>{
             tags,
         })
     }
+
     submit = (e:any) => {
         e.preventDefault();
         e.stopPropagation();
@@ -86,6 +87,7 @@ class TagForm extends React.Component<ITagFormProps, any>{
     render(){
         const { classes } = this.props;
         const { tags, text } = this.state;
+        
         return (
             <div>
                 <form className={classes.root} onSubmit={this.submit}>

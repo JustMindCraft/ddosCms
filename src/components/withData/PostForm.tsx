@@ -1,8 +1,10 @@
 import React from 'react';
 import { TextField, Paper, Button, withStyles, createStyles, CircularProgress, Divider, Switch } from '@material-ui/core';
 import ImageUploader from './ImageUploader';
+import VideoUploader from './VideoUploader';
 import { observer, inject } from 'mobx-react';
 import TextEditor from './TextEditor';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { RootNode, now } from '../../gunDB';
 import { withRouter } from 'react-router';
 import TagForm from '../public/TagForm';
@@ -40,7 +42,8 @@ const styles = createStyles({
         justifyContent: 'space-between',
         width: "80%",
         marginBottom: 100,
-        marginTop: 100
+        marginTop: 100,
+        zIndex:9999
     }
 })
 
@@ -54,28 +57,43 @@ class PostForm extends React.Component<any, any> {
     constructor(props: any){
         super(props);
         this.state = {
-            videoUploading: false,
-            magnetURI: "",
             imageUploading: false,
             coverUrl: "http://res.cloudinary.com/ddycd5xyn/image/upload/a_0,c_fill,w_300/default.jpg",
             publicId: "",
             cloudName: "",
-            description: "",
+            body: "",
             title: "",
             isRecommend: false,
-            tags: ["视频"],
+            tags: [],
+            isEditLoading: false,
+            tagLoaded: false,
+
         };
 
     }
 
     componentWillMount(){
         RootNode.get('status').put("online");
+       
+    }
+    componentDidMount(){
         const { dataProvider,match } = this.props;
+        const { setAction, setOperateId, doAction }  = dataProvider;
         console.log(match.params.id);
-        const { setSource, setAction, setOperateId }  = dataProvider;
-        setAction('create');
-        setOperateId("");
-        console.log("prepare");
+        
+        if(match.params.id){
+            setAction("view");
+            setOperateId(match.params.id);
+            doAction(match.params.source);
+            this.setState({
+                isEdit: true,
+            });
+            setAction('update');
+            
+        }else{
+            setOperateId(null);
+            setAction('create');
+        }
     }
 
     componentWillUnmount(){
@@ -84,6 +102,34 @@ class PostForm extends React.Component<any, any> {
     }
 
     componentWillReact(){
+        const { dataProvider,match } = this.props;
+        const { singleData }  = dataProvider;
+        const { tags, tagLoaded, isEditLoading } = this.state;
+        let tagsLength = tags.length;
+        console.log({tagsLength});
+        
+        if(match.params.id === singleData.id && !isEditLoading){
+            console.log("确实是编辑模式");
+                if(tagLoaded === false){
+                    RootNode.get(match.params.source+"/"+singleData.id+"/tags").map().once((tag:any, key:string)=>{
+                        
+                        if(tag){
+                            tags.push(tag);
+                        }
+                        this.setState({
+                            tags,
+                            tagLoaded: true,
+                        })
+                       
+                    })
+                }
+                this.setState({
+                    ...singleData,
+                    isEditLoading: true,
+                })
+
+        }
+        
         
     }
 
@@ -97,7 +143,7 @@ class PostForm extends React.Component<any, any> {
        })
         
     }
-    getDescription =  (html:string) => {
+    getBody =  (html:string) => {
         this.setState({
             description: html,
         })
@@ -113,27 +159,33 @@ class PostForm extends React.Component<any, any> {
         })
     }
     
-    get videoData(){
-        const { magnetURI, 
+    get postData(){
+        const { 
             coverUrl, 
             cloudName, 
             publicId, 
-            description,
+            body,
             title,
-            isRecommend
+            isRecommend, tags
         } = this.state; 
-        return  { magnetURI, 
+        return  {  
             coverUrl, 
             cloudName, 
             publicId, 
-            description,
+            body,
             title,
-            isRecommend
+            isRecommend, tags
         }
     }
     getTags = (tags:any) => {
+        let tagsObj:any = {}
+        for (let index = 0; index < tags.length; index++) {
+            const tag = tags[index];
+            tagsObj[index] = tag;
+        }
+        
         this.setState({
-            tags
+            tags: tagsObj
         })
         
     }
@@ -141,44 +193,84 @@ class PostForm extends React.Component<any, any> {
     saveDraft= (e:any) => {
 
         e.preventDefault();
-        const data = this.videoData;
+        const data = this.postData;
         const { message, dataProvider, history } = this.props;
         if(data.title===""){
-            return message.show("视频标题不得为空");
+            return message.show("文章标题不得为空");
         }
         if(data.coverUrl===""){
             return message.show("请务必上传图片封面")
         }
-        if(data.magnetURI===""){
-            return message.show('请务必上传视频，并且在本地做种');
-        }
+        
 
         const { doAction, operateId, setAction, setTimeEndCondition } = dataProvider;
         console.log(operateId);
-        if(operateId===""){
-            doAction("videos", {
+        
+        console.log(data);
+        if(operateId==="" || !operateId){
+            doAction("posts", {
                 ...data,
                 createdAt: now(),
                 status: "draft"
             }, (m:any)=>{
                 setTimeEndCondition(now());
-                history.push("/admin/videos")
+                history.push("/admin/posts")
                 return message.show(m);
             });
         }else{
             setAction('update');
-            doAction('videos',{
+            doAction('posts',{
                 ...data,
-                createdAt: now(),
+                updatedAt: now(),
                 status: "draft"
             },(m:any)=>{
-                message.show(m);
-                history.push('/admin/videos');
+                setTimeEndCondition(now());
+                history.push('/admin/posts');
+                return message.show(m);
 
             });
         }
         
         
+    }
+
+    publish = (e:any) => {
+        e.preventDefault();
+        const data = this.postData;
+        const { message, dataProvider, history } = this.props;
+        if(data.title===""){
+            return message.show("文章标题不得为空");
+        }
+        if(data.coverUrl===""){
+            return message.show("请务必上传图片封面")
+        }
+        
+
+        const { doAction, operateId, setAction, setTimeEndCondition } = dataProvider;
+        console.log(data);
+        if(operateId==="" || !operateId){
+            doAction("posts", {
+                ...data,
+                createdAt: now(),
+                status: "published"
+            }, (m:any)=>{
+                setTimeEndCondition(now());
+                history.push("/admin/posts")
+                return message.show(m);
+            });
+        }else{
+            setAction('update');
+            doAction('posts',{
+                ...data,
+                updatedAt: now(),
+                status: "published"
+            },(m:any)=>{
+                setTimeEndCondition(now());
+                history.push('/admin/posts');
+                return message.show(m);
+
+            });
+        }
     }
 
     onChange = (e:any) =>{
@@ -194,26 +286,26 @@ class PostForm extends React.Component<any, any> {
    
     render(){
         const { classes } = this.props;
-        const {  videoUploading, imageUploading, coverUrl, title, isRecommend } = this.state;
+        const { imageUploading, coverUrl, title, isRecommend, tags } = this.state;
         
-
-        const locked = videoUploading || imageUploading;
+        console.log(tags);
+        
         
         
         return (
             <Paper className={classes.paper}>
                 <div className={classes.form} onSubmit={this.saveDraft}>
                    
-                    <TextField disabled={locked} style={{
+                    <TextField disabled={imageUploading} style={{
                         minWidth: 310,
                         width: "50%",
                         marginBottom:70,
-                    }} label="视频标题" value={title}  placeholder="标题" onChange={this.onChange}  />
+                    }} label="文章标题" value={title}  placeholder="标题" onChange={this.onChange}  />
                     <Divider variant="middle"/>
                      <h2 style={{
                                 textAlign: 'center',
-                            }}>添加标签</h2>
-                    <TagForm  tags={["视频"]} onTagsChange={this.getTags}/> 
+                            }}>为文章添加标签</h2>
+                    <TagForm  tags={tags} onTagsChange={this.getTags}/> 
                     <hr/>
                     <h2 style={{
                                 textAlign: 'center',
@@ -225,7 +317,7 @@ class PostForm extends React.Component<any, any> {
                     />({isRecommend? "推荐": "不推荐"})
                     <hr/>
 
-                    <ImageUploader disabled={locked} onChange={this.handleImageUploaderChange} />
+                    <ImageUploader disabled={imageUploading} onChange={this.handleImageUploaderChange} />
                     {
                         imageUploading ? <CircularProgress  color="secondary" /> :
                         <div>
@@ -236,13 +328,26 @@ class PostForm extends React.Component<any, any> {
                         </div>
                     }
                     <hr/>
-                    <TextEditor getRawHtml={this.getDescription} />
 
                    
                     
+                    {
+                        !imageUploading &&
+                        <div>
+                            <h2 style={{
+                                textAlign: 'center',
+                            }}>文章正文</h2>
+                            <TextEditor getRawHtml={this.getBody} />
+                        
+                        </div>
+
+                    }
+                    
+                    <hr/>
+                    
                     <div className={classes.action}>
-                        <Button disabled={locked } type="submit" onClick={this.saveDraft}  variant="contained" color="secondary">保存草稿</Button>
-                        <Button disabled={locked } variant="contained"  color="secondary">直接发布</Button>
+                        <Button disabled={imageUploading } type="submit" onClick={this.saveDraft}  variant="contained" color="secondary">保存草稿</Button>
+                        <Button disabled={imageUploading } variant="contained" onClick={this.publish}  color="secondary">直接发布</Button>
                     </div>
                 </div>
 

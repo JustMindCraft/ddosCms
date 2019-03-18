@@ -1,6 +1,6 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { Paper, Fab, CircularProgress, Typography, ListItemAvatar, Avatar, Toolbar, Button, Divider, AppBar, Tabs, Tab, LinearProgress} from '@material-ui/core';
+import { Paper, Fab, CircularProgress, Typography, Button, AppBar, Tabs, Tab, LinearProgress} from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import AdminIcon from '@material-ui/icons/Dashboard';
 import { withRouter } from 'react-router-dom';
@@ -13,7 +13,6 @@ import  WebTorrent from 'webtorrent';
 import { RootNode, now } from '../../gunDB';
 import SourceListShow from '../containers/SouceListShow';
 import ListStyles from '../public/ListStyles';
-const  client = new WebTorrent();
 
 interface IListAdminProps{
     classes: any;
@@ -21,10 +20,12 @@ interface IListAdminProps{
     location: any,
     history: any,
     match:any,
+    message:any,
 }
 
 
 @inject('dataProvider')
+@inject('message')
 @observer
 class ListAdmin extends React.Component<IListAdminProps, any> {
     constructor(props: any){
@@ -149,6 +150,8 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
     onView = (id:string) => {
         const { history, match } = this.props;
         const source = match.params.source;
+        console.log(source);
+        
         history.push(`/admin/${source}/${id}/preview`);
         
     }
@@ -167,17 +170,58 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
         
     }
 
-    ShowDialogBack = (back:boolean) => {
-        const { dataProvider } = this.props;
-        const { setOperateId, setAction, setShowDialogOpen } = dataProvider;
-        setAction('list');
-        setShowDialogOpen(back);
-        const { magnetURI } = this.state;
-        if(back===false && magnetURI !== ""){
-            client.remove(this.state.magnetURI);
-        }
+    onRecommend = (e:any, item:any) => {
+        e.stopPropagation();
+        e.cancelBubble = true;
+        console.log({...item});
+        const { message, dataProvider, match, location } = this.props;
+        const { doAction, setOperateId, setAction, setTimeEndCondition } = dataProvider;
+        const source = match.params.source;
+        setOperateId(item.id)
+        setAction('update');
+            doAction(source,{
+                // ...item,
+                tags: item.tags,
+                updatedAt: now(),
+                isRecommend: e.target.checked
+            },(m:any)=>{
+                const query = queryString.parse(location.search);
+                dataProvider.setTimeEndCondition(now());
+                dataProvider.setCondition({...query})
+                dataProvider.setAction("list");
+                doAction(source);
+                return message.show(m);
+
+        });
         
     }
+    onPublish = (e:any, item:any) => {
+        e.stopPropagation();
+        e.cancelBubble = true;
+        console.log({...item});
+        const { message, dataProvider, match, location } = this.props;
+        const { doAction, setOperateId, setAction, setTimeEndCondition } = dataProvider;
+        const source = match.params.source;
+        setOperateId(item.id)
+        setAction('update');
+            doAction(source,{
+                // ...item,
+                tags: item.tags,
+                updatedAt: now(),
+                status: e.target.checked? "published": "draft",
+            },(m:any)=>{
+                const query = queryString.parse(location.search);
+                dataProvider.setTimeEndCondition(now());
+                dataProvider.setCondition({...query})
+                dataProvider.setAction("list");
+                doAction(source);
+                return message.show(m);
+
+        });
+        
+    }
+
+   
     componentWillUnmount(){
         // client.remove(this.state.magnetURI);
         RootNode.get('status').bye().put("offline");
@@ -195,11 +239,13 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
         
     }
     onEdit = (e:any, id:string) => {
+        const { history, match } = this.props;
+        const source = match.params.source;
+        
         e.stopPropagation();
         e.cancelBubble = true;
-        const { history } = this.props;
         setTimeout(()=>{
-            history.push('/admin/videos/'+id+'/edit')
+            history.push('/admin/'+source+'/'+id+'/edit')
         }, 500)
     }
 
@@ -266,6 +312,8 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
                 onDelete={this.onDelete}
                 onEdit={this.onEdit}
                 getTagList={getTagList}
+                onRecommend={this.onRecommend} 
+                onPublish={this.onPublish}
               />
             }
         
@@ -277,16 +325,7 @@ class ListAdmin extends React.Component<IListAdminProps, any> {
                 <AdminIcon />
             </Fab>
             <ConfirmDialog dialogBack={this.dialogBack} title={confirmTitle} content={confirmContent} open={confirmOpen} />
-            {/* <VideoDialogShow 
-                blobURI={this.state.blobURI} 
-                coverUrl={coverUrl} 
-                handleDelete={(e:any)=>this.onDelete(e, operateId)} 
-                title={title} content={description}  
-                magnetURI={this.state.magnetURI}
-                open={showDialogOpen}  
-                loading={this.state.videoLoading}
-                ShowDialogBack={this.ShowDialogBack} 
-            /> */}  
+           
             {
                 !listLoading && 
             <Button disabled={listLoading}  variant="outlined" color="secondary" fullWidth>加载前一天的</Button>

@@ -3,6 +3,7 @@ import { observer, inject } from 'mobx-react';
 import  WebTorrent from 'webtorrent';
 import { LinearProgress, Typography, withWidth } from '@material-ui/core';
 import { isWidthUp } from '@material-ui/core/withWidth';
+import { withRouter } from 'react-router';
 
 (window as any).WebTorrent = WebTorrent;
 
@@ -13,6 +14,7 @@ class TorrentVideoPlayer extends React.Component<any, any>{
         super(props);
         this.state = {
            loading: true,
+           files: [],
         }
     }
 
@@ -21,48 +23,104 @@ class TorrentVideoPlayer extends React.Component<any, any>{
         if(!torrentId){
             return this.setState({
                 loading:false,
+                files: []
             });
         }
         this.setState({
             loading:true,
+            files: [],
         });
-        const { torrentClient } = this.props;
-        setTimeout(()=>{
+        const { torrentClient, history } = this.props;
+        let timer = setInterval(()=>{
             torrentClient.addTorrent(torrentId, (torrent:any)=>{
                 if(torrent === "setTorrentId first"){
                     this.setState({
                         loading:true,
+                        files: [],
                     });
+                    clearInterval(timer);
+
                     return false;
                 }
                 console.log("files",torrent.files);
-                
-                return torrent.files.forEach((file:any)=>{
-                    console.log(file);
+                if(!torrent){
+                    clearInterval(timer);
+
+                    return false;
+                }
+                if(!torrent.files || torrent.files.length === 0  )
+                {
+                    clearInterval(timer);
+
+                    return false;
                     
-                    file.renderTo(this.refs.dplayer,{
-                        autoplay: true,
-                        controls: true,
-                    }, (err:any, video:any)=>{
-                        console.log(video);
-                        video.style.width = "100%"
-                        video.controls = true,
-                        video.autoplay = true,
-                        console.log(err);
-                        this.setState({
-                            loading:false,
-                        })
-                    });
-                })
+                }
+
+                if(document.readyState === "complete"){
+                    clearInterval(timer);
+                    this.setState({
+                        files: torrent.files,
+                        loading: false,
+                    })
+                   
+                        
+                        
+                }
             });
         }, 200);
         
        
         
     }
+
+    componentWillMount(){
+        const { history } = this.props;
+    }
     componentDidMount(){
         const { torrentId, poster} = this.props;
         this.change(torrentId, poster);
+    }
+
+    componentDidUpdate(){
+        const { files } = this.state;
+        return files.length!==0 && files.forEach((file:any)=>{
+
+            if(!file){
+                this.setState({
+                    loading:false,
+                    files: []
+                });
+            }
+                
+            file.renderTo(this.refs.dplayer,{
+                autoplay: true,
+                controls: true,
+            }, (err:any, video:any)=>{
+                console.log(video);
+                video.style.width = "100%"
+                video.controls = true,
+                video.autoplay = true,
+                console.log(err);
+                this.setState({
+                    loading:false,
+                    files: [],
+                });
+            });
+        });
+    }
+
+    componentWillUnmount(){
+        clearInterval();
+        const { history} = this.props;
+        this.setState({
+            loading:false,
+            files: []
+        });
+        history.block((location:any, action:any) => {
+            console.log(location, action);
+                
+        });
+          
     }
    
     componentWillReceiveProps(nextProps: any){
@@ -111,4 +169,4 @@ class TorrentVideoPlayer extends React.Component<any, any>{
 }
 
 
-export default withWidth()(TorrentVideoPlayer);
+export default withRouter(withWidth()(TorrentVideoPlayer) as any) as any;

@@ -7,13 +7,13 @@ import LoginPage from './components/pages/LoginPage';
 import SignupPage from './components/pages/SignupPage';
 import DetailPage from './components/pages/DetailPage';
 import VideoDetail from './components/pages/VideoDetail';
-import EidtVideo from './components/pages/EidtVideo';
 import Admin from './components/pages/Admin';
 import ListAdmin from './components/withData/ListAdmin';
 import NewSource from './components/pages/NewSource';
 import NewHome from './components/pages/NewHome';
 import './components/css/common.css';
 import SourcePreview from './components/pages/SourcePreview';
+import EditSource from './components/pages/EditSource';
 
 class App extends Component<any, any> {
   
@@ -33,7 +33,7 @@ class App extends Component<any, any> {
               <Route exact path="/admin" component={Admin}/>
               <Route exact path="/admin/:source" component={ListAdmin} />
               <Route exact path="/admin/:source/new" component={NewSource} />
-              <Route exact path="/admin/:source/:id/edit" component={EidtVideo} />
+              <Route exact path="/admin/:source/:id/edit" component={EditSource} />
               <Route exact path="/admin/:source/:id/preview" component={SourcePreview} />
               <Route component={HomePage}/>
             </Switch>

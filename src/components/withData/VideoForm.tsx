@@ -66,19 +66,36 @@ class VideoForm extends React.Component<any, any> {
             description: "",
             title: "",
             isRecommend: false,
-            tags: ["视频"],
+            tags: [],
+            isEditLoading: false,
+            tagLoaded: false,
+
         };
 
     }
 
     componentWillMount(){
         RootNode.get('status').put("online");
+       
+    }
+    componentDidMount(){
         const { dataProvider,match } = this.props;
+        const { setAction, setOperateId, doAction }  = dataProvider;
         console.log(match.params.id);
-        const { setSource, setAction, setOperateId }  = dataProvider;
-        setAction('create');
-        setOperateId("");
-        console.log("prepare");
+        
+        if(match.params.id){
+            setAction("view");
+            setOperateId(match.params.id);
+            doAction(match.params.source);
+            this.setState({
+                isEdit: true,
+            });
+            setAction('update');
+            
+        }else{
+            setOperateId(null);
+            setAction('create');
+        }
     }
 
     componentWillUnmount(){
@@ -87,6 +104,34 @@ class VideoForm extends React.Component<any, any> {
     }
 
     componentWillReact(){
+        const { dataProvider,match } = this.props;
+        const { singleData }  = dataProvider;
+        const { tags, tagLoaded, isEditLoading } = this.state;
+        let tagsLength = tags.length;
+        console.log({tagsLength});
+        
+        if(match.params.id === singleData.id && !isEditLoading){
+            console.log("确实是编辑模式");
+                if(tagLoaded === false){
+                    RootNode.get(match.params.source+"/"+singleData.id+"/tags").map().once((tag:any, key:string)=>{
+                        
+                        if(tag){
+                            tags.push(tag);
+                        }
+                        this.setState({
+                            tags,
+                            tagLoaded: true,
+                        })
+                       
+                    })
+                }
+                this.setState({
+                    ...singleData,
+                    isEditLoading: true,
+                })
+
+        }
+        
         
     }
 
@@ -135,8 +180,14 @@ class VideoForm extends React.Component<any, any> {
         }
     }
     getTags = (tags:any) => {
+        let tagsObj:any = {}
+        for (let index = 0; index < tags.length; index++) {
+            const tag = tags[index];
+            tagsObj[index] = tag;
+        }
+        
         this.setState({
-            tags
+            tags: tagsObj
         })
         
     }
@@ -157,8 +208,10 @@ class VideoForm extends React.Component<any, any> {
         }
 
         const { doAction, operateId, setAction, setTimeEndCondition } = dataProvider;
+        console.log(operateId);
+        
         console.log(data);
-        if(operateId===""){
+        if(operateId==="" || !operateId){
             doAction("videos", {
                 ...data,
                 createdAt: now(),
@@ -172,7 +225,7 @@ class VideoForm extends React.Component<any, any> {
             setAction('update');
             doAction('videos',{
                 ...data,
-                createdAt: now(),
+                updatedAt: now(),
                 status: "draft"
             },(m:any)=>{
                 setTimeEndCondition(now());
@@ -201,7 +254,7 @@ class VideoForm extends React.Component<any, any> {
 
         const { doAction, operateId, setAction, setTimeEndCondition } = dataProvider;
         console.log(data);
-        if(operateId===""){
+        if(operateId==="" || !operateId){
             doAction("videos", {
                 ...data,
                 createdAt: now(),
@@ -215,7 +268,7 @@ class VideoForm extends React.Component<any, any> {
             setAction('update');
             doAction('videos',{
                 ...data,
-                createdAt: now(),
+                updatedAt: now(),
                 status: "published"
             },(m:any)=>{
                 setTimeEndCondition(now());
@@ -239,9 +292,8 @@ class VideoForm extends React.Component<any, any> {
    
     render(){
         const { classes } = this.props;
-        const { magnetURI, videoUploading, imageUploading, coverUrl, title, isRecommend } = this.state;
+        const { videoUploading, imageUploading, coverUrl, title, isRecommend, tags, description } = this.state;
         
-
         const locked = videoUploading || imageUploading;
         
         
@@ -258,7 +310,7 @@ class VideoForm extends React.Component<any, any> {
                      <h2 style={{
                                 textAlign: 'center',
                             }}>为视频添加标签</h2>
-                    <TagForm  tags={["视频"]} onTagsChange={this.getTags}/> 
+                    <TagForm  tags={tags} onTagsChange={this.getTags}/> 
                     <hr/>
                     <h2 style={{
                                 textAlign: 'center',
@@ -291,7 +343,7 @@ class VideoForm extends React.Component<any, any> {
                             <h2 style={{
                                 textAlign: 'center',
                             }}>视频介绍或描述</h2>
-                            <TextEditor getRawHtml={this.getDescription} />
+                            <TextEditor getRawHtml={this.getDescription} value={description}  />
                         
                         </div>
 

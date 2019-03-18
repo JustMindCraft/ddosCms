@@ -25,14 +25,16 @@ class VideoListShow extends React.Component<any, any>{
         
     }
     componentDidMount(){
-        const { classes, list, getTagList }  =  this.props;
-        const tags = getTagList("videos", "1");
-        console.log(tags);
+       
+    }
+    handleClick = (e:any) => {
+        e.stopPropagation();
+        e.cancelBubble = true;
     }
     render(){
-        const { classes, list, getTagList }  =  this.props;
-        const tags = getTagList("videos", "1");
-
+        const { classes, list, onRecommend, onPublish }  =  this.props;
+       
+        
         return (
             <List className={classes.root}>
             {list && list.length===0? "暂时没有数据": list && list.filter((video:any)=>video!==null).map((video:any, index:number) => (
@@ -57,12 +59,17 @@ class VideoListShow extends React.Component<any, any>{
                                         <Switch
                                             checked={video.status === "published"}
                                             value="draft"
+                                            onChange={(e:any)=>onPublish(e,video)}
+                                            onClick={this.handleClick}
+
                                         />
                                         ({video.status === "published"? "已发布" : "未发布"})
                                     </div>
                                     <div>
                                         <Switch
                                             checked={video.isRecommend}
+                                            onChange={(e:any)=>onRecommend(e, video)}
+                                            onClick={this.handleClick}
                                             value="draft"
                                         />
                                         ({video.isRecommend? "已推荐" : "未推荐"})

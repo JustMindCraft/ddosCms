@@ -3,16 +3,16 @@ import VideoListShow from './VideoListShow';
 import PostListShow from './PostListShow';
 
 const SourceListShow = (props:any) => {
-    const { source, list, onView, onDelete, onEdit, getTagList } = props;
+    const { source, list, onView, onDelete, onEdit, getTagList, onRecommend, onPublish } = props;
     switch (source) {
         case "videos":
             
            return (
-               <VideoListShow  list={list} onView={onView} onDelete={onDelete} onEdit={onEdit} getTagList={getTagList} />
+                <VideoListShow onPublish={onPublish} onRecommend={onRecommend}  list={list} onView={onView} onDelete={onDelete} onEdit={onEdit} getTagList={getTagList} />
            )
         case "posts":
             return (
-                <PostListShow list={list} onView={onView} onDelete={onDelete} onEdit={onEdit} getTagList={getTagList} />
+                <PostListShow onPublish={onPublish} onRecommend={onRecommend} list={list} onView={onView} onDelete={onDelete} onEdit={onEdit} getTagList={getTagList} />
             )
         default:
             return (

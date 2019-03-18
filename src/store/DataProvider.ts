@@ -76,10 +76,6 @@ export class DataProvider {
 
     @action setSearchString = (searchString:string) => {
         this.searchString = searchString;
-        if(this.indexes.includes('tags')){
-            //保证模糊搜索能够匹配tags;
-            this.condition.set('tags', searchString);
-        }
     }
 
     @action setCondition = (condition:any) =>{
@@ -124,6 +120,7 @@ export class DataProvider {
             const searchKey = this.indexes[index];
             let conditionMatch = false;
             // console.log("status", this.condition.get("status"));
+            
             if(this.condition.size===0){
                 // 查询有结果
                 // console.log("查询条件是空的");
@@ -135,19 +132,7 @@ export class DataProvider {
             }
             this.condition.forEach((value:any, key:string)=>{
                 //条件查询
-                if(key==='tags'){
-                    //对于标签查询,我们求交集
-                    if(!item[key]){
-                        //对于没有tags的记录，我们总是把他们返回出来
-                        return conditionMatch = true;
-                    }
-                    const intersection = item[key].filter((v:string) => value.includes(v))
-                    if(intersection.length>0){
-                        return conditionMatch = true;
-                    }else{
-                        return conditionMatch = false;
-                    }
-                }
+                
                 if(item[key] === value){
                     return conditionMatch = true;
                 }
@@ -189,7 +174,8 @@ export class DataProvider {
             if(data===null){    
                 return false;
             }
-            // console.log('每次回来的数据',{sourceName, data});
+            console.log(data);
+            
             
             const list = this.dataSource.get(sourceName);
             if(list){
@@ -215,7 +201,6 @@ export class DataProvider {
     }
 
     @action delete = (sourceName:string, cb?:(m:string)=>void) => {
-        console.log('开始删除', this.operateId);
         
             RootNode.get(sourceName)
             .map((item:any)=> item? (item.id===this.operateId? item: undefined): undefined )
@@ -263,40 +248,22 @@ export class DataProvider {
 
         const tags = data.tags;
         const uuid = require('uuid/v4')();
-
-        if(tags){
-            tags.forEach((tag:string, index: number) => {
-                console.log({tag});
-                const tagOne = RootNode.get(sourceName+"/tags/"+uuid).get(index).put({
-                    name: tag,
-                    id: uuid,
-                }, (ack:any)=>{
+        console.log({tags});
+        
+        RootNode.get(sourceName+"/"+uuid+"/tags").put(null).put({...tags});
+        for (const key in tags) {
+            if (tags.hasOwnProperty(key)) {
+                const tag = tags[key];
+                const tagOne = RootNode.get("tags/"+tag).put({name: tag, contentId: uuid})
+                RootNode.get("tags").set(tagOne, (ack:any)=>{
                     console.log(ack);
-                    RootNode.get("tags").map((item:any)=>item? item&&item.name!==tag: undefined).once((data:any, key:string)=>{
-                        console.log({data, key});
-                        
-                        if(data && data.name===tag){
-                           return false;
-                        }
-                        RootNode.get("tags").get(key).put({
-                                name: tag,
-                                id: uuid,
-                        }, (ack:any)=>{
-                            console.log(ack);
-                            
-                        })
-                       
-                    })
+                    
                 });
-                RootNode.get("tags").set(tagOne);
-               
-            });
+                
+            }
         }
 
-        
-
         this.setOperateId(uuid);
-        
 
         const one = RootNode.get(sourceName+"/"+this.operateId).put({...data, id: this.operateId}, (ack:any)=>{
             if(!ack.err){
@@ -313,29 +280,40 @@ export class DataProvider {
             console.log("保存", ack);
             this.creating = false;
             if(!ack.err){
-                cb('保存草稿成功');
+                cb('保存成功');
             }
         });
     }
 
-    @action updateOne = (sourceName:string, data:any) => {
+    @action updateOne = (sourceName:string, data:any, cb:(m:any)=>void) => {
 
         this.updating = true;
+        const tags = data.tags;
+        console.log({tags});
+        
+        RootNode.get(sourceName+"/"+this.operateId+"/tags").put(null).put({...tags});
 
-        const one = RootNode.get(sourceName+"/"+this.operateId).put(data, (ack:any)=>{
-            if(!ack.err){
-                RootNode.get(sourceName+"_count").once((data:any, key:string)=>{
-                    RootNode.get(sourceName+"_count").put({
-                        count: data? data.count+1: 1,
-                    });
+        for (const key in tags) {
+            if (tags.hasOwnProperty(key)) {
+                const tag = tags[key];
+                const tagOne = RootNode.get("tags/"+tag).put({name: tag, contentId: this.operateId})
+                RootNode.get("tags").set(tagOne, (ack:any)=>{
+                    console.log(ack);
+                    
                 });
+                
             }
+        }
+
+        const one = RootNode.get(sourceName+"/"+this.operateId).put({...data, id: this.operateId}, (ack:any)=>{
             console.log(ack);
-            
         });
         RootNode.get(sourceName).set(one, (ack:any)=>{
-            console.log("更新", ack);
+            console.log("保存", ack);
             this.updating = false;
+            if(!ack.err){
+                cb('更新成功');
+            }
         });
     }
 
@@ -377,7 +355,12 @@ export class DataProvider {
                
 
             case "update":
-                return this.updateOne(sourceName, data);
+                if(cb){
+                    return this.updateOne(sourceName, data, cb);
+                }else{
+                    throw "update, callback missing"
+
+                }
         
             default:
                 return this.getData(sourceName);

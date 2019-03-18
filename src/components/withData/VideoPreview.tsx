@@ -1,10 +1,12 @@
 import React from 'react';
-import { Paper, createStyles, withStyles, CircularProgress, Typography } from '@material-ui/core';
+import { Paper, createStyles, withStyles, CircularProgress, Typography, Fab } from '@material-ui/core';
 import { observer, inject } from 'mobx-react';
 import TorrentVideoPlayer from './TorrentVideoPlayer';
 import TagSmallList from '../containers/TagSmallList';
 import renderHTML from 'react-render-html';
+import { Link } from 'react-router-dom';
 
+const VideoListLink = (props:any)=> <Link to='/admin/videos' {...props} />;
 
 const styles = createStyles({
     paper: {
@@ -55,16 +57,7 @@ class VideoPreview extends React.Component<any, any> {
         setAction("view");
         setOperateId(id);
         doAction(source);
-        console.log(id);
-        console.log(source);
         
-    }
-
-    componentDidMount(){
-        const {  dataProvider } = this.props;
-        const { singleData} = dataProvider;
-        document.title = "预览 | " + singleData.title;
-
     }
 
     handleTagClick = (tag:string) => {
@@ -76,8 +69,16 @@ class VideoPreview extends React.Component<any, any> {
     render(){
         const { classes, dataProvider } = this.props;
         const { singleData, oneLoading } = dataProvider;
+        document.title = "预览 | " + singleData.title;
         return (
             <React.Fragment>
+                <Fab className={classes.button} 
+                    variant="extended" 
+                    color="primary"
+                    component={VideoListLink}
+                    >
+                    --返回列表--->
+                </Fab>
                 <div className={classes.player}>
                     <TorrentVideoPlayer torrentId={singleData.magnetURI} poster={singleData.coverUrl} />
                  </div>
@@ -136,6 +137,7 @@ class VideoPreview extends React.Component<any, any> {
                 }
 
                  </Paper>
+                 
             </React.Fragment>
             
         )
