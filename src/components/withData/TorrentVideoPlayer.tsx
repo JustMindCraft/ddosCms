@@ -54,17 +54,7 @@ class TorrentVideoPlayer extends React.Component<any, any>{
                     return false;
                     
                 }
-
-                if(document.readyState === "complete"){
-                    clearInterval(timer);
-                    this.setState({
-                        files: torrent.files,
-                        loading: false,
-                    })
-                   
-                        
-                        
-                }
+                
             });
         }, 200);
         
@@ -82,6 +72,8 @@ class TorrentVideoPlayer extends React.Component<any, any>{
 
     componentDidUpdate(){
         const { files } = this.state;
+        console.log(files);
+        
         return files.length!==0 && files.forEach((file:any)=>{
 
             if(!file){
@@ -98,6 +90,7 @@ class TorrentVideoPlayer extends React.Component<any, any>{
                 video.style.width = "100%"
                 video.controls = true,
                 video.autoplay = true,
+                
                 this.setState({
                     loading:false,
                     files: [],
@@ -155,7 +148,7 @@ class TorrentVideoPlayer extends React.Component<any, any>{
                     alignCentent: 'center',
                     justifyContent: 'baseline',
                 }}>
-                    <video src="" style={{width: "100%"}}  ref="dplayer"></video>
+                    <video src="" style={{width: "100%"}} autoPlay={true} controls={true} ref="dplayer"></video>
                 
                 </div>
             </React.Fragment>

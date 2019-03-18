@@ -57,6 +57,7 @@ class VideoShow extends React.Component<any, any> {
         setAction("view");
         setOperateId(match.params.id);
         doAction("videos");
+        document.body.scrollTop = document.documentElement.scrollTop = 0; 
         
     }
 

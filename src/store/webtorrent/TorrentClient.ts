@@ -69,9 +69,11 @@ class TorrentClient {
             this.adding = true;
             client.add(torrentId, {
                 announce: [
-                    "wss://tracker.openwebtorrent.com",
                     "wss://trackerxx.lododor.com",
                     "wss://tracker.hanpeidou.life",
+                    "wss://tracker.openwebtorrent.com",
+                    "wss://tracker.btorrent.xyz",
+                    "wss://tracker.fastcast.nz"
                 ],  
             },  (torrent:any)=>{
                 if(torrent){
@@ -99,9 +101,11 @@ class TorrentClient {
         try {
             client.seed(file,{
                 announce: [
-                    "wss://tracker.openwebtorrent.com",
                     "wss://trackerxx.lododor.com",
                     "wss://tracker.hanpeidou.life",
+                    "wss://tracker.openwebtorrent.com",
+                    "wss://tracker.btorrent.xyz",
+                    "wss://tracker.fastcast.nz"
                 ],  
             }, (torrent:any)=>{
                 

@@ -23,8 +23,8 @@ const Cards = (props:any) => {
         <React.Fragment>
         {
             list.length!==0 && list.map((item:any, index:number)=>
-            <Link to={"/"+source+"/"+item.id}  className={classes.cardItem}>
-              <Paper className={classes.cardItem} key={index}>
+            <Link key={index} to={"/"+source+"/"+item.id}  className={classes.cardItem}>
+              <Paper className={classes.cardItem}>
                   <img src={item.coverUrl} alt={item.title} style={{
                   width: "100%"
                     
