@@ -73,7 +73,12 @@ class TorrentClient {
                     "wss://tracker.hanpeidou.life",
                     "wss://tracker.openwebtorrent.com",
                     "wss://tracker.btorrent.xyz",
-                    "wss://tracker.fastcast.nz"
+                    "wss://tracker.fastcast.nz",
+                    "udp://trackerxx.lododor.com",
+                    "udp://tracker.hanpeidou.life",
+                    "udp://tracker.openwebtorrent.com",
+                    "udp://tracker.btorrent.xyz",
+                    "udp://tracker.fastcast.nz"
                 ],  
             },  (torrent:any)=>{
                 if(torrent){
@@ -105,7 +110,12 @@ class TorrentClient {
                     "wss://tracker.hanpeidou.life",
                     "wss://tracker.openwebtorrent.com",
                     "wss://tracker.btorrent.xyz",
-                    "wss://tracker.fastcast.nz"
+                    "wss://tracker.fastcast.nz",
+                    "udp://trackerxx.lododor.com",
+                    "udp://tracker.hanpeidou.life",
+                    "udp://tracker.openwebtorrent.com",
+                    "udp://tracker.btorrent.xyz",
+                    "udp://tracker.fastcast.nz"
                 ],  
             }, (torrent:any)=>{
                 
