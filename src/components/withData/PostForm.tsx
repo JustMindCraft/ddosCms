@@ -145,7 +145,7 @@ class PostForm extends React.Component<any, any> {
     }
     getBody =  (html:string) => {
         this.setState({
-            description: html,
+            body: html,
         })
     }
 
@@ -286,9 +286,9 @@ class PostForm extends React.Component<any, any> {
    
     render(){
         const { classes } = this.props;
-        const { imageUploading, coverUrl, title, isRecommend, tags } = this.state;
+        const { imageUploading, coverUrl, title, isRecommend, tags, body } = this.state;
         
-        console.log(tags);
+        console.log({body});
         
         
         
@@ -337,7 +337,7 @@ class PostForm extends React.Component<any, any> {
                             <h2 style={{
                                 textAlign: 'center',
                             }}>文章正文</h2>
-                            <TextEditor getRawHtml={this.getBody} />
+                            <TextEditor getRawHtml={this.getBody} value={body} />
                         
                         </div>
 
