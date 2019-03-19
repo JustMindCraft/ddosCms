@@ -209,6 +209,7 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
                 </AppBar>
                 <Grid container style={{
                     justifyContent: "center",
+                    marginTop: 50,
                 }}>
                 {this.props.children}
                 </Grid>

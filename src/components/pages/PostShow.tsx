@@ -59,8 +59,6 @@ class PostShow extends React.Component<any, any> {
    
     componentDidMount(){
     
-        // this.updateCount();
-        console.log("did mount");
         const { match } = this.props;
         
         RootNode.get("posts").map((post:any)=>(post && post.id===match.params.id)?post: undefined)
@@ -69,7 +67,6 @@ class PostShow extends React.Component<any, any> {
             if(loading ===false && post.id){
                 return false;
             }
-            console.log(key, data);
             document.title =  data.title;
             
             let updateCount = data.visited;

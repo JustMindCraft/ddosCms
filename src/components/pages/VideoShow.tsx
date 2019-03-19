@@ -5,6 +5,7 @@ import TagSmallList from '../containers/TagSmallList';
 import renderHTML from 'react-render-html';
 import { Link, withRouter } from 'react-router-dom';
 import TorrentVideoPlayer from '../withData/TorrentVideoPlayer';
+import { RootNode } from '../../gunDB';
 
 
 const styles = createStyles({
@@ -51,54 +52,43 @@ const styles = createStyles({
 @observer
 class VideoShow extends React.Component<any, any> {
     constructor(props:any) {
-        super(props)
-        
-    }
-
-    componentWillMount(){
-        const {  dataProvider, match } = this.props;
-        const { setAction, doAction, setOperateId } = dataProvider;
-       
-        setAction("view");
-        setOperateId(match.params.id);
-        doAction("videos");
-        document.body.scrollTop = document.documentElement.scrollTop = 0; 
-        
-    }
-    componentDidMount(){
-        const { dataProvider, match } = this.props;
-        const { doAction, setAction, singleData, setOperateId } = dataProvider;
-        
-        let countVisited = singleData.visited;
-
-        const {
-            magnetURI, 
-            coverUrl, 
-            cloudName, 
-            publicId, 
-            description,
-            title,
-            isRecommend, tags
-        } = singleData;
-        if(!countVisited){
-            countVisited = 0;
+        super(props);
+        this.state = {
+            video: {},
+            loading: true,
+            loadingVisited: true,
         }
-        setAction('update');
-        setOperateId(match.params.id);
-        doAction('videos',{
-            visited: ++countVisited,
-            magnetURI, 
-            coverUrl, 
-            cloudName, 
-            publicId, 
-            description,
-            title,
-            isRecommend, tags
-        },(m:any)=>{
-           console.log("统计", m);
-           
+        
+    }
 
-        });
+    componentDidMount(){
+        const { match } = this.props;
+        
+        RootNode.get("videos").map((video:any)=>(video && video.id===match.params.id)?video: undefined)
+        .once((data:any, key:string)=>{
+            const { video, loading} = this.state;
+            if(loading ===false && video.id){
+                return false;
+            }
+            document.title =  data.title;
+            
+            let updateCount = data.visited;
+            if(!updateCount){
+                updateCount=0
+            }
+            this.setState({
+                video: data,
+                loading: false,
+            })
+            RootNode.get("videos").get(key).get("visited").put(updateCount+1, (ack:any)=>{
+                console.log(ack);
+                this.setState({
+                    loadingVisited: false,
+                })
+               
+            });
+
+        })
     }
 
     handleTagClick = (tag:string) => {
@@ -108,17 +98,16 @@ class VideoShow extends React.Component<any, any> {
     }
 
     render(){
-        const { classes, dataProvider } = this.props;
-        const { singleData, oneLoading } = dataProvider;
-        document.title = singleData.title;
+        const { classes } = this.props;
+        const { video, loading, loadingVisited} = this.state;
         return (
             <React.Fragment>
                 
                 <div className={classes.player}>
-                    <TorrentVideoPlayer torrentId={singleData.magnetURI} poster={singleData.coverUrl} />
+                    <TorrentVideoPlayer torrentId={video.magnetURI} videoer={video.coverUrl} />
                  </div>
                 {
-                    oneLoading ? 
+                    loading ? 
                     <div>
                         <CircularProgress />
                     </div>
@@ -128,7 +117,7 @@ class VideoShow extends React.Component<any, any> {
                             <div style={{
                             textAlign: 'center'
                                 }}>
-                                {singleData.title}
+                                {video.title}
                             </div>
                         </Typography>
                          
@@ -140,7 +129,7 @@ class VideoShow extends React.Component<any, any> {
                             width: "100%"
                         }}>
                              <TagSmallList source="videos" 
-                             recordId={singleData.id} onClick={this.handleTagClick}/>
+                             recordId={video.id} onClick={this.handleTagClick}/>
                          </div>
                          <div>
                              <br />
@@ -155,7 +144,7 @@ class VideoShow extends React.Component<any, any> {
                                 width: "100%",
                                 minWidth: 260,
                                 minHeight: 76
-                            }}  defaultValue={singleData.magnetURI} />
+                            }}  defaultValue={video.magnetURI} />
                                 
                          </div>
                          <div>
@@ -165,8 +154,8 @@ class VideoShow extends React.Component<any, any> {
                             <Typography variant="subtitle1">视频介绍:</Typography>
                             <Typography variant="body1" component="div" >
                                 {   
-                                    singleData.description ? 
-                                    renderHTML(singleData.description) 
+                                    video.description ? 
+                                    renderHTML(video.description) 
                                     : 
                                     renderHTML("<span></span>")
                                 }
