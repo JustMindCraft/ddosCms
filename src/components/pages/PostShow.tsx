@@ -38,24 +38,15 @@ const styles = createStyles({
     
 })
 
-@inject('dataProvider')
-@observer
 class PostShow extends React.Component<any, any> {
     constructor(props:any) {
         super(props);
         RootNode.get('status').put("online");
-        
-    }
-
-    componentWillMount(){
-        const { match,  dataProvider } = this.props;
-        const { setAction, doAction, setOperateId } = dataProvider;
-
-        document.body.scrollTop = document.documentElement.scrollTop = 0; 
-       
-        setAction("view");
-        setOperateId(match.params.id);
-        doAction("posts");
+        this.state = {
+            post: {},
+            loading: true,
+            loadingVisited: true,
+        }
         
     }
 
@@ -64,84 +55,60 @@ class PostShow extends React.Component<any, any> {
         history.push('/tags/'+tag);
 
     }
-    componentWillReceiveProps(nextProps:any){
-        console.log("receiveProps");
-        
-    }
-    componentWillUpdate(){
-        console.log("will update");
-        this.updateCount();
 
-        
-    }
-
-    componentDidUpdate(){
-        console.log("didupdate");
-        // this.updateCount();
-    }
-
-    updateCount = () => {
-        const { dataProvider, match } = this.props;
-        const { doAction, setAction, singleData, setOperateId } = dataProvider;
-        let countVisited = singleData.visited;
-        const {
-            coverUrl, 
-            cloudName, 
-            publicId, 
-            body,
-            title,
-            isRecommend, tags
-        } = singleData;
-        if(!countVisited){
-            countVisited = 0;
-        }
-        if(singleData.id !== match.params.id){
-            return false;
-        }
-        setAction('update');
-        setOperateId(match.params.id);
-        doAction('posts',{
-            visited: ++countVisited,
-            coverUrl, 
-            cloudName, 
-            publicId, 
-            body,
-            title,
-            isRecommend, tags
-        },(m:any)=>{
-           console.log("统计", m);
-           
-
-        });
-    }
-
+   
     componentDidMount(){
     
         // this.updateCount();
         console.log("did mount");
+        const { match } = this.props;
+        
+        RootNode.get("posts").map((post:any)=>(post && post.id===match.params.id)?post: undefined)
+        .once((data:any, key:string)=>{
+            const { post, loading} = this.state;
+            if(loading ===false && post.id){
+                return false;
+            }
+            console.log(key, data);
+            document.title =  data.title;
+            
+            let updateCount = data.visited;
+            if(!updateCount){
+                updateCount=0
+            }
+            this.setState({
+                post: data,
+                loading: false,
+            })
+            RootNode.get("posts").get(key).get("visited").put(updateCount+1, (ack:any)=>{
+                console.log(ack);
+                this.setState({
+                    loadingVisited: false,
+                })
+               
+            });
+
+        })
         
        
         
     }
 
     render(){
-        const { classes, dataProvider } = this.props;
-        const { singleData, oneLoading } = dataProvider;
-        const { coverUrl, title } = singleData;
-        document.title =  title;
+        const { classes } = this.props;
+        const { post, loading, loadingVisited} = this.state;
         return (
             <React.Fragment>
-                
              
                 {
-                    oneLoading ? 
+                    loading ? 
                     <div>
                         <CircularProgress />
                     </div>
                     :
                     <React.Fragment>
                         <div style={{
-                            background: `url(${coverUrl}) no-repeat`,
+                            background: `url(${post.coverUrl}) no-repeat`,
                             backgroundSize: 'contain',
                             width: "80%",
                             padding: 30,
@@ -155,7 +122,7 @@ class PostShow extends React.Component<any, any> {
                             padding: 20,
                             color: "white"
                                 }}>
-                                {singleData.title}
+                                {post.title}
                             </div>
                         </Typography>
                          
@@ -166,7 +133,7 @@ class PostShow extends React.Component<any, any> {
                             textAlign: 'center'
                         }}>
                              <TagSmallList source="posts" 
-                             recordId={singleData.id} onClick={this.handleTagClick}/>
+                             recordId={post.id} onClick={this.handleTagClick}/>
                          </div>
                          <div>
                              <br />
@@ -180,12 +147,13 @@ class PostShow extends React.Component<any, any> {
                          <Paper className={classes.body}>
                             <Typography variant="body1" component="div" >
                                 {   
-                                    singleData.body ? 
-                                    renderHTML(singleData.body) 
+                                    post.body ? 
+                                    renderHTML(post.body) 
                                     : 
                                     renderHTML("<span></span>")
                                 }
                             </Typography>
+                            <div>阅读量：{loadingVisited? "统计中" : post.visited}</div>
                          </Paper>
                     </React.Fragment>
                 }
