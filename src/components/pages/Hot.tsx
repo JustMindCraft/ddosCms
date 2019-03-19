@@ -39,7 +39,7 @@ class HotPage extends React.Component<IHomePageProps, any> {
     const {  hotVideos, hotPosts} = this.state;
     RootNode.get("videos")
     .map(
-      (video:any) => (video && video.visited >=2) ? video:undefined
+      (video:any) => (video && video.visited >=4) ? video:undefined
     ).once((data: any, key:string)=>{
       if(data===null){
         return false;
@@ -55,7 +55,7 @@ class HotPage extends React.Component<IHomePageProps, any> {
     //===================hostPost
     RootNode.get("posts")
     .map(
-      (post:any) => (post && post.visited >= 2) ? post:undefined
+      (post:any) => (post && post.visited >= 4) ? post:undefined
     ).once((data: any, key:string)=>{
       if(data===null){
         return false;

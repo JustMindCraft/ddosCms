@@ -10,6 +10,7 @@ import { withRouter } from 'react-router';
 @inject('torrentClient')
 @observer
 class TorrentVideoPlayer extends React.Component<any, any>{
+    file:any = null;
     constructor(props:any){
         super(props);
         this.state = {
@@ -31,36 +32,64 @@ class TorrentVideoPlayer extends React.Component<any, any>{
             files: [],
         });
         const { torrentClient, history } = this.props;
-        let timer = setInterval(()=>{
             torrentClient.addTorrent(torrentId, (torrent:any)=>{
                 if(torrent === "setTorrentId first"){
                     this.setState({
                         loading:true,
                         files: [],
                     });
-                    clearInterval(timer);
 
                     return false;
                 }
                 if(!torrent){
-                    clearInterval(timer);
 
                     return false;
                 }
                 if(!torrent.files || torrent.files.length === 0  )
                 {
-                    clearInterval(timer);
 
                     return false;
                     
                 }
                 this.setState({
                     loading: false,
-                    files: torrent.files
                 })
+                const files = torrent.files;
+               
+                
+                const file = files.find((file:any)=>{
+                    return file.name.endsWith('.mp4')
+                });
+
+                if(!file){
+                    return false;
+                }
+                if(this.file === null){
+                    this.file = file;
+                    return file.renderTo(this.refs.dplayer,{
+                        autoplay: true,
+                        controls: true,
+                    }, (err:any, video:any)=>{
+                        if(!video){
+                            return false;
+                        }
+                        video.style.width = "100%"
+                        video.controls = true,
+                        video.autoplay = true,
+                        console.log(video);
+                        
+                        
+                        this.setState({
+                            loading:false,
+                            files: [],
+                        });
+                    });
+
+                }
+                
+                
                 
             });
-        }, 200);
         
        
         
@@ -74,38 +103,10 @@ class TorrentVideoPlayer extends React.Component<any, any>{
         this.change(torrentId, poster);
     }
 
-    componentDidUpdate(){
-        const { files } = this.state;
-        console.log(files);
+    componentDidUpdate(preProps:any, preState:any){
+       
         
-        return files.length!==0 && files.forEach((file:any)=>{
-
-            if(!file){
-                return this.setState({
-                    loading:false,
-                    files: []
-                });
-            }
-                
-            file.renderTo(this.refs.dplayer,{
-                autoplay: true,
-                controls: true,
-            }, (err:any, video:any)=>{
-                if(!video){
-                    return false;
-                }
-                video.style.width = "100%"
-                video.controls = true,
-                video.autoplay = true,
-                console.log(video);
-                
-                
-                this.setState({
-                    loading:false,
-                    files: [],
-                });
-            });
-        });
+        
     }
 
     componentWillUnmount(){
@@ -157,7 +158,7 @@ class TorrentVideoPlayer extends React.Component<any, any>{
                     alignCentent: 'center',
                     justifyContent: 'baseline',
                 }}>
-                    <video  style={{width: "100%"}} autoPlay={true} controls={true} ref="dplayer"></video>
+                    <video src=""  ref="dplayer"></video>
                 
                 </div>
             </React.Fragment>

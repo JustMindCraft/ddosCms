@@ -49,27 +49,13 @@ class PostShow extends React.Component<any, any> {
 
     componentWillMount(){
         const { match,  dataProvider } = this.props;
-        const { setAction, doAction, setOperateId, singleData } = dataProvider;
+        const { setAction, doAction, setOperateId } = dataProvider;
 
         document.body.scrollTop = document.documentElement.scrollTop = 0; 
-        let countVisited = singleData.visited;
-        if(!countVisited){
-            countVisited = 0;
-        }      
+       
         setAction("view");
         setOperateId(match.params.id);
-        doAction("posts", (m:any)=>{
-            console.log(m);
-            
-            setAction('update');
-            doAction('posts',{
-                visited: ++countVisited,
-                tags: singleData.tags,
-            },(m:any)=>{
-            console.log("统计", m);
-
-        });
-        });
+        doAction("posts");
         
     }
 
@@ -77,6 +63,39 @@ class PostShow extends React.Component<any, any> {
         const { history } = this.props;
         history.push('/tags/'+tag);
 
+    }
+
+    componentDidMount(){
+        const { dataProvider, match } = this.props;
+        const { doAction, setAction, singleData, setOperateId } = dataProvider;
+        let countVisited = singleData.visited;
+       
+        const {
+            coverUrl, 
+            cloudName, 
+            publicId, 
+            body,
+            title,
+            isRecommend, tags
+        } = singleData;
+        if(!countVisited){
+            countVisited = 0;
+        }
+        setAction('update');
+        setOperateId(match.params.id);
+        doAction('posts',{
+            visited: ++countVisited,
+            coverUrl, 
+            cloudName, 
+            publicId, 
+            body,
+            title,
+            isRecommend, tags
+        },(m:any)=>{
+           console.log("统计", m);
+           
+
+        });
     }
 
     render(){

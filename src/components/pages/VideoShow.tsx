@@ -66,16 +66,34 @@ class VideoShow extends React.Component<any, any> {
         
     }
     componentDidMount(){
-        const { dataProvider } = this.props;
-        const { doAction, setAction, singleData } = dataProvider;
+        const { dataProvider, match } = this.props;
+        const { doAction, setAction, singleData, setOperateId } = dataProvider;
+        
         let countVisited = singleData.visited;
+
+        const {
+            magnetURI, 
+            coverUrl, 
+            cloudName, 
+            publicId, 
+            description,
+            title,
+            isRecommend, tags
+        } = singleData;
         if(!countVisited){
             countVisited = 0;
         }
         setAction('update');
+        setOperateId(match.params.id);
         doAction('videos',{
             visited: ++countVisited,
-            tags: singleData.tags
+            magnetURI, 
+            coverUrl, 
+            cloudName, 
+            publicId, 
+            description,
+            title,
+            isRecommend, tags
         },(m:any)=>{
            console.log("统计", m);
            
