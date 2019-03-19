@@ -320,6 +320,9 @@ export class DataProvider {
 
         this.updating = true;
         const tags = data.tags;
+
+        console.log({tags});
+        
         
         RootNode.get(sourceName+"/"+this.operateId+"/tags").put(null).put({...tags});
         if(tags && tags!==undefined){

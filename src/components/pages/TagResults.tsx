@@ -68,6 +68,7 @@ class TagResults extends React.Component<IHomePageProps, any> {
         if(data===null){
             return false;
         }
+        console.log(data,key);
         
         RootNode.get("posts/"+data.contentId).once((data:any, key:string)=>{
             const { posts } = this.state;

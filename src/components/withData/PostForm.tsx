@@ -170,7 +170,7 @@ class PostForm extends React.Component<any, any> {
             publicId, 
             body,
             title,
-            isRecommend, tags
+            isRecommend, tags: {...tags}
         }
     }
     getTags = (tags:any) => {
