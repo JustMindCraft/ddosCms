@@ -11,12 +11,13 @@ const styles = (theme: any) => createStyles({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: "space-around",
-    alignItems: "baseline",
+    alignItems: "center",
     flexWrap: "wrap",
     flexShrink: "initial",
     paddingLeft: 5,
     width: "100%",
-    maxWidth: 1336
+    maxWidth: 1336,
+    padding: "10%"
   },
   tag:  {
     maxWidth: 250,
@@ -47,7 +48,7 @@ class Tags extends React.Component<IHomePageProps, any> {
 
   componentWillMount(){
       const { tags } = this.state;
-    RootNode.get("tags").map((tag:any)=> (tag && tag.name)? tag: undefined).on((data:any, key:string)=>{
+    RootNode.get("tags").map((tag:any)=> (tag && tag.name && tag.contentId)? tag: undefined).on((data:any, key:string)=>{
         if(data===null){
             return false;
         }

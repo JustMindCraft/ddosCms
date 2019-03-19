@@ -64,12 +64,26 @@ class PostShow extends React.Component<any, any> {
         history.push('/tags/'+tag);
 
     }
+    componentWillReceiveProps(nextProps:any){
+        console.log("receiveProps");
+        
+    }
+    componentWillUpdate(){
+        console.log("will update");
+        this.updateCount();
 
-    componentDidMount(){
+        
+    }
+
+    componentDidUpdate(){
+        console.log("didupdate");
+        // this.updateCount();
+    }
+
+    updateCount = () => {
         const { dataProvider, match } = this.props;
         const { doAction, setAction, singleData, setOperateId } = dataProvider;
         let countVisited = singleData.visited;
-       
         const {
             coverUrl, 
             cloudName, 
@@ -80,6 +94,9 @@ class PostShow extends React.Component<any, any> {
         } = singleData;
         if(!countVisited){
             countVisited = 0;
+        }
+        if(singleData.id !== match.params.id){
+            return false;
         }
         setAction('update');
         setOperateId(match.params.id);
@@ -96,6 +113,15 @@ class PostShow extends React.Component<any, any> {
            
 
         });
+    }
+
+    componentDidMount(){
+    
+        // this.updateCount();
+        console.log("did mount");
+        
+       
+        
     }
 
     render(){

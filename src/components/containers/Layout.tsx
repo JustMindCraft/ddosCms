@@ -52,7 +52,7 @@ const styles = (theme: any) => createStyles({
     appBar: {
         position: 'fixed',
         width: "100%",
-        height: 40,
+        height: "auto",
         justifyContent: 'flex-start',
         overflowX: 'auto',
         overflowY: 'hidden',
