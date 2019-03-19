@@ -31,7 +31,7 @@ class TorrentVideoPlayer extends React.Component<any, any>{
             loading:true,
             files: [],
         });
-        const { torrentClient, history } = this.props;
+        const { torrentClient } = this.props;
             torrentClient.addTorrent(torrentId, (torrent:any)=>{
                 if(torrent === "setTorrentId first"){
                     this.setState({
@@ -55,7 +55,9 @@ class TorrentVideoPlayer extends React.Component<any, any>{
                     loading: false,
                 })
                 const files = torrent.files;
-               
+                if(this.props.getFiles){
+                    this.props.getFiles(files);
+                }
                 
                 const file = files.find((file:any)=>{
                     return file.name.endsWith('.mp4')
@@ -66,6 +68,7 @@ class TorrentVideoPlayer extends React.Component<any, any>{
                 }
                 if(this.file === null){
                     this.file = file;
+                   
                     return file.renderTo(this.refs.dplayer,{
                         autoplay: true,
                         controls: true,
@@ -103,22 +106,16 @@ class TorrentVideoPlayer extends React.Component<any, any>{
         this.change(torrentId, poster);
     }
 
-    componentDidUpdate(preProps:any, preState:any){
-       
-        
-        
-    }
+   
 
     componentWillUnmount(){
-        clearInterval();
-        const { history} = this.props;
+       
         this.setState({
             loading:false,
             files: []
         });
-        history.block((location:any, action:any) => {
-                
-        });
+        // const { torrentClient } = this.props;
+        // torrentClient.destroy();
           
     }
    

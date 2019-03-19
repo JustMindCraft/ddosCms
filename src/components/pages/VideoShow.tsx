@@ -48,7 +48,7 @@ const styles = createStyles({
     
 })
 
-@inject('dataProvider')
+@inject('torrentClient')
 @observer
 class VideoShow extends React.Component<any, any> {
     constructor(props:any) {
@@ -57,8 +57,36 @@ class VideoShow extends React.Component<any, any> {
             video: {},
             loading: true,
             loadingVisited: true,
+            gettingDownloadUrl: true,
         }
         
+    }
+
+    getFiles = (files:any) => {
+        console.log(files);
+        
+        
+       files.forEach( (file:any) => {
+                console.log(file);
+                
+                file.getBlobURL((err:any, url:any)=>{
+                    if (err) throw err;
+                    console.log(url);
+                    
+                    const link:any = this.refs.downloadlink;
+                    link.download = file.name;
+                    link.href = url;
+                    link.textContent = '开始下载 ' + file.name;
+                    console.log(link);
+                    
+                    this.setState({
+                        gettingDownloadUrl: false,
+                    })
+                    
+                    
+                })
+            })
+            
     }
 
     componentDidMount(){
@@ -80,11 +108,15 @@ class VideoShow extends React.Component<any, any> {
                 video: data,
                 loading: false,
             })
+
+            
             RootNode.get("videos").get(key).get("visited").put(updateCount+1, (ack:any)=>{
                 console.log(ack);
                 this.setState({
                     loadingVisited: false,
-                })
+                });
+                console.log(data.magnetURI);
+                
                
             });
 
@@ -99,12 +131,12 @@ class VideoShow extends React.Component<any, any> {
 
     render(){
         const { classes } = this.props;
-        const { video, loading, loadingVisited} = this.state;
+        const { video, loading, loadingVisited, gettingDownloadUrl} = this.state;
         return (
             <React.Fragment>
                 
                 <div className={classes.player}>
-                    <TorrentVideoPlayer torrentId={video.magnetURI} videoer={video.coverUrl} />
+                    <TorrentVideoPlayer getFiles={this.getFiles} torrentId={video.magnetURI} videoer={video.coverUrl} />
                  </div>
                 {
                     loading ? 
@@ -135,6 +167,17 @@ class VideoShow extends React.Component<any, any> {
                              <br />
                          </div>
                          <div style={{
+                             width: "50%",
+                             textAlign:"center"
+
+                         }}>
+                         {
+                             !gettingDownloadUrl && <a href="" ref="downloadlink">下载视频</a>
+                         }
+                              
+                             
+                         </div>
+                         <div style={{
                                 width: "90%",
                                 minWidth: 260,
                                 minHeight: 76
@@ -160,6 +203,7 @@ class VideoShow extends React.Component<any, any> {
                                     renderHTML("<span></span>")
                                 }
                             </Typography>
+                            <div>观看量：{loadingVisited? "统计中" : video.visited}</div>
                          </Paper>
                     </React.Fragment>
                 }
