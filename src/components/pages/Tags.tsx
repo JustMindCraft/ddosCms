@@ -52,7 +52,10 @@ class Tags extends React.Component<IHomePageProps, any> {
         if(data===null){
             return false;
         }
-        tags.unshift(data);
+        if(tags.includes(data.name)){
+          return false;
+        }
+        tags.unshift(data.name);
         this.setState({
             tags,
         })
@@ -79,7 +82,7 @@ class Tags extends React.Component<IHomePageProps, any> {
 
             {tags && tags.map((tag:any, index:number)=>
                 <div>
-                    <Chip key={index} onClick={(e:any)=>this.onClick(tag.name)} className={classes.tag} label={tag.name} />
+                    <Chip key={index} onClick={(e:any)=>this.onClick(tag)} className={classes.tag} label={tag} />
                 </div>
             )}
         </main>
