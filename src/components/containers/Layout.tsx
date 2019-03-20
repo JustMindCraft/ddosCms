@@ -184,7 +184,7 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
                 </div>
                 <AppBar style={
                     {
-                        top: top <= 50 ? 100 : 0,
+                        top: 0,
                     }
                 } position="fixed" color="default" className={classes.appBar}>
                     <Toolbar className={classes.toolBar}>

