@@ -28,8 +28,11 @@ const styles = (theme: any) => createStyles({
     },
     header: {
         display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        top: 90,
+        position: 'relative',
+        flexWrap: "wrap-reverse",
     },
     headerButton: {
         display: 'flex',
@@ -44,15 +47,15 @@ const styles = (theme: any) => createStyles({
         marginLeft: 20,
     },
     logo: {
-        marginTop: -30,
-        marginBottom: 20,
         width: 200,
         display: 'inline-block'
     },
     appBar: {
         position: 'fixed',
         width: "100%",
-        height: "auto",
+        height: "46",
+        wordBreak: "keep-all",
+        wordWrap: "normal",
         justifyContent: 'flex-start',
         overflowX: 'auto',
         overflowY: 'hidden',
@@ -111,7 +114,6 @@ interface ILayoutProps {
     location:any,
 }
 interface ILayoutState {
-    top: number,
     tags: Array<any>,
 }
 class Layout extends React.Component<ILayoutProps, ILayoutState> {
@@ -119,19 +121,11 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
     constructor(props: any) {
         super(props);
         this.state = {
-            top: 0,
             tags: [],
         }
     }
 
-    componentWillMount() {
-        document.onscroll = (e: any) => {
-            const top = document.documentElement.scrollTop;
-            this.setState({
-                top
-            })
-        }
-    }
+    
     componentDidMount(){
         RootNode.get("tags").map((tag:any) => (tag && tag.isTop) === true ? tag: undefined)
         .on((data:any, key:string)=>{
@@ -158,7 +152,7 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
 
     render() {
         const { classes, location } = this.props;
-        const { top, tags } = this.state;
+        const {  tags } = this.state;
 
         
         return (
@@ -168,7 +162,9 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
                         <img src={chashao} className={classes.logo} />
                        
                     </Link>
-                    <Typography variant="subtitle1">基于的区块链内容收集</Typography>
+                    <Typography style={{
+                        flex: 1,
+                    }} variant="caption">链上阅读</Typography>
                    <div>
                        {
                            location.pathname !== "/search"  &&
@@ -182,11 +178,7 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
                    
                    
                 </div>
-                <AppBar style={
-                    {
-                        top: 0,
-                    }
-                } position="fixed" color="default" className={classes.appBar}>
+                <AppBar position="fixed" color="default" className={classes.appBar}>
                     <Toolbar className={classes.toolBar}>
                         <Button component={HomeLink} className={classes.toolBarButton}>首页</Button>
                         <Button component={PostsLink} className={classes.toolBarButton}>文章</Button>

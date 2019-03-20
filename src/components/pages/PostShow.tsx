@@ -60,7 +60,6 @@ class PostShow extends React.Component<any, any> {
     componentDidMount(){
     
         const { match } = this.props;
-        
         RootNode.get("posts").map((post:any)=>(post && post.id===match.params.id)?post: undefined)
         .once((data:any, key:string)=>{
             const { post, loading} = this.state;
@@ -68,7 +67,6 @@ class PostShow extends React.Component<any, any> {
                 return false;
             }
             document.title =  data.title;
-            
             let updateCount = data.visited;
             if(!updateCount){
                 updateCount=0
@@ -94,6 +92,7 @@ class PostShow extends React.Component<any, any> {
     render(){
         const { classes } = this.props;
         const { post, loading, loadingVisited} = this.state;
+        document.body.scrollTop = document.documentElement.scrollTop = 154;
         return (
             <React.Fragment>
              
