@@ -106,17 +106,22 @@ class PostShow extends React.Component<any, any> {
                         <div style={{
                             background: `url(${post.coverUrl}) no-repeat`,
                             backgroundSize: 'contain',
-                            width: "80%",
+                            width: "95%",
                             padding: 30,
                             backgroundPosition: "center",
 
                         }}>
-                        <Typography variant="title" component="div" >
+                        <Typography variant="title" component="h3" >
                             <div style={{
                             textAlign: 'center',
                             background: "rgba(20, 20, 20, 0.63)",
                             padding: 20,
-                            color: "white"
+                            marginRight: 20,
+                            color: "white",
+                            maxWidth: "800",
+                            position: "relative",
+                            left: -20,
+                            width: "100%"
                                 }}>
                                 {post.title}
                             </div>
