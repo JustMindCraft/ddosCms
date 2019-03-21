@@ -52,7 +52,10 @@ class Login extends Component<ILoginProps>{
     const { classes: s } = this.props
     return (
       <Layout title="登陆">
-        <div>
+        <div style={{
+          maxWidth: 500,
+          
+        }}>
           <TextField
             style={{ width: '100%' }}
             value={account}

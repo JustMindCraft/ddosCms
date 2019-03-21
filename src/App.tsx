@@ -17,6 +17,7 @@ import Recommend from './components/pages/Recommend';
 import Tags from './components/pages/Tags';
 import TagResults from './components/pages/TagResults';
 import Videos from './components/pages/Videos';
+import LoginPage from './components/pages/LoginPage';
 
 class App extends Component<any, any> {
   
@@ -34,7 +35,7 @@ class App extends Component<any, any> {
               <Route exact path="/posts" component={Posts} />
               <Route exact path="/videos" component={Videos} />
               <Route exact path="/search" component={SearchPage} />
-              <Route exact path="/login" component={HomePage} />
+              <Route exact path="/login" component={LoginPage} />
               <Route exact path="/videos/:id" component={VideoShow} />
               <Route exact path="/posts/:id" component={PostShow} />
               <Route exact path="/admin" component={Admin}/>

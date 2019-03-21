@@ -31,6 +31,8 @@ const styles = createStyles({
         alignItems: 'stretch',
         alignCentent: 'baseline',
         justifyContent: 'space-around',
+        maxWidth: 1280,
+        wordBreak: "break-all",
     }
     
 })

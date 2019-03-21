@@ -323,7 +323,11 @@ class PostForm extends React.Component<any, any> {
                     
                     {
                         !imageUploading &&
-                        <div>
+                        <div style={{
+                            width: "100%",
+                            maxWidth: "1280px",
+                            padding: 20,
+                        }}>
                             <h2 style={{
                                 textAlign: 'center',
                             }}>文章正文</h2>

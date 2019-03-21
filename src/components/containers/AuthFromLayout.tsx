@@ -5,10 +5,12 @@ import Typography from '@material-ui/core/Typography'
 
 const styles = (theme:any) => createStyles({
   container: {
-    width: "90%",
+    width: "100%",
     margin: '30px auto',
     display: 'flex',
     flexDirection: 'column',
+    alignItems: "center",
+    maxWidth: 600,
     padding: 12
   },
   titleWrap: {
